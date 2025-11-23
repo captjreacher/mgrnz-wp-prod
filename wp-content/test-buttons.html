@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Blueprint Buttons</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 40px;
+            background: #0a0a0a;
+            color: #fff;
+        }
+        .test-container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        .completion-action-btn {
+            display: block;
+            width: 100%;
+            padding: 20px;
+            margin: 10px 0;
+            font-size: 18px;
+            background: #1a1a1a;
+            border: 2px solid #ff4f00;
+            color: #fff;
+            cursor: pointer;
+            border-radius: 8px;
+        }
+        .completion-action-btn:hover {
+            background: #ff4f00;
+        }
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.8);
+            align-items: center;
+            justify-content: center;
+            z-index: 10000;
+        }
+        .modal-content {
+            background: #1a1a1a;
+            padding: 40px;
+            border-radius: 12px;
+            max-width: 500px;
+            width: 90%;
+            position: relative;
+        }
+        .modal-close {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: none;
+            border: none;
+            color: #fff;
+            font-size: 24px;
+            cursor: pointer;
+        }
+        input, textarea {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            background: #0a0a0a;
+            border: 1px solid #333;
+            color: #fff;
+            border-radius: 4px;
+        }
+        button[type="submit"] {
+            width: 100%;
+            padding: 15px;
+            background: #ff4f00;
+            border: none;
+            color: #fff;
+            font-size: 16px;
+            cursor: pointer;
+            border-radius: 4px;
+            margin-top: 10px;
+        }
+        .error-message {
+            color: #ff6b6b;
+            font-size: 14px;
+            display: none;
+        }
+        .log {
+            background: #1a1a1a;
+            padding: 20px;
+            margin-top: 20px;
+            border-radius: 8px;
+            font-family: monospace;
+            font-size: 12px;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+        .log-entry {
+            margin: 5px 0;
+            padding: 5px;
+            border-left: 3px solid #ff4f00;
+            padding-left: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="test-container">
+        <h1>Blueprint Buttons Test</h1>
+        <p>This is a standalone test of the quote button functionality.</p>
+        
+        <button id="btn-get-quote" class="completion-action-btn">
+            💰 Get a Quote for this Workflow
+        </button>
+
+        <div class="log" id="log">
+            <strong>Console Log:</strong>
+            <div id="log-entries"></div>
+        </div>
+    </div>
+
+    <!-- Quote Form Modal -->
+    <div id="quote-form" class="modal-overlay">
+        <div class="modal-content">
+            <button class="modal-close" id="quote-close">&times;</button>
+            <h3>Request a Quote</h3>
+            <p>We'll send you a detailed quote within 24 hours</p>
+            <form id="quote-request-form">
+                <div class="form-group">
+                    <input 
+                        type="text" 
+                        id="quote-name" 
+                        name="name" 
+                        placeholder="Name *" 
+                        required 
+                    />
+                    <span class="error-message" id="quote-name-error"></span>
+                </div>
+                <div class="form-group">
+                    <input 
+                        type="email" 
+                        id="quote-email" 
+                        name="email" 
+                        placeholder="Email *" 
+                        required 
+                    />
+                    <span class="error-message" id="quote-email-error"></span>
+                </div>
+                <div class="form-group">
+                    <input 
+                        type="tel" 
+                        id="quote-phone" 
+                        name="phone" 
+                        placeholder="Phone (optional)" 
+                    />
+                </div>
+                <div class="form-group">
+                    <textarea 
+                        id="quote-notes" 
+                        name="notes" 
+                        placeholder="Additional notes" 
+                        rows="4"
+                    ></textarea>
+                </div>
+                <button type="submit">Request Quote</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Simple logging
+        function log(message) {
+            const logEntries = document.getElementById('log-entries');
+            const entry = document.createElement('div');
+            entry.className = 'log-entry';
+            entry.textContent = new Date().toLocaleTimeString() + ' - ' + message;
+            logEntries.appendChild(entry);
+            console.log(message);
+        }
+
+        // Quote Form Class (simplified)
+        class QuoteForm {
+            constructor() {
+                log('[QuoteForm] Initializing...');
+                this.modal = document.getElementById('quote-form');
+                this.form = document.getElementById('quote-request-form');
+                this.closeBtn = document.getElementById('quote-close');
+                this.initialized = false;
+                
+                log('[QuoteForm] Elements found: modal=' + !!this.modal + ', form=' + !!this.form);
+                
+                if (!this.modal || !this.form) {
+                    log('[QuoteForm] ERROR: Required elements not found');
+                    return;
+                }
+                
+                this.initialized = true;
+                this.setupHandlers();
+                log('[QuoteForm] Initialization complete');
+            }
+
+            setupHandlers() {
+                if (this.closeBtn) {
+                    this.closeBtn.addEventListener('click', () => this.hide());
+                }
+                
+                this.modal.addEventListener('click', (e) => {
+                    if (e.target === this.modal) {
+                        this.hide();
+                    }
+                });
+                
+                this.form.addEventListener('submit', (e) => {
+                    e.preventDefault();
+                    log('[QuoteForm] Form submitted');
+                    alert('Form submitted! (This is a test - no actual API call)');
+                    this.hide();
+                });
+            }
+
+            show() {
+                if (!this.initialized || !this.modal) {
+                    log('[QuoteForm] ERROR: Cannot show - not initialized');
+                    return;
+                }
+                log('[QuoteForm] Showing modal');
+                this.modal.style.display = 'flex';
+            }
+
+            hide() {
+                if (!this.initialized || !this.modal) return;
+                log('[QuoteForm] Hiding modal');
+                this.modal.style.display = 'none';
+            }
+        }
+
+        // Initialize on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            log('[Test] Page loaded, initializing...');
+            
+            // Create quote form instance
+            window.mgrnzQuoteForm = new QuoteForm();
+            
+            // Attach button handler
+            const quoteBtn = document.getElementById('btn-get-quote');
+            if (quoteBtn) {
+                log('[Test] Quote button found, attaching handler');
+                quoteBtn.addEventListener('click', () => {
+                    log('[Test] Quote button clicked');
+                    if (window.mgrnzQuoteForm && window.mgrnzQuoteForm.initialized) {
+                        window.mgrnzQuoteForm.show();
+                    } else {
+                        log('[Test] ERROR: QuoteForm not initialized');
+                    }
+                });
+            } else {
+                log('[Test] ERROR: Quote button not found');
+            }
+            
+            log('[Test] Initialization complete');
+        });
+    </script>
+</body>
+</html>

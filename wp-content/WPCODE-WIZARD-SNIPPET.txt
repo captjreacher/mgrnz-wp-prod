@@ -1,0 +1,26 @@
+/**
+ * WPCode Snippet for AI Workflow Wizard
+ * 
+ * INSTRUCTIONS:
+ * 1. Go to WPCode → Add Snippet
+ * 2. Choose "Add Your Custom Code (New Snippet)"
+ * 3. Name: "AI Workflow Wizard"
+ * 4. Type: PHP Snippet
+ * 5. Paste the code below
+ * 6. Location: Page Specific → Select "Try Using AI Right Now" page
+ * 7. Insert: After Content (or Replace Content)
+ * 8. Save & Activate
+ */
+
+<?php
+// Output the wizard HTML
+$wizard_file = get_template_directory() . '/templates/ai-workflow-wizard.html';
+
+if (file_exists($wizard_file)) {
+    include $wizard_file;
+} else {
+    echo '<div style="padding: 2rem; background: #fee; border: 1px solid #fcc; border-radius: 8px; color: #c00;">';
+    echo '<strong>Error:</strong> Wizard template not found at: ' . esc_html($wizard_file);
+    echo '</div>';
+}
+?>

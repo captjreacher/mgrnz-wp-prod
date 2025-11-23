@@ -1,0 +1,35 @@
+/**
+ * INSTRUCTIONS: Add this to your theme's functions.php
+ * 
+ * Location: wp-content/themes/saaslauncher/functions.php
+ * 
+ * This properly loads the wizard JavaScript without conflicts
+ */
+
+// Add this at the END of functions.php:
+
+function mgrnz_enqueue_wizard_inline_js() {
+    // Only on the wizard page
+    if (is_page('start-using-ai')) {
+        ?>
+        <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            console.log('Wizard JavaScript loaded from functions.php');
+            const form = document.getElementById("ai-wizard-form");
+            if (!form) {
+                console.error('Form not found!');
+                return;
+            }
+
+            const totalSteps = 5;
+            let currentStep = 1;
+
+            // ... REST OF THE JAVASCRIPT FROM wpcode-COMPLETE-FINAL.txt GOES HERE ...
+            // (Copy lines 7-469 from wpcode-COMPLETE-FINAL.txt)
+
+        });
+        </script>
+        <?php
+    }
+}
+add_action('wp_footer', 'mgrnz_enqueue_wizard_inline_js');

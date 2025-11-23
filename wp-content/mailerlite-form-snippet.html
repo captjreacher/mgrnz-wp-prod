@@ -1,0 +1,40 @@
+<!-- MailerLite Form Snippet for HTML Block -->
+<!-- Paste this into your WordPress HTML block on the /quote-my-workflow page -->
+
+<!-- MailerLite Universal Script (if not already in header) -->
+<script>
+(function(w,d,e,u,f,l,n){w[f]=w[f]||function(){(w[f].q=w[f].q||[]).push(arguments);},l=d.createElement(e),l.async=1,l.src=u,n=d.getElementsByTagName(e)[0],n.parentNode.insertBefore(l,n);})(window,document,'script','https://assets.mailerlite.com/js/universal.js','ml');
+ml('account', '1849787');
+</script>
+
+<!-- Auto-open the form when page loads -->
+<script>
+// Wait for MailerLite to load, then show form
+window.addEventListener('load', function() {
+  // Try immediately
+  if (typeof ml === 'function') {
+    ml('show', 'E0CY8N', true);
+  } else {
+    // If not loaded yet, wait and try again
+    setTimeout(function() {
+      if (typeof ml === 'function') {
+        ml('show', 'E0CY8N', true);
+      }
+    }, 500);
+  }
+});
+</script>
+
+<!-- Optional: Add a manual trigger button as backup -->
+<div style="text-align: center; padding: 2rem;">
+  <a 
+    class="ml-onclick-form" 
+    href="javascript:void(0)" 
+    onclick="ml('show', 'E0CY8N', true)"
+    style="display: inline-block; padding: 1rem 2rem; font-size: 1.125rem; font-weight: 700; background: #ff4f00; color: #fff; border: none; border-radius: 8px; cursor: pointer; text-decoration: none; transition: all 0.2s;"
+    onmouseover="this.style.filter='brightness(1.1)'"
+    onmouseout="this.style.filter='brightness(1)'"
+  >
+    Get Your Quote
+  </a>
+</div>

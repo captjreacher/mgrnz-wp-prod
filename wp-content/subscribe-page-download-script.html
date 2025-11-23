@@ -1,0 +1,66 @@
+<!-- Subscribe Page Auto-Download Script with PDF -->
+<!-- Paste this into an HTML block on your /wizard-subscribe-page -->
+
+<!-- Load html2pdf library (better than jsPDF for HTML content) -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+
+<script>
+// Check if there's a blueprint waiting to be downloaded
+window.addEventListener('load', function() {
+  const blueprintHTML = localStorage.getItem('mgrnz_blueprint_download');
+  
+  if (blueprintHTML) {
+    // Create a download button
+    const downloadBtn = document.createElement('a');
+    downloadBtn.textContent = '⬇️ Download Your Blueprint (PDF)';
+    downloadBtn.style.cssText = 'display: inline-block; padding: 1rem 2rem; margin: 2rem auto; font-size: 1.125rem; font-weight: 700; background: #ff4f00; color: #fff; border: none; border-radius: 8px; cursor: pointer; text-decoration: none; text-align: center;';
+    downloadBtn.href = '#';
+    
+    downloadBtn.addEventListener('click', function(e) {
+      e.preventDefault();
+      
+      // Show loading state
+      downloadBtn.textContent = '⏳ Generating PDF...';
+      downloadBtn.style.background = '#666';
+      
+      // Create a temporary container for PDF generation
+      const pdfContainer = document.createElement('div');
+      pdfContainer.innerHTML = blueprintHTML;
+      pdfContainer.style.cssText = 'position: absolute; left: -9999px; width: 800px; padding: 40px; background: white; color: black;';
+      document.body.appendChild(pdfContainer);
+      
+      // Configure PDF options
+      const opt = {
+        margin: 15,
+        filename: 'ai-workflow-blueprint.pdf',
+        image: { type: 'jpeg', quality: 0.98 },
+        html2canvas: { scale: 2, useCORS: true },
+        jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+      };
+      
+      // Generate and download PDF
+      html2pdf().set(opt).from(pdfContainer).save().then(function() {
+        // Clean up
+        document.body.removeChild(pdfContainer);
+        localStorage.removeItem('mgrnz_blueprint_download');
+        
+        // Update button
+        downloadBtn.textContent = '✅ Downloaded!';
+        downloadBtn.style.background = '#4ade80';
+      }).catch(function(error) {
+        console.error('PDF generation error:', error);
+        downloadBtn.textContent = '❌ Error - Try Again';
+        downloadBtn.style.background = '#f05656';
+        document.body.removeChild(pdfContainer);
+      });
+    });
+    
+    // Add button to page
+    const container = document.querySelector('.entry-content') || document.querySelector('main') || document.body;
+    const wrapper = document.createElement('div');
+    wrapper.style.textAlign = 'center';
+    wrapper.appendChild(downloadBtn);
+    container.appendChild(wrapper);
+  }
+});
+</script>
