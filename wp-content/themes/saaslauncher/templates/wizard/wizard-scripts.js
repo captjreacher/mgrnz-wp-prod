@@ -287,7 +287,7 @@ document.addEventListener("DOMContentLoaded", function () {
           const wizardData = {
             goal: goal,
             workflow: workflow,
-            submission_ref: data.submission_ref || sessionId
+            submission_ref: data.submission_id || data.submission_ref || sessionId
           };
           localStorage.setItem('mgrnz_wizard_data', JSON.stringify(wizardData));
 
