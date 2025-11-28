@@ -437,3 +437,5 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
 // Deployment trigger - 2025-11-28 16:36:37
+
+// Force deploy: 2025-11-28 16:53:42
