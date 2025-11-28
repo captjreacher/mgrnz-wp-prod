@@ -18,8 +18,15 @@ class MGRNZ_PDF_Generator {
      */
     public function generate_blueprint_pdf($blueprint_data, $user_data, $session_id) {
         try {
+            // Load Composer autoloader for TCPDF
+            $autoload_path = __DIR__ . '/../vendor/autoload.php';
+            if (file_exists($autoload_path)) {
+                require_once $autoload_path;
+            }
+            
             // Check if TCPDF is available
             if (!class_exists('TCPDF')) {
+                error_log('[PDF Generator] TCPDF not available, using HTML fallback');
                 // Try to load TCPDF from WordPress or use fallback
                 return $this->generate_simple_pdf($blueprint_data, $user_data, $session_id);
             }
