@@ -59,6 +59,11 @@ if (empty($api_root) || strpos($api_root, 'wp-json') === false) {
 // Ensure it ends with a slash
 $api_root = trailingslashit($api_root);
 
+// Force absolute URL to handle /wp/ subdirectory correctly
+if (strpos($api_root, 'http') !== 0) {
+    $api_root = home_url($api_root);
+}
+
 $wizard_api_settings = [
     'root' => $api_root,
     'nonce' => wp_create_nonce('wp_rest')
