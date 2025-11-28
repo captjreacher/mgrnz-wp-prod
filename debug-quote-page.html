@@ -1,0 +1,52 @@
+<!-- Debug Quote Page Script -->
+<!-- Paste this BEFORE the existing quote page script to see what's happening -->
+
+<script>
+console.log('🔍 DEBUG: Quote page loading...');
+
+// Log all elements being hidden
+const originalDisplaySetter = Object.getOwnPropertyDescriptor(HTMLElement.prototype, 'style').set;
+Object.defineProperty(HTMLElement.prototype, 'style', {
+  set: function(value) {
+    if (typeof value === 'string' && value.includes('display: none')) {
+      console.warn('⚠️ Element being hidden:', this.tagName, this.className, this.textContent.substring(0, 50));
+      console.trace('Hide called from:');
+    }
+    return originalDisplaySetter.call(this, value);
+  }
+});
+
+// Monitor style changes
+const observer = new MutationObserver(function(mutations) {
+  mutations.forEach(function(mutation) {
+    if (mutation.type === 'attributes' && mutation.attributeName === 'style') {
+      const element = mutation.target;
+      const style = window.getComputedStyle(element);
+      if (style.display === 'none') {
+        console.warn('⚠️ Element hidden via style mutation:', {
+          tag: element.tagName,
+          class: element.className,
+          id: element.id,
+          text: element.textContent.substring(0, 100)
+        });
+      }
+    }
+  });
+});
+
+observer.observe(document.body, {
+  attributes: true,
+  subtree: true,
+  attributeFilter: ['style']
+});
+
+console.log('🔍 DEBUG: Monitoring enabled');
+</script>
+
+<style>
+  /* Prevent any hiding during debug */
+  body * {
+    opacity: 1 !important;
+    visibility: visible !important;
+  }
+</style>
