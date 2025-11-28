@@ -88,7 +88,7 @@ class MGRNZ_PDF_Generator {
             $this->add_pdf_footer($pdf);
             
             // Generate filename
-            $filename = $this->generate_filename($session_id);
+            $filename = $this->generate_filename($session_id, 'pdf');
             $upload_dir = wp_upload_dir();
             $pdf_dir = $upload_dir['basedir'] . '/blueprints';
             
@@ -112,16 +112,14 @@ class MGRNZ_PDF_Generator {
     }
     
     /**
-     * Generate simple text-based PDF fallback
-     * ...
+     * Generate simple HTML-based fallback (opens print dialog for PDF save)
      */
     private function generate_simple_pdf($blueprint_data, $user_data, $session_id) {
-        // ... existing code ...
         try {
-            // Generate HTML version that can be converted to PDF
+            // Generate HTML version
             $html = $this->generate_blueprint_html($blueprint_data, $user_data);
             
-            // Save as HTML file (can be converted to PDF by browser)
+            // Save as HTML file
             $filename = $this->generate_filename($session_id, 'html');
             $upload_dir = wp_upload_dir();
             $pdf_dir = $upload_dir['basedir'] . '/blueprints';
@@ -136,6 +134,9 @@ class MGRNZ_PDF_Generator {
             // Write HTML to file
             file_put_contents($file_path, $html);
             
+            error_log('[PDF Generator] HTML file created: ' . $file_path);
+            
+            // Return the file path (not URL) - the handler will convert it
             return $file_path;
             
         } catch (Exception $e) {
@@ -143,13 +144,140 @@ class MGRNZ_PDF_Generator {
             return new WP_Error('pdf_generation_failed', 'Failed to generate document: ' . $e->getMessage());
         }
     }
-
-    // ... (skip to generate_blueprint_html) ...
-
-    private function generate_blueprint_html($blueprint_data, $user_data) {
-        // ... (existing code) ...
+    
+    /**
+     * Generate filename for blueprint
+     * 
+     * @param string $session_id Session ID
+     * @param string $extension File extension (default: pdf)
+     * @return string Filename
+     */
+    private function generate_filename($session_id, $extension = 'pdf') {
+        $safe_session = preg_replace('/[^a-zA-Z0-9_-]/', '', $session_id);
+        return 'blueprint-' . $safe_session . '-' . time() . '.' . $extension;
+    }
+    
+    /**
+     * Get download URL for generated file
+     * 
+     * @param string $file_path Full file path
+     * @return string Download URL
+     */
+    public function get_download_url($file_path) {
+        // If it's already a URL (from generate_simple_pdf), return as-is
+        if (strpos($file_path, 'http') === 0 || strpos($file_path, '/wp-json/') === 0) {
+            return $file_path;
+        }
         
-        // Build complete HTML document
+        // For HTML files, use the viewer endpoint
+        if (strpos($file_path, '.html') !== false) {
+            $filename = basename($file_path);
+            return rest_url('mgrnz/v1/view-blueprint/' . $filename);
+        }
+        
+        // For PDF files, return direct URL
+        $upload_dir = wp_upload_dir();
+        $file_url = str_replace($upload_dir['basedir'], $upload_dir['baseurl'], $file_path);
+        return $file_url;
+    }
+    
+    /**
+     * Format content for HTML display
+     * 
+     * @param string $content Markdown or plain text content
+     * @return string Formatted HTML
+     */
+    private function format_content_for_html($content) {
+        if (empty($content)) {
+            return '';
+        }
+        
+        // Basic markdown-like formatting
+        $html = $content;
+        
+        // Headers
+        $html = preg_replace('/^### (.+)$/m', '<h3>$1</h3>', $html);
+        $html = preg_replace('/^## (.+)$/m', '<h2>$1</h2>', $html);
+        $html = preg_replace('/^# (.+)$/m', '<h1>$1</h1>', $html);
+        
+        // Bold
+        $html = preg_replace('/\*\*(.+?)\*\*/', '<strong>$1</strong>', $html);
+        
+        // Lists
+        $html = preg_replace('/^- (.+)$/m', '<li>$1</li>', $html);
+        $html = preg_replace('/(<li>.*<\/li>)/s', '<ul>$1</ul>', $html);
+        
+        // Line breaks
+        $html = nl2br($html);
+        
+        return $html;
+    }
+    
+    /**
+     * Add PDF header
+     */
+    private function add_pdf_header($pdf) {
+        $pdf->SetFont('helvetica', 'B', 20);
+        $pdf->Cell(0, 10, 'AI Workflow Blueprint', 0, 1, 'C');
+        $pdf->Ln(5);
+    }
+    
+    /**
+     * Add blueprint content to PDF
+     */
+    private function add_blueprint_content($pdf, $blueprint_data) {
+        $content = $blueprint_data['content'] ?? '';
+        $pdf->SetFont('helvetica', '', 11);
+        $pdf->MultiCell(0, 5, strip_tags($content), 0, 'L');
+    }
+    
+    /**
+     * Add diagram to PDF
+     */
+    private function add_diagram_to_pdf($pdf, $diagram_data) {
+        // Placeholder for diagram rendering
+        $pdf->Ln(10);
+        $pdf->SetFont('helvetica', 'B', 12);
+        $pdf->Cell(0, 10, 'Workflow Diagram', 0, 1, 'L');
+    }
+    
+    /**
+     * Add PDF footer
+     */
+    private function add_pdf_footer($pdf) {
+        $pdf->Ln(10);
+        $pdf->SetFont('helvetica', 'I', 9);
+        $pdf->Cell(0, 10, 'MGRNZ - AI Workflow Automation | www.mgrnz.com', 0, 1, 'C');
+    }
+    
+    /**
+     * Cleanup old PDF files
+     */
+    public static function cleanup_old_pdfs() {
+        $upload_dir = wp_upload_dir();
+        $pdf_dir = $upload_dir['basedir'] . '/blueprints';
+        
+        if (!file_exists($pdf_dir)) {
+            return;
+        }
+        
+        $files = glob($pdf_dir . '/blueprint-*');
+        $now = time();
+        
+        foreach ($files as $file) {
+            if (is_file($file) && ($now - filemtime($file)) > (7 * DAY_IN_SECONDS)) {
+                unlink($file);
+            }
+        }
+    }
+    
+    /**
+     * Generate blueprint HTML
+     */
+    private function generate_blueprint_html($blueprint_data, $user_data) {
+        $content = $blueprint_data['content'] ?? 'No content available';
+        
+        // Build complete HTML document with print-to-PDF functionality
         $html = '<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -157,10 +285,118 @@ class MGRNZ_PDF_Generator {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Your AI Automation Blueprint</title>
     <style>
-        /* ... existing styles ... */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+            line-height: 1.6;
+            color: #1e293b;
+            background: #ffffff;
+            padding: 40px;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding-bottom: 20px;
+            border-bottom: 3px solid #ff4f00;
+        }
+        .header h1 {
+            color: #0f172a;
+            font-size: 32px;
+            margin-bottom: 10px;
+        }
+        .header p {
+            color: #64748b;
+            font-size: 16px;
+        }
+        .meta {
+            background: #f8fafc;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 30px;
+            border-left: 4px solid #ff4f00;
+        }
+        .meta p {
+            margin: 5px 0;
+            color: #475569;
+        }
+        .content {
+            margin: 30px 0;
+        }
+        .content h2 {
+            color: #0f172a;
+            font-size: 24px;
+            margin: 30px 0 15px 0;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #e2e8f0;
+        }
+        .content h3 {
+            color: #1e293b;
+            font-size: 20px;
+            margin: 25px 0 12px 0;
+        }
+        .content p {
+            margin: 12px 0;
+            color: #334155;
+        }
+        .content ul, .content ol {
+            margin: 15px 0 15px 30px;
+        }
+        .content li {
+            margin: 8px 0;
+            color: #475569;
+        }
+        .content strong {
+            color: #0f172a;
+            font-weight: 600;
+        }
+        .footer {
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 2px solid #e2e8f0;
+            text-align: center;
+            color: #64748b;
+            font-size: 14px;
+        }
+        .footer p {
+            margin: 8px 0;
+        }
+        .no-print {
+            background: #f0f9ff;
+            border: 2px solid #0284c7;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+        .no-print h2 {
+            color: #0369a1;
+            font-size: 20px;
+            margin-bottom: 10px;
+        }
+        .no-print p {
+            color: #0c4a6e;
+            margin: 8px 0;
+        }
+        .no-print button {
+            background: #0284c7;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 600;
+            margin-top: 15px;
+            transition: background 0.2s;
+        }
+        .no-print button:hover {
+            background: #0369a1;
+        }
         @media print {
             .no-print { display: none !important; }
-            /* Ensure background colors print */
+            body { padding: 20px; }
             * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
         }
     </style>
@@ -174,16 +410,17 @@ class MGRNZ_PDF_Generator {
     </script>
 </head>
 <body>
-    <div class="no-print" style="text-align: center; padding: 20px; background: #f0f9ff; border-bottom: 1px solid #bae6fd; margin-bottom: 30px;">
-        <p style="font-size: 18px; color: #0369a1; margin-bottom: 10px;"><strong>📄 Ready to Save!</strong></p>
-        <p style="color: #0c4a6e;">Your blueprint is ready. The print dialog should open automatically.</p>
-        <p style="color: #0c4a6e;">Choose <strong>"Save as PDF"</strong> as your printer destination.</p>
-        <button onclick="window.print()" style="background: #0284c7; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; font-size: 16px; margin-top: 10px;">🖨️ Print / Save as PDF</button>
+    <div class="no-print">
+        <h2>📄 Ready to Save as PDF!</h2>
+        <p>Your blueprint is ready. The print dialog should open automatically.</p>
+        <p><strong>Choose "Save as PDF"</strong> as your printer destination to save this document.</p>
+        <button onclick="window.print()">🖨️ Print / Save as PDF</button>
     </div>
     
     <div class="header">
-        <!-- ... rest of content ... -->
-
+        <h1>AI Workflow Blueprint</h1>
+        <p>Your Personalized Automation Strategy</p>
+    </div>
     
     <div class="meta">
         <p><strong>Prepared for:</strong> ' . esc_html($user_data['name'] ?? 'Valued Client') . '</p>
@@ -192,7 +429,7 @@ class MGRNZ_PDF_Generator {
     </div>
     
     <div class="content">
-        ' . ($this->format_content_for_html($content) ?: nl2br(htmlspecialchars($content))) . '
+        ' . $this->format_content_for_html($content) . '
     </div>
     
     <div class="footer">

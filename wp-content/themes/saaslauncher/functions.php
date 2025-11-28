@@ -3,7 +3,7 @@ if (! defined('SAASLAUNCHER_VERSION')) {
 	// Replace the version number of the theme on each release.
 	define('SAASLAUNCHER_VERSION', wp_get_theme()->get('Version'));
 }
-define('SAASLAUNCHER_DEBUG', defined('WP_DEBUG') && WP_DEBUG === true);
+// Debug constants removed - they should be in wp-config.php only
 define('SAASLAUNCHER_DIR', trailingslashit(get_template_directory()));
 define('SAASLAUNCHER_URL', trailingslashit(get_template_directory_uri()));
 
