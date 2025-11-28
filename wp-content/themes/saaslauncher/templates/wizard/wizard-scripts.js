@@ -351,7 +351,7 @@ document.addEventListener("DOMContentLoaded", function () {
         console.error('[WIZARD] Blueprint content element not found!');
       }
       // Navigate to subscribe page
-      window.location.href = '/wizard-subscribe-standalone.php';
+      window.location.href = '/wizard-subscribe-page';
     });
   }
 
