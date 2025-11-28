@@ -1,0 +1,53 @@
+# WordPress Core
+/wp-admin/
+/wp-includes/
+/wp-*.php
+/xmlrpc.php
+/license.txt
+/readme.html
+
+# WordPress Config
+wp-config.php
+.env
+.env.local
+
+# Uploads and Cache
+wp-content/uploads/
+wp-content/cache/
+wp-content/backup*/
+wp-content/backups/
+wp-content/upgrade/
+wp-content/ai2html-output/
+
+# Logs
+*.log
+wp-content/debug.log
+error_log
+
+# Plugins (uncomment if you want to exclude all plugins)
+# wp-content/plugins/
+
+# Themes (uncomment if you want to exclude all themes except your custom one)
+# wp-content/themes/twenty*/
+
+# Node modules
+node_modules/
+npm-debug.log
+yarn-error.log
+
+# OS files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# IDE files
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# Temporary files
+*.tmp
+*.swp
+*.swo
+*~
