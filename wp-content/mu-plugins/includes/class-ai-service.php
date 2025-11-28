@@ -517,6 +517,9 @@ class MGRNZ_AI_Service {
             throw new Exception('Empty response from AI service');
         }
         
+        // Clean markdown code fences from AI response
+        $content = $this->clean_markdown_fences($content);
+        
         // Extract summary (first paragraph or first 200 chars)
         $summary = $this->extract_summary($content);
         
@@ -532,6 +535,28 @@ class MGRNZ_AI_Service {
             'tokens_used' => $tokens_used,
             'diagram' => $diagram_data
         ];
+    }
+    
+    /**
+     * Clean markdown code fences from AI response
+     * 
+     * @param string $content Content with potential markdown fences
+     * @return string Cleaned content
+     */
+    private function clean_markdown_fences($content) {
+        // Remove ```html at the start
+        $content = preg_replace('/^```html\s*/i', '', $content);
+        
+        // Remove ``` at the end
+        $content = preg_replace('/\s*```\s*$/m', '', $content);
+        
+        // Remove any remaining standalone ``` lines
+        $content = preg_replace('/^```\s*$/m', '', $content);
+        
+        // Remove any remaining ``` markers
+        $content = str_replace('```', '', $content);
+        
+        return trim($content);
     }
     
     /**
