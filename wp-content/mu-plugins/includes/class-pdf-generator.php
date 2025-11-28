@@ -487,7 +487,7 @@ class MGRNZ_PDF_Generator {
     <button onclick="window.print()" class="print-btn no-print">🖨️ Print / Save as PDF</button>
     
     <div class="header">
-        <img src="' . home_url('/wp-content/uploads/2024/11/MGRNZ-Logo-300x103.png') . '" class="logo" alt="MGRNZ">
+        <img src="' . home_url('/wp-content/uploads/2025/11/mgrnz-logo-full-300x146.png') . '" class="logo" alt="MGRNZ">
         <h1>Your 2-minute AI Automation Blueprint</h1>
     </div>
     
