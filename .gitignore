@@ -23,6 +23,7 @@ wp-content/ai2html-output/
 *.log
 wp-content/debug.log
 error_log
+debug.log
 
 # Plugins (uncomment if you want to exclude all plugins)
 # wp-content/plugins/
