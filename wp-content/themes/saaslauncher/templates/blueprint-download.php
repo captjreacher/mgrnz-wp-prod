@@ -196,16 +196,10 @@
                     
                     console.log('Download URL:', data.download_url);
                     
-                    // Force download using a hidden link
-                    const link = document.createElement('a');
-                    link.href = data.download_url;
-                    link.download = 'blueprint.html';
-                    link.style.display = 'none';
-                    document.body.appendChild(link);
-                    link.click();
-                    document.body.removeChild(link);
+                    // Open blueprint in new tab (will trigger print dialog for PDF save)
+                    window.open(data.download_url, '_blank');
                     
-                    console.log('Download triggered');
+                    console.log('Blueprint opened in new tab');
                 } else {
                     throw new Error(data.message || 'Download failed');
                 }

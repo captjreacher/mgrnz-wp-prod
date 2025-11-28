@@ -246,9 +246,9 @@ document.addEventListener('DOMContentLoaded', function() {
                 console.log('URL:', subData.download_url);
                 console.log('Full response:', subData);
                 
-                // Trigger download
-                console.log('Redirecting to:', subData.download_url);
-                window.location.href = subData.download_url;
+                // Open blueprint in new tab (will trigger print dialog for PDF save)
+                console.log('Opening blueprint in new tab:', subData.download_url);
+                window.open(subData.download_url, '_blank');
                 
                 // Optional: Clear storage after success?
                 // localStorage.removeItem('mgrnz_blueprint_download');
