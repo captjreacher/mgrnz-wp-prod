@@ -52,3 +52,10 @@ desktop.ini
 *.swp
 *.swo
 *~
+
+# Local testing files
+quote-my-workflow-standalone.php
+wizard-subscribe-standalone.php
+debug-quote-page.html
+test-*.php
+test-*.html
