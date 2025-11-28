@@ -1772,17 +1772,11 @@ function mgrnz_handle_subscribe_blueprint($request) {
         // Get download URL
         $download_url = $pdf_generator->get_download_url($pdf_path);
         
-        // For HTML files, return the content directly with proper headers
+        // For HTML files, use the viewer endpoint to ensure proper Content-Type headers
         if (strpos($pdf_path, '.html') !== false) {
-            error_log('[SUBSCRIBE BLUEPRINT] Serving HTML file directly');
-            
-            // Read the HTML content
-            $html_content = file_get_contents($pdf_path);
-            
-            // Return HTML response with proper headers
-            header('Content-Type: text/html; charset=UTF-8');
-            echo $html_content;
-            exit;
+            $filename = basename($pdf_path);
+            $download_url = rest_url('mgrnz/v1/view-blueprint/' . $filename);
+            error_log('[SUBSCRIBE BLUEPRINT] HTML file will open via viewer: ' . $download_url);
         }
         
         // Get submission ID for blueprint_id
