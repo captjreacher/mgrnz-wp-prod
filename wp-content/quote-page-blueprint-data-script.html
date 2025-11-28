@@ -1,0 +1,196 @@
+<!-- Quote Page Blueprint Data Script -->
+<!-- Paste this into an HTML block on your /quote-my-workflow page -->
+<!-- This script retrieves the wizard data and displays it for context -->
+
+<script>
+  (function () {
+    'use strict';
+
+    console.log('🚀 Quote page script initialized');
+
+    // Main execution function
+    function runQuotePageLogic() {
+      const wizardDataStr = localStorage.getItem('mgrnz_wizard_data');
+      console.log('📦 Wizard data from localStorage:', wizardDataStr);
+
+      let wizardData = null;
+      if (wizardDataStr) {
+        try {
+          wizardData = JSON.parse(wizardDataStr);
+          // Ensure submission ref exists
+          if (!wizardData.submission_ref) {
+            const timestamp = Date.now();
+            wizardData.submission_ref = 'WIZ-' + timestamp.toString(36).toUpperCase();
+            localStorage.setItem('mgrnz_wizard_data', JSON.stringify(wizardData));
+          }
+          console.log('✅ Using submission ref:', wizardData.submission_ref);
+        } catch (e) {
+          console.error('❌ Error parsing wizard data', e);
+        }
+      }
+
+      // Polling mechanism to handle dynamic content loading
+      let attempts = 0;
+      const maxAttempts = 40; // 20 seconds (40 * 500ms)
+      let bannerRemoved = false;
+
+      const pollInterval = setInterval(function () {
+        attempts++;
+
+        // 1. Try to remove the banner (only if not already removed)
+        if (!bannerRemoved) {
+          bannerRemoved = removeBanner();
+        }
+
+        // 2. Try to add the hidden field (if we have data)
+        if (wizardData) {
+          addHiddenFieldsToForm(wizardData);
+        }
+
+        if (attempts >= maxAttempts) {
+          clearInterval(pollInterval);
+          console.log('🛑 Polling stopped after timeout');
+        }
+      }, 500);
+    }
+
+    // Function to remove the specific banner (returns true if removed)
+    function removeBanner() {
+      const allElements = document.querySelectorAll('h2, h3, h4, div, p');
+      for (let el of allElements) {
+        const text = el.textContent.trim();
+        if (text === "Haven't completed the wizard yet?" ||
+          text.includes("Haven't completed the wizard yet?")) {
+          console.log('🚫 Found Wizard CTA banner text, attempting to remove...');
+
+          // Try to find a small wrapper, not the whole section
+          const wrapper = el.closest('.elementor-widget-container') ||
+            el.closest('.wp-block') ||
+            el.parentElement;
+
+          // Only hide the wrapper if it's small (less than 4 children = likely just banner + button)
+          if (wrapper && wrapper.children.length <= 3) {
+            wrapper.style.display = 'none';
+            console.log('✅ Wizard CTA banner wrapper removed (children:', wrapper.children.length, ')');
+            return true;
+          } else {
+            // Just hide the element itself and try to hide the "Start Wizard" button
+            el.style.display = 'none';
+            const nextSibling = el.nextElementSibling;
+            if (nextSibling && nextSibling.tagName === 'A' && nextSibling.textContent.includes('Wizard')) {
+              nextSibling.style.display = 'none';
+              console.log('✅ Wizard CTA text + button removed');
+            } else {
+              console.log('✅ Wizard CTA text removed (no button found)');
+            }
+            return true;
+          }
+        }
+      }
+      return false; // Not found yet
+    }
+
+    // Populate submission reference into MailerLite form
+    function addHiddenFieldsToForm(wizardData) {
+      // Find the form
+      const forms = document.querySelectorAll('form');
+      let mlForm = null;
+
+      for (let form of forms) {
+        // Check if it's the right form (has email input)
+        // And isn't the search form
+        if (form.querySelector('input[type="email"]') && !form.className.includes('search')) {
+          mlForm = form;
+          break;
+        }
+      }
+
+      if (mlForm) {
+        const submissionRef = wizardData.submission_ref || 'WIZ-UNKNOWN';
+
+        // Check if we already added it
+        if (mlForm.querySelector('.ml-field-submission_ref')) {
+          return true; // Already added
+        }
+
+        console.log('📝 Adding Blueprint ID field to form...');
+
+        // Create the field container
+        const fieldContainer = document.createElement('div');
+        fieldContainer.className = 'ml-form-fieldRow ml-last-item ml-field-submission_ref';
+        fieldContainer.style.cssText = 'margin-bottom: 20px; width: 100%;';
+
+        const fieldGroup = document.createElement('div');
+        fieldGroup.className = 'ml-field-group';
+        fieldGroup.style.cssText = 'width: 100%;';
+
+        // Create label
+        const label = document.createElement('label');
+        label.textContent = 'Blueprint ID (Auto-filled)';
+        label.style.cssText = 'margin-bottom: 8px; color: #ffffff; font-size: 14px; font-weight: bold; display: block; font-family: inherit;';
+
+        // Create visible input (read-only)
+        const visibleInput = document.createElement('input');
+        visibleInput.type = 'text';
+        visibleInput.value = submissionRef;
+        visibleInput.name = 'fields[submission_ref]'; // MailerLite format
+        visibleInput.readOnly = true;
+        visibleInput.className = 'form-control';
+        // Style to match the dark theme but stand out
+        visibleInput.style.cssText = 'background-color: rgba(255,255,255,0.9) !important; color: #333 !important; border: 2px solid #333 !important; border-radius: 4px !important; font-family: monospace !important; font-size: 16px !important; font-weight: 700 !important; height: 45px !important; width: 100% !important; padding: 0 15px !important; text-align: center; cursor: not-allowed; box-sizing: border-box;';
+
+        // Assemble
+        fieldGroup.appendChild(label);
+        fieldGroup.appendChild(visibleInput);
+        fieldContainer.appendChild(fieldGroup);
+
+        // Insert at the very top of the form content
+        // Try to find the first visible input container to insert before
+        const firstInput = mlForm.querySelector('input');
+        if (firstInput) {
+          // Go up to the row container
+          const row = firstInput.closest('.ml-form-fieldRow') || firstInput.closest('.elementor-field-group') || firstInput.parentElement;
+          if (row) {
+            row.parentElement.insertBefore(fieldContainer, row);
+          } else {
+            mlForm.insertBefore(fieldContainer, mlForm.firstChild);
+          }
+        } else {
+          mlForm.insertBefore(fieldContainer, mlForm.firstChild);
+        }
+
+        console.log('✅ Blueprint ID field inserted at top of form:', submissionRef);
+        return true;
+
+      } else {
+        return false;
+      }
+    }
+
+    // Run on load
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', runQuotePageLogic);
+    } else {
+      runQuotePageLogic();
+    }
+
+  })();
+</script>
+
+<style>
+  /* Optional: Style adjustments for the summary section */
+  #wizard-data-summary h4 {
+    font-weight: 600;
+  }
+
+  #wizard-data-summary p {
+    margin: 0;
+  }
+
+  @media (max-width: 768px) {
+    #wizard-data-summary {
+      padding: 1.5rem !important;
+      margin: 1.5rem !important;
+    }
+  }
+</style>

@@ -26,7 +26,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const prevBtn = document.getElementById("ai-prev-btn");
     const nextBtn = document.getElementById("ai-next-btn");
     const submitBtn = document.getElementById("ai-submit-btn");
-    
+
     // Form inputs
     const goalInput = document.getElementById("goal");
     const workflowInput = document.getElementById("workflow");
@@ -82,7 +82,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     function validateCurrentStep() {
         if (!statusEl) return true;
-        
+
         statusEl.textContent = "";
         statusEl.classList.remove("mgrnz-status-error");
         statusEl.style.display = "none";
@@ -131,7 +131,7 @@ document.addEventListener("DOMContentLoaded", function () {
     function showCompletionScreen() {
         console.log('Showing completion screen with blueprint...');
         hideProgress();
-        
+
         if (!completionScreen) {
             console.error('Completion screen element not found!');
             return;
@@ -155,25 +155,25 @@ document.addEventListener("DOMContentLoaded", function () {
                 overflow-y: auto;
                 text-align: left;
             `;
-            
+
             const blueprintTitle = document.createElement('h3');
-            blueprintTitle.textContent = 'Your AI Workflow Blueprint';
+            blueprintTitle.textContent = 'Your 2-minute AI Automation Blueprint';
             blueprintTitle.style.cssText = 'margin-top: 0; color: #ffcf00; font-size: 1.3rem;';
-            
+
             const blueprintContent = document.createElement('div');
             blueprintContent.innerHTML = window.wizardSessionData.blueprint;
             blueprintContent.style.cssText = 'color: rgba(255, 255, 255, 0.9); line-height: 1.6;';
-            
+
             blueprintContainer.appendChild(blueprintTitle);
             blueprintContainer.appendChild(blueprintContent);
-            
+
             // Insert blueprint before the heading
             const completionMessage = completionScreen.querySelector('.completion-message');
             if (completionMessage) {
                 completionMessage.parentNode.insertBefore(blueprintContainer, completionMessage);
             }
         }
-        
+
         completionScreen.style.display = "block";
         completionScreen.classList.add('show');
         console.log('Completion screen visible!');
@@ -183,12 +183,12 @@ document.addEventListener("DOMContentLoaded", function () {
         const popup = document.getElementById('success-popup');
         const messageEl = document.getElementById('success-popup-message');
         const okBtn = document.getElementById('success-ok');
-        
+
         if (popup && messageEl) {
             messageEl.textContent = message;
             popup.style.display = 'flex';
             popup.classList.add('show');
-            
+
             if (okBtn) {
                 okBtn.onclick = () => {
                     popup.style.display = 'none';
@@ -239,49 +239,49 @@ document.addEventListener("DOMContentLoaded", function () {
                 '📝 Generating your personalized blueprint...'
             ]);
 
-            const nonce = (typeof wpApiSettings !== 'undefined' && wpApiSettings.nonce) 
+            const nonce = (typeof wpApiSettings !== 'undefined' && wpApiSettings.nonce)
                 || (typeof wp !== 'undefined' && wp.apiFetch && wp.apiFetch.nonceMiddleware && wp.apiFetch.nonceMiddleware.nonce)
                 || '';
-            
+
             fetch('/wp-json/mgrnz/v1/ai-workflow', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json', 'X-WP-Nonce': nonce },
                 body: JSON.stringify(payload)
             })
-            .then(response => response.text().then(text => {
-                if (!response.ok) throw new Error('HTTP error ' + response.status);
-                try {
-                    return JSON.parse(text);
-                } catch (e) {
-                    console.error('JSON parse error:', e);
-                    throw new Error('Invalid JSON response');
-                }
-            }))
-            .then(data => {
-                if (data.success && data.blueprint) {
-                    window.wizardSessionData = {
-                        sessionId: data.session_id || 'unknown',
-                        blueprint: data.blueprint,
-                        wizardData: payload
-                    };
-                    setTimeout(() => showCompletionScreen(), 3000);
-                } else {
-                    throw new Error('Invalid response from server');
-                }
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                hideProgress();
-                formWrap.style.display = "block";
-                if (statusEl) {
-                    statusEl.textContent = error.message || 'Unable to generate blueprint. Please try again.';
-                    statusEl.classList.add("mgrnz-status-error");
-                    statusEl.style.display = "block";
-                }
-                submitBtn.disabled = false;
-                if (nextBtn) nextBtn.disabled = false;
-                if (prevBtn) prevBtn.disabled = false;
-            });
+                .then(response => response.text().then(text => {
+                    if (!response.ok) throw new Error('HTTP error ' + response.status);
+                    try {
+                        return JSON.parse(text);
+                    } catch (e) {
+                        console.error('JSON parse error:', e);
+                        throw new Error('Invalid JSON response');
+                    }
+                }))
+                .then(data => {
+                    if (data.success && data.blueprint) {
+                        window.wizardSessionData = {
+                            sessionId: data.session_id || 'unknown',
+                            blueprint: data.blueprint,
+                            wizardData: payload
+                        };
+                        setTimeout(() => showCompletionScreen(), 3000);
+                    } else {
+                        throw new Error('Invalid response from server');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    hideProgress();
+                    formWrap.style.display = "block";
+                    if (statusEl) {
+                        statusEl.textContent = error.message || 'Unable to generate blueprint. Please try again.';
+                        statusEl.classList.add("mgrnz-status-error");
+                        statusEl.style.display = "block";
+                    }
+                    submitBtn.disabled = false;
+                    if (nextBtn) nextBtn.disabled = false;
+                    if (prevBtn) prevBtn.disabled = false;
+                });
         });
     }
 
@@ -296,7 +296,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 if (workflowInput) workflowInput.value = data.workflow || '';
                 if (painInput) painInput.value = data.pain_points || '';
                 if (emailInput) emailInput.value = data.email || '';
-                
+
                 if (data.tools) {
                     const selectedTools = data.tools.split(', ');
                     document.querySelectorAll('input[name="tools"]').forEach(checkbox => {
@@ -304,11 +304,11 @@ document.addEventListener("DOMContentLoaded", function () {
                     });
                 }
             }
-            
+
             completionScreen.style.display = 'none';
             formWrap.style.display = 'block';
             setStep(1);
-            
+
             if (submitBtn) submitBtn.disabled = false;
             if (nextBtn) nextBtn.disabled = false;
             if (prevBtn) prevBtn.disabled = false;
@@ -441,24 +441,24 @@ document.addEventListener("DOMContentLoaded", function () {
             debugBtn.textContent = '🤖 Fill Test Data';
             debugBtn.className = 'mgrnz-btn mgrnz-btn-secondary';
             debugBtn.style.cssText = 'margin-top: 1rem; font-size: 0.85rem; padding: 0.65rem 1.2rem; background-color: #ff00ff; border-color: #ff00ff; color: white;';
-            
+
             debugBtn.addEventListener('click', (e) => {
                 e.preventDefault();
                 if (goalInput) goalInput.value = "I want to automate my daily reporting process to save 2 hours a day.";
                 if (workflowInput) workflowInput.value = "Currently I log into 3 different portals, download CSVs, merge them in Excel, and email a PDF summary to my boss.";
-                
+
                 const exampleTools = ['Gmail', 'Google Sheets', 'Make.com', 'OpenAI (ChatGPT)'];
                 document.querySelectorAll('input[name="tools"]').forEach(checkbox => {
                     checkbox.checked = exampleTools.includes(checkbox.value);
                 });
-                
+
                 if (painInput) painInput.value = "It's boring, prone to copy-paste errors, and takes time away from real work.";
                 if (emailInput) emailInput.value = "test@example.com";
-                
+
                 debugBtn.textContent = '✅ Data Filled!';
                 setTimeout(() => debugBtn.textContent = '🤖 Fill Test Data', 2000);
             });
-            
+
             if (formWrap) formWrap.insertBefore(debugBtn, formWrap.firstChild);
         }
     }

@@ -11,6 +11,9 @@
  * @package MGRNZ
  */
 
+// Disable emoji scripts globally (they cause JavaScript syntax errors)
+define('DISABLE_WP_EMOJIS', true);
+
 // Load environment variables from .env.local
 if (file_exists(__DIR__ . '/.env.local')) {
     // Using vlucas/phpdotenv (install via: composer require vlucas/phpdotenv)

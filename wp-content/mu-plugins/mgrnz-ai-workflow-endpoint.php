@@ -39,6 +39,13 @@ add_action('rest_api_init', function () {
         'callback' => 'mgrnz_handle_subscription',
     ]);
     
+    // Start chat session endpoint
+    register_rest_route('mgrnz/v1', '/start-chat', [
+        'methods'  => 'POST',
+        'permission_callback' => '__return_true', // Public endpoint with rate limiting
+        'callback' => 'mgrnz_handle_start_chat',
+    ]);
+    
     // Chat message endpoint
     register_rest_route('mgrnz/v1', '/chat-message', [
         'methods'  => 'POST',
@@ -60,6 +67,13 @@ add_action('rest_api_init', function () {
         'callback' => 'mgrnz_handle_request_quote',
     ]);
     
+    // Generate blueprint endpoint (for chat-based wizard)
+    register_rest_route('mgrnz/v1', '/generate-blueprint', [
+        'methods'  => 'POST',
+        'permission_callback' => '__return_true',
+        'callback' => 'mgrnz_handle_generate_blueprint',
+    ]);
+    
     // Blueprint subscription endpoint
     register_rest_route('mgrnz/v1', '/subscribe-blueprint', [
         'methods'  => 'POST',
@@ -72,6 +86,20 @@ add_action('rest_api_init', function () {
         'methods'  => 'POST',
         'permission_callback' => '__return_true', // Public endpoint with rate limiting
         'callback' => 'mgrnz_handle_download_blueprint',
+    ]);
+    
+    // Token-based blueprint download endpoint
+    register_rest_route('mgrnz/v1', '/download-blueprint/(?P<token>[a-zA-Z0-9]+)', [
+        'methods'  => 'GET',
+        'permission_callback' => '__return_true',
+        'callback' => 'mgrnz_handle_token_download',
+        'args' => [
+            'token' => [
+                'required' => true,
+                'type' => 'string',
+                'sanitize_callback' => 'sanitize_text_field'
+            ]
+        ]
     ]);
     
     // State transition endpoint
@@ -256,6 +284,35 @@ function mgrnz_handle_ai_workflow_submission($request) {
             ], 500);
         }
         
+        // Check if this is a chat-based submission with conversation history
+        $session_id = $data['session_id'] ?? null;
+        $conversation_context = '';
+        
+        if ($session_id) {
+            // Load the conversation session to get chat history
+            try {
+                $session = MGRNZ_Conversation_Session::load($session_id);
+                if ($session) {
+                    $messages = $session->get_messages();
+                    if (!empty($messages)) {
+                        $conversation_context = "\n\n=== CONVERSATION HISTORY ===\n";
+                        foreach ($messages as $msg) {
+                            $sender = ucfirst($msg->sender);
+                            $conversation_context .= "{$sender}: {$msg->content}\n";
+                        }
+                        $conversation_context .= "=== END CONVERSATION ===\n\n";
+                        
+                        // Add conversation context to validated data for blueprint generation
+                        $validated_data['conversation_history'] = $conversation_context;
+                        
+                        error_log('[AI WORKFLOW] Including conversation history from session: ' . $session_id);
+                    }
+                }
+            } catch (Exception $e) {
+                error_log('[AI WORKFLOW] Failed to load conversation session: ' . $e->getMessage());
+            }
+        }
+        
         // Generate blueprint using AI service
         try {
             $ai_service = new MGRNZ_AI_Service();
@@ -282,8 +339,12 @@ function mgrnz_handle_ai_workflow_submission($request) {
                 ], 500);
             }
             
-            // Cache the newly generated blueprint
-            $cache_service->cache_blueprint($validated_data, $blueprint);
+            // Only cache if not bypassed and no conversation history
+            if (empty($conversation_context) && !isset($data['bypass_cache'])) {
+                $cache_service->cache_blueprint($validated_data, $blueprint);
+            } else {
+                error_log('[AI WORKFLOW] Skipping cache - chat-based submission or bypass requested');
+            }
             
         } catch (Exception $e) {
             $logger->log_error(
@@ -908,6 +969,87 @@ function mgrnz_subscribe_to_mailerlite($email, $api_key, $group_id = '', $fields
 }
 
 /**
+ * Handle start chat session endpoint
+ * 
+ * @param WP_REST_Request $request
+ * @return WP_REST_Response
+ */
+function mgrnz_handle_start_chat($request) {
+    $logger = new MGRNZ_Error_Logger();
+    mgrnz_add_cors_headers();
+    
+    $data = $request->get_json_params();
+    $goal = isset($data['goal']) ? sanitize_textarea_field($data['goal']) : '';
+    $workflow = isset($data['workflow']) ? sanitize_textarea_field($data['workflow']) : '';
+    
+    if (empty($goal) || empty($workflow)) {
+        return new WP_REST_Response([
+            'status' => 'error',
+            'message' => 'Goal and workflow are required'
+        ], 400);
+    }
+    
+    try {
+        // Generate session ID (must match format: sess_[32 alphanumeric chars])
+        $session_id = 'sess_' . wp_generate_password(32, false);
+        
+        // Create new conversation session using the Session class
+        $session = new MGRNZ_Conversation_Session([
+            'session_id' => $session_id,
+            'wizard_data' => [
+                'goal' => $goal,
+                'workflow' => $workflow
+            ],
+            'conversation_state' => MGRNZ_Conversation_Session::STATE_CLARIFICATION,
+            'metadata' => [
+                'question_count' => 0,
+                'max_questions' => 3
+            ]
+        ]);
+        
+        if (!$session->save()) {
+            throw new Exception('Failed to save session to database');
+        }
+        
+        // Generate first AI message
+        $ai_service = new MGRNZ_AI_Service();
+        $questions = $ai_service->generate_clarifying_questions([
+            'goal' => $goal,
+            'workflow_description' => $workflow
+        ]);
+        
+        $first_message = $questions['message'] ?? "Thanks for sharing that! Let me ask you a few questions to better understand your needs.";
+        
+        // Store first message in session
+        $chat_message = new MGRNZ_Chat_Message([
+            'session_id' => $session_id,
+            'sender' => 'assistant',
+            'content' => $first_message
+        ]);
+        $message_id = $chat_message->save();
+        $session->add_message($message_id);
+        
+        return new WP_REST_Response([
+            'status' => 'success',
+            'session_id' => $session_id,
+            'message' => $first_message
+        ], 200);
+        
+    } catch (Exception $e) {
+        $logger->log_error(
+            MGRNZ_Error_Logger::CATEGORY_AI_SERVICE,
+            'Failed to start chat session',
+            ['error' => $e->getMessage(), 'trace' => $e->getTraceAsString()]
+        );
+        
+        return new WP_REST_Response([
+            'status' => 'error',
+            'message' => 'Failed to start chat session: ' . $e->getMessage()
+        ], 500);
+    }
+}
+
+/**
  * Handle chat message requests
  *
  * @param WP_REST_Request $request
@@ -1061,7 +1203,8 @@ function mgrnz_handle_chat_message($request) {
             'conversation_state' => $response['conversation_state'],
             'next_action' => $response['next_action'],
             'transition' => $response['transition'] ?? null,
-            'progress' => $response['progress'] ?? 0
+            'progress' => $response['progress'] ?? 0,
+            'complete' => ($response['next_action'] === 'transition_to_blueprint')
         ], 200);
         
     } catch (Exception $e) {
@@ -1438,16 +1581,21 @@ function mgrnz_handle_subscribe_blueprint($request) {
     $session_validation = mgrnz_validate_session_id($data['session_id']);
     
     if (!$session_validation['valid']) {
-        $logger->log_warning(
-            MGRNZ_Error_Logger::CATEGORY_VALIDATION,
-            'Session validation failed for blueprint subscription',
-            ['ip_address' => $ip_address, 'session_id' => $data['session_id']]
-        );
-        
-        return $session_validation['error'];
+        // If session is invalid, check if we have direct blueprint data
+        if (!empty($data['blueprint_data'])) {
+            $session_id = 'direct_' . time();
+        } else {
+            $logger->log_warning(
+                MGRNZ_Error_Logger::CATEGORY_VALIDATION,
+                'Session validation failed for blueprint subscription',
+                ['ip_address' => $ip_address, 'session_id' => $data['session_id']]
+            );
+            
+            return $session_validation['error'];
+        }
+    } else {
+        $session_id = $session_validation['session_id'];
     }
-    
-    $session_id = $session_validation['session_id'];
     
     // Sanitize and validate name
     $name = sanitize_text_field($data['name']);
@@ -1497,29 +1645,79 @@ function mgrnz_handle_subscribe_blueprint($request) {
         // Load session
         $session = MGRNZ_Conversation_Session::load($session_id);
         
-        if (!$session) {
+        if (!$session && strpos($session_id, 'direct_') !== 0) {
             throw new Exception('Session not found');
         }
         
-        // Get blueprint data from session or generate it
-        $blueprint_data = $session->get_metadata('blueprint_data');
+        // Get blueprint data from session or request
+        $blueprint_data = null;
         
-        if (empty($blueprint_data)) {
-            // Try to get from submission post
-            $submission_id = $session->get_metadata('submission_id');
-            if ($submission_id) {
-                $blueprint_content = get_post_meta($submission_id, '_mgrnz_blueprint_content', true);
-                $diagram_data = get_post_meta($submission_id, '_mgrnz_diagram_data', true);
-                
-                if (!empty($diagram_data)) {
-                    $diagram_data = json_decode($diagram_data, true);
-                }
-                
-                $blueprint_data = [
-                    'content' => $blueprint_content,
-                    'diagram' => $diagram_data
-                ];
+        // 1. Try direct data from request (highest priority for this flow)
+        if (!empty($data['blueprint_data'])) {
+            $blueprint_data = $data['blueprint_data'];
+            
+            // Handle different formats
+            if (is_string($blueprint_data)) {
+                // If it's a string, assume it's HTML content
+                $blueprint_data = ['content' => $blueprint_data];
+            } elseif (isset($blueprint_data['html']) && !isset($blueprint_data['content'])) {
+                // If we have HTML but no content, use HTML as content
+                $blueprint_data['content'] = $blueprint_data['html'];
             }
+            
+            error_log('[SUBSCRIBE BLUEPRINT] Using direct blueprint data from request');
+        }
+        
+        // 2. Try session if available
+        if (empty($blueprint_data) && $session) {
+            $blueprint_data = $session->get_metadata('blueprint_data');
+            
+            if (empty($blueprint_data)) {
+                // Try to get from submission post
+                $submission_id = $session->get_metadata('submission_id');
+                if ($submission_id) {
+                    $blueprint_content = get_post_meta($submission_id, '_mgrnz_blueprint_content', true);
+                    $diagram_data = get_post_meta($submission_id, '_mgrnz_diagram_data', true);
+                    
+                    if (!empty($diagram_data)) {
+                        $diagram_data = json_decode($diagram_data, true);
+                    }
+                    
+                    $blueprint_data = [
+                        'content' => $blueprint_content,
+                        'diagram' => $diagram_data
+                    ];
+                }
+            }
+        }
+        
+        // Log what we have before validation
+        error_log('[SUBSCRIBE BLUEPRINT] Detailed blueprint data check: ' . json_encode([
+            'has_blueprint_data' => !empty($blueprint_data),
+            'blueprint_data_type' => gettype($blueprint_data),
+            'has_content' => !empty($blueprint_data['content'] ?? null),
+            'content_length' => isset($blueprint_data['content']) ? strlen($blueprint_data['content']) : 0,
+            'content_preview' => isset($blueprint_data['content']) ? substr($blueprint_data['content'], 0, 200) : 'NONE',
+            'content_is_empty_string' => isset($blueprint_data['content']) && $blueprint_data['content'] === '',
+            'content_is_whitespace' => isset($blueprint_data['content']) && trim($blueprint_data['content']) === '',
+            'has_html' => !empty($blueprint_data['html'] ?? null),
+            'html_length' => isset($blueprint_data['html']) ? strlen($blueprint_data['html']) : 0,
+            'data_keys' => is_array($blueprint_data) ? array_keys($blueprint_data) : 'not_array',
+            'session_id' => $session_id
+        ]));
+        
+        // Check if we have content in either 'content' or 'html' key
+        $has_content = !empty($blueprint_data['content']) || !empty($blueprint_data['html']);
+        
+        if (empty($blueprint_data) || !$has_content) {
+             error_log('[SUBSCRIBE BLUEPRINT] ERROR: No blueprint content - blueprint_data: ' . print_r($blueprint_data, true));
+             throw new Exception('No blueprint content found to generate PDF');
+        }
+        
+        // Normalize: ensure 'content' key exists
+        if (empty($blueprint_data['content']) && !empty($blueprint_data['html'])) {
+            $blueprint_data['content'] = $blueprint_data['html'];
+            error_log('[SUBSCRIBE BLUEPRINT] Copied html to content field');
         }
         
         // Generate PDF
@@ -1540,32 +1738,49 @@ function mgrnz_handle_subscribe_blueprint($request) {
         // Get download URL
         $download_url = $pdf_generator->get_download_url($pdf_path);
         
+        // For HTML files, use viewer endpoint to ensure it displays in browser
+        if (strpos($pdf_path, '.html') !== false) {
+            $filename = basename($pdf_path);
+            $download_url = rest_url('mgrnz/v1/view-blueprint/' . $filename);
+            error_log('[SUBSCRIBE BLUEPRINT] HTML file will open via viewer: ' . $download_url);
+        }
+        
         // Get submission ID for blueprint_id
-        $submission_id = $session->get_metadata('submission_id');
+        $submission_id = ($session) ? $session->get_metadata('submission_id') : 0;
         $blueprint_id = $submission_id ? intval($submission_id) : 0;
         
         // Create subscription record in database
-        global $wpdb;
-        $table_name = $wpdb->prefix . 'mgrnz_blueprint_subscriptions';
-        
-        $result = $wpdb->insert(
-            $table_name,
-            [
-                'name' => $name,
-                'email' => $email,
-                'subscription_type' => 'blueprint_download',
-                'blueprint_id' => $blueprint_id,
-                'subscribed_at' => current_time('mysql'),
-                'download_count' => 0
-            ],
-            ['%s', '%s', '%s', '%d', '%s', '%d']
-        );
-        
-        if ($result === false) {
-            throw new Exception('Failed to create subscription: ' . $wpdb->last_error);
+        $subscription_id = 0;
+        try {
+            global $wpdb;
+            $table_name = $wpdb->prefix . 'mgrnz_blueprint_subscriptions';
+            
+            // Check if table exists first
+            if ($wpdb->get_var("SHOW TABLES LIKE '$table_name'") === $table_name) {
+                $result = $wpdb->insert(
+                    $table_name,
+                    [
+                        'name' => $name,
+                        'email' => $email,
+                        'subscription_type' => 'blueprint_download',
+                        'blueprint_id' => $blueprint_id,
+                        'subscribed_at' => current_time('mysql'),
+                        'download_count' => 0
+                    ],
+                    ['%s', '%s', '%s', '%d', '%s', '%d']
+                );
+                
+                if ($result !== false) {
+                    $subscription_id = $wpdb->insert_id;
+                } else {
+                    error_log('[Subscribe Endpoint] DB Insert failed: ' . $wpdb->last_error);
+                }
+            } else {
+                error_log('[Subscribe Endpoint] Table does not exist: ' . $table_name);
+            }
+        } catch (Exception $e) {
+            error_log('[Subscribe Endpoint] Subscription recording failed (non-fatal): ' . $e->getMessage());
         }
-        
-        $subscription_id = $wpdb->insert_id;
         
         // Send email with blueprint
         $email_service = new MGRNZ_Email_Service();
@@ -3011,4 +3226,168 @@ function mgrnz_handle_track_event($request) {
     return new WP_REST_Response([
         'success' => true
     ], 200);
+}
+
+
+/**
+ * Handle token-based blueprint download
+ * Serves HTML blueprint files with proper download headers
+ */
+function mgrnz_handle_token_download($request) {
+    $token = $request->get_param('token');
+    
+    error_log('[BLUEPRINT DOWNLOAD] Token download requested: ' . $token);
+    
+    // Get file info from transient
+    $download_data = get_transient('blueprint_download_' . $token);
+    
+    if (!$download_data || !isset($download_data['file'])) {
+        error_log('[BLUEPRINT DOWNLOAD] Invalid or expired token: ' . $token);
+        return new WP_Error('invalid_token', 'Download link has expired or is invalid', ['status' => 404]);
+    }
+    
+    $file_path = $download_data['file'];
+    $filename = $download_data['filename'] ?? basename($file_path);
+    
+    // Check if file exists
+    if (!file_exists($file_path)) {
+        error_log('[BLUEPRINT DOWNLOAD] File not found: ' . $file_path);
+        return new WP_Error('file_not_found', 'Blueprint file not found', ['status' => 404]);
+    }
+    
+    error_log('[BLUEPRINT DOWNLOAD] Serving file: ' . $file_path);
+    
+    // Delete the transient so it can only be used once
+    delete_transient('blueprint_download_' . $token);
+    
+    // Serve the file with download headers
+    header('Content-Type: text/html; charset=utf-8');
+    header('Content-Disposition: inline; filename="' . $filename . '"');
+    header('Content-Length: ' . filesize($file_path));
+    header('Cache-Control: no-cache, must-revalidate');
+    header('Expires: 0');
+    
+    // Output the file
+    readfile($file_path);
+    exit;
+}
+
+
+/**
+ * Handle generate blueprint request
+ * Generates blueprint from existing chat session
+ */
+function mgrnz_handle_generate_blueprint($request) {
+    $logger = MGRNZ_Error_Logger::get_instance();
+    
+    try {
+        $data = $request->get_json_params();
+        $session_id = $data['session_id'] ?? '';
+        
+        error_log('[GENERATE BLUEPRINT] Request received for session: ' . $session_id);
+        
+        if (empty($session_id)) {
+            throw new Exception('Session ID is required');
+        }
+        
+        // Load session
+        $session = MGRNZ_Conversation_Session::load($session_id);
+        if (!$session) {
+            throw new Exception('Session not found');
+        }
+        
+        // Get conversation history
+        $messages = $session->get_messages();
+        if (empty($messages)) {
+            throw new Exception('No conversation history found');
+        }
+        
+        // Get goal and workflow from session metadata
+        $goal = $session->get_metadata('goal') ?? '';
+        $workflow = $session->get_metadata('workflow') ?? '';
+        
+        error_log('[GENERATE BLUEPRINT] Goal: ' . substr($goal, 0, 100));
+        error_log('[GENERATE BLUEPRINT] Workflow: ' . substr($workflow, 0, 100));
+        error_log('[GENERATE BLUEPRINT] Messages count: ' . count($messages));
+        
+        // Build conversation context
+        $conversation_context = "Previous conversation:\n\n";
+        foreach ($messages as $msg) {
+            $role = $msg['role'] === 'user' ? 'User' : 'Assistant';
+            $conversation_context .= "$role: " . $msg['content'] . "\n\n";
+        }
+        
+        // Generate blueprint using AI
+        $ai_service = new MGRNZ_AI_Service();
+        
+        $blueprint_prompt = "Based on our conversation, create a comprehensive 2-minute AI Automation Blueprint.\n\n";
+        $blueprint_prompt .= "Original Goal: $goal\n\n";
+        $blueprint_prompt .= "Current Workflow: $workflow\n\n";
+        $blueprint_prompt .= $conversation_context;
+        $blueprint_prompt .= "\n\nGenerate a detailed HTML blueprint with:\n";
+        $blueprint_prompt .= "- Executive Summary\n";
+        $blueprint_prompt .= "- Current State Analysis\n";
+        $blueprint_prompt .= "- Proposed Solution\n";
+        $blueprint_prompt .= "- Implementation Steps\n";
+        $blueprint_prompt .= "- Expected Benefits\n";
+        $blueprint_prompt .= "- Timeline & Cost Estimate\n\n";
+        $blueprint_prompt .= "Format the output as clean HTML with proper headings (h2, h3), paragraphs, and lists. Do NOT include ```html code fences.";
+        
+        $blueprint_html = $ai_service->generate_completion($blueprint_prompt, [
+            'max_tokens' => 2000,
+            'temperature' => 0.7
+        ]);
+        
+        // Clean up markdown code fences
+        $blueprint_html = preg_replace('/```html\s*/i', '', $blueprint_html);
+        $blueprint_html = preg_replace('/```\s*$/m', '', $blueprint_html);
+        $blueprint_html = preg_replace('/^```\s*/m', '', $blueprint_html);
+        $blueprint_html = trim($blueprint_html);
+        
+        error_log('[GENERATE BLUEPRINT] Generated blueprint length: ' . strlen($blueprint_html));
+        error_log('[GENERATE BLUEPRINT] Blueprint preview: ' . substr($blueprint_html, 0, 200));
+        
+        // Save blueprint to session
+        $session->set_metadata('blueprint_data', [
+            'content' => $blueprint_html,
+            'generated_at' => current_time('mysql')
+        ]);
+        
+        // Create submission post
+        $submission_id = wp_insert_post([
+            'post_type' => 'mgrnz_submission',
+            'post_title' => 'Blueprint - ' . $session_id,
+            'post_status' => 'publish',
+            'meta_input' => [
+                '_mgrnz_session_id' => $session_id,
+                '_mgrnz_blueprint_content' => $blueprint_html,
+                '_mgrnz_goal' => $goal,
+                '_mgrnz_workflow' => $workflow
+            ]
+        ]);
+        
+        if ($submission_id) {
+            $session->set_metadata('submission_id', $submission_id);
+        }
+        
+        return new WP_REST_Response([
+            'success' => true,
+            'blueprint' => $blueprint_html,
+            'submission_ref' => $session_id,
+            'submission_id' => $submission_id
+        ], 200);
+        
+    } catch (Exception $e) {
+        error_log('[GENERATE BLUEPRINT] Error: ' . $e->getMessage());
+        $logger->log_error(
+            MGRNZ_Error_Logger::CATEGORY_SUBMISSION,
+            'Blueprint generation failed: ' . $e->getMessage(),
+            ['session_id' => $session_id ?? 'unknown']
+        );
+        
+        return new WP_REST_Response([
+            'success' => false,
+            'message' => $e->getMessage()
+        ], 500);
+    }
 }

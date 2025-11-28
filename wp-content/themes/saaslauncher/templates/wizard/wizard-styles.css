@@ -1,0 +1,785 @@
+/* ============================================
+   MGRNZ AI Workflow Wizard - Complete Styles
+   ============================================ */
+
+:root {
+  --color-bg: #0f172a;
+  --color-card: #131c32;
+  --color-border: #2d3748;
+  --color-accent: #ff4f00;
+  --color-text: #ffffff;
+  --color-text-muted: #cbd5e0;
+  --color-text-dim: #718096;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+  background: var(--color-bg);
+  color: var(--color-text);
+  line-height: 1.6;
+  padding: 2rem 1rem;
+}
+
+.wizard-container {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+/* Wizard Header */
+.wizard-header {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.wizard-header h1 {
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
+  color: var(--color-text);
+}
+
+.wizard-header p {
+  font-size: 1.125rem;
+  color: var(--color-text-muted);
+}
+
+/* Wizard Form */
+.wizard-form {
+  background: var(--color-card);
+  border: 1px solid var(--color-border);
+  border-radius: 16px;
+  padding: 2rem;
+  margin-bottom: 2rem;
+}
+
+/* Progress Bar */
+.wizard-progress {
+  margin-bottom: 2rem;
+}
+
+.wizard-progress-bar {
+  height: 8px;
+  background: var(--color-accent);
+  border-radius: 4px;
+  transition: width 0.3s ease;
+  margin-bottom: 0.5rem;
+}
+
+.wizard-progress-text {
+  text-align: center;
+  color: var(--color-text-muted);
+  font-size: 0.875rem;
+}
+
+/* Wizard Steps */
+.wizard-step {
+  display: none;
+}
+
+.wizard-step.active {
+  display: block;
+  animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.wizard-step h2 {
+  color: var(--color-text);
+  margin-bottom: 0.5rem;
+  font-size: 1.5rem;
+}
+
+.wizard-step p {
+  color: var(--color-text-muted);
+  margin-bottom: 1.5rem;
+}
+
+.wizard-step textarea,
+.wizard-step input[type="email"] {
+  width: 100%;
+  padding: 1rem;
+  background: #000;
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  color: var(--color-text);
+  font-family: inherit;
+  font-size: 1rem;
+  resize: vertical;
+  margin-bottom: 0.5rem;
+}
+
+.wizard-step textarea:focus,
+.wizard-step input[type="email"]:focus {
+  outline: none;
+  border-color: var(--color-accent);
+}
+
+.char-count {
+  text-align: right;
+  color: var(--color-text-dim);
+  font-size: 0.875rem;
+  margin-bottom: 1.5rem;
+}
+
+/* Tools Categories */
+.tools-category {
+  margin-bottom: 2rem;
+  padding: 1.5rem;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+}
+
+.category-title {
+  color: var(--color-accent);
+  font-size: 1.125rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+/* Checkbox Group */
+.checkbox-group {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 0.75rem;
+  margin-bottom: 0;
+}
+
+.checkbox-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1rem;
+  background: #000;
+  border: 2px solid var(--color-border);
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s;
+  user-select: none;
+}
+
+.checkbox-item:hover {
+  border-color: var(--color-accent);
+  background: #0a0a0a;
+}
+
+.checkbox-item input[type="checkbox"] {
+  width: 20px;
+  height: 20px;
+  cursor: pointer;
+  accent-color: var(--color-accent);
+}
+
+.checkbox-item span {
+  color: var(--color-text);
+  font-size: 0.9375rem;
+}
+
+.checkbox-item:has(input:checked) {
+  border-color: var(--color-accent);
+  background: rgba(255, 79, 0, 0.1);
+}
+
+/* Buttons */
+.wizard-buttons {
+  display: flex;
+  gap: 1rem;
+  justify-content: space-between;
+}
+
+.btn {
+  padding: 0.75rem 1.5rem;
+  background: var(--color-accent);
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-size: 1rem;
+}
+
+.btn:hover {
+  filter: brightness(1.1);
+  transform: translateY(-1px);
+}
+
+.btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.btn-secondary {
+  background: transparent;
+  border: 1px solid var(--color-border);
+  color: var(--color-text);
+}
+
+.btn-secondary:hover {
+  background: #1f1f1f;
+}
+
+/* Progress Animation */
+.progress-container {
+  background: var(--color-card);
+  border: 1px solid var(--color-border);
+  border-radius: 16px;
+  padding: 3rem 2rem;
+  text-align: center;
+  display: none;
+  opacity: 0;
+  transition: opacity 0.5s ease;
+}
+
+.progress-container.show {
+  display: block;
+  opacity: 1;
+}
+
+.progress-messages {
+  margin-bottom: 2rem;
+  min-height: 120px;
+}
+
+.progress-message {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  opacity: 0;
+  transform: translateY(10px);
+  transition: opacity 0.4s ease, transform 0.4s ease;
+  margin: 1rem 0;
+}
+
+.progress-message.active {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.progress-icon {
+  font-size: 1.5rem;
+  animation: pulse 2s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(1.1); opacity: 0.8; }
+}
+
+.progress-text {
+  color: var(--color-text);
+  font-size: 1.125rem;
+  font-weight: 500;
+}
+
+.progress-bar-container {
+  width: 100%;
+  height: 8px;
+  background: #1f1f1f;
+  border-radius: 4px;
+  overflow: hidden;
+  position: relative;
+}
+
+.progress-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--color-accent), #ff7a3d);
+  border-radius: 4px;
+  width: 0%;
+  transition: width 0.6s ease;
+  position: relative;
+}
+
+.progress-bar-fill::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+  animation: shimmer 2s infinite;
+}
+
+@keyframes shimmer {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+}
+
+/* Blueprint Section */
+.blueprint-section {
+  background: var(--color-card);
+  border: 1px solid var(--color-border);
+  border-radius: 16px;
+  padding: 2rem;
+  display: none;
+  opacity: 0;
+  transition: opacity 0.5s ease;
+}
+
+.blueprint-section.show {
+  display: block;
+  opacity: 1;
+}
+
+.blueprint-header {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.blueprint-header h2 {
+  color: var(--color-text);
+  margin-bottom: 0.5rem;
+}
+
+.blueprint-content {
+  color: var(--color-text);
+  line-height: 1.7;
+  margin-bottom: 2rem;
+}
+
+.blueprint-content h3 {
+  color: var(--color-text);
+  margin-top: 1.5rem;
+  margin-bottom: 0.75rem;
+}
+
+.blueprint-content ul {
+  margin-left: 1.5rem;
+  margin-bottom: 1rem;
+}
+
+.blueprint-content li {
+  margin-bottom: 0.5rem;
+}
+
+.blueprint-content strong {
+  color: var(--color-accent);
+}
+
+/* Flow Diagram Styles */
+.flow-diagram {
+  background: #000;
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+  padding: 2rem;
+  margin: 2rem 0;
+  overflow-x: auto;
+}
+
+.flow-step {
+  display: flex;
+  align-items: center;
+  margin: 1rem 0;
+  gap: 1rem;
+}
+
+.flow-box {
+  background: linear-gradient(135deg, #1f1f1f, #2a2a2a);
+  border: 2px solid var(--color-accent);
+  border-radius: 8px;
+  padding: 1rem 1.5rem;
+  min-width: 200px;
+  text-align: center;
+  position: relative;
+}
+
+.flow-box-title {
+  font-weight: 600;
+  color: var(--color-accent);
+  font-size: 0.875rem;
+  text-transform: uppercase;
+  margin-bottom: 0.5rem;
+}
+
+.flow-box-content {
+  color: var(--color-text);
+  font-size: 0.9375rem;
+}
+
+.flow-arrow {
+  color: var(--color-accent);
+  font-size: 2rem;
+  flex-shrink: 0;
+}
+
+.flow-section {
+  margin: 2rem 0;
+}
+
+.flow-section-title {
+  color: var(--color-accent);
+  font-size: 1.125rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+  text-align: center;
+}
+
+@media (max-width: 768px) {
+  .flow-step {
+    flex-direction: column;
+  }
+  
+  .flow-arrow {
+    transform: rotate(90deg);
+  }
+  
+  .flow-box {
+    width: 100%;
+  }
+}
+
+/* Completion Screen */
+.completion-screen {
+  background: var(--color-card);
+  border: 1px solid var(--color-border);
+  border-radius: 16px;
+  padding: 3rem 2rem;
+  text-align: center;
+  display: none;
+  opacity: 0;
+  transition: opacity 0.5s ease;
+  margin-top: 2rem;
+}
+
+.completion-screen.show {
+  display: block;
+  opacity: 1;
+}
+
+.completion-message h2 {
+  color: var(--color-text);
+  font-size: 1.75rem;
+  margin-bottom: 2rem;
+  font-weight: 600;
+}
+
+.completion-action-buttons {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1.25rem;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.completion-action-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  padding: 1.25rem 1.5rem;
+  font-size: 1rem;
+  font-weight: 500;
+  border: 2px solid var(--color-accent);
+  background: transparent;
+  color: var(--color-text);
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  min-height: 64px;
+  position: relative;
+  overflow: hidden;
+}
+
+.completion-action-btn::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 0;
+  height: 100%;
+  background: var(--color-accent);
+  transition: width 0.3s ease;
+  z-index: 0;
+}
+
+.completion-action-btn:hover::before {
+  width: 100%;
+}
+
+.completion-action-btn:hover {
+  color: #fff;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(255, 79, 0, 0.3);
+}
+
+.completion-action-btn .btn-icon,
+.completion-action-btn .btn-text {
+  position: relative;
+  z-index: 1;
+}
+
+.completion-action-btn .btn-icon {
+  font-size: 1.5rem;
+}
+
+/* Modal Overlay */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.75);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 10000;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.modal-overlay.show {
+  display: flex;
+  opacity: 1;
+}
+
+.modal-content {
+  background: var(--color-card);
+  border: 1px solid var(--color-border);
+  border-radius: 16px;
+  padding: 2.5rem;
+  max-width: 500px;
+  width: 90%;
+  position: relative;
+  transform: scale(0.9);
+  transition: transform 0.3s ease;
+}
+
+.modal-overlay.show .modal-content {
+  transform: scale(1);
+}
+
+.modal-close {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  background: transparent;
+  border: none;
+  font-size: 1.75rem;
+  color: var(--color-text-dim);
+  cursor: pointer;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+  transition: all 0.2s;
+}
+
+.modal-close:hover {
+  background: #1f1f1f;
+  color: var(--color-text);
+}
+
+.modal-content h3 {
+  color: var(--color-text);
+  font-size: 1.5rem;
+  margin-bottom: 0.75rem;
+}
+
+.modal-content p {
+  color: var(--color-text-muted);
+  margin-bottom: 1.5rem;
+}
+
+.modal-content input,
+.modal-content textarea {
+  width: 100%;
+  padding: 0.875rem 1rem;
+  background: #000;
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  color: var(--color-text);
+  font-family: inherit;
+  font-size: 1rem;
+  margin-bottom: 1rem;
+}
+
+.modal-content input:focus,
+.modal-content textarea:focus {
+  outline: none;
+  border-color: var(--color-accent);
+}
+
+.modal-content textarea {
+  resize: vertical;
+  min-height: 100px;
+}
+
+/* MailerLite Form Block */
+#workflow-quote-form {
+  background: var(--color-card);
+  border: 1px solid var(--color-border);
+  border-radius: 16px;
+  padding: 2rem;
+  margin-top: 2rem;
+  display: none;
+  opacity: 0;
+  transition: opacity 0.5s ease;
+}
+
+#workflow-quote-form.show {
+  display: block;
+  opacity: 1;
+}
+
+#workflow-quote-form h3 {
+  color: var(--color-text);
+  margin-bottom: 1rem;
+  text-align: center;
+}
+
+/* Mobile Responsive */
+@media (max-width: 768px) {
+  body {
+    padding: 1rem 0.5rem;
+  }
+  
+  .wizard-header h1 {
+    font-size: 1.75rem;
+  }
+  
+  .wizard-form {
+    padding: 1.5rem;
+  }
+  
+  .wizard-buttons {
+    flex-direction: column;
+  }
+  
+  .checkbox-group {
+    grid-template-columns: 1fr;
+  }
+  
+  .tools-category {
+    padding: 1rem;
+  }
+  
+  .category-title {
+    font-size: 1rem;
+  }
+  
+  .completion-action-buttons {
+    grid-template-columns: 1fr;
+  }
+  
+  .modal-content {
+    padding: 2rem 1.5rem;
+    width: 95%;
+  }
+}
+
+
+/* Chat Interface Styles */
+#chat-container {
+  background: #000;
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  padding: 1rem;
+  margin-bottom: 1.5rem;
+  min-height: 300px;
+  max-height: 400px;
+  overflow-y: auto;
+}
+
+#chat-messages {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.chat-message {
+  padding: 0.875rem 1rem;
+  border-radius: 8px;
+  max-width: 80%;
+  line-height: 1.5;
+}
+
+.chat-ai {
+  background: var(--color-card);
+  border: 1px solid var(--color-border);
+  color: var(--color-text);
+  align-self: flex-start;
+}
+
+.chat-user {
+  background: var(--color-accent);
+  color: #fff;
+  align-self: flex-end;
+  text-align: right;
+}
+
+#chat-typing {
+  display: none;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.875rem 1rem;
+  margin-top: 1rem;
+}
+
+.typing-indicator {
+  display: flex;
+  gap: 0.25rem;
+}
+
+.typing-indicator span {
+  width: 8px;
+  height: 8px;
+  background: var(--color-accent);
+  border-radius: 50%;
+  animation: typing 1.4s infinite;
+}
+
+.typing-indicator span:nth-child(2) {
+  animation-delay: 0.2s;
+}
+
+.typing-indicator span:nth-child(3) {
+  animation-delay: 0.4s;
+}
+
+@keyframes typing {
+  0%, 60%, 100% {
+    transform: translateY(0);
+    opacity: 0.7;
+  }
+  30% {
+    transform: translateY(-10px);
+    opacity: 1;
+  }
+}
+
+.typing-text {
+  color: var(--color-text-muted);
+  font-size: 0.875rem;
+}
+
+.chat-input-container {
+  margin-bottom: 1.5rem;
+}
+
+.chat-input-container label {
+  display: block;
+  color: var(--color-text);
+  margin-bottom: 0.5rem;
+  font-weight: 500;
+}
+
+#chat-submit-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}

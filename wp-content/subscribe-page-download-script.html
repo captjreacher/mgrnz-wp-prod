@@ -27,6 +27,17 @@ window.addEventListener('load', function() {
       const pdfContainer = document.createElement('div');
       pdfContainer.innerHTML = blueprintHTML;
       pdfContainer.style.cssText = 'position: absolute; left: -9999px; width: 800px; padding: 40px; background: white; color: black;';
+      
+      // Style the content for PDF (override dark theme)
+      const style = document.createElement('style');
+      style.textContent = `
+        #pdf-content * { color: #000 !important; }
+        #pdf-content h1, #pdf-content h2, #pdf-content h3 { color: #ff4f00 !important; }
+        #pdf-content strong { color: #ff4f00 !important; }
+        #pdf-content { line-height: 1.6; font-family: Arial, sans-serif; }
+      `;
+      pdfContainer.id = 'pdf-content';
+      document.head.appendChild(style);
       document.body.appendChild(pdfContainer);
       
       // Configure PDF options
@@ -42,6 +53,7 @@ window.addEventListener('load', function() {
       html2pdf().set(opt).from(pdfContainer).save().then(function() {
         // Clean up
         document.body.removeChild(pdfContainer);
+        document.head.removeChild(style);
         localStorage.removeItem('mgrnz_blueprint_download');
         
         // Update button
@@ -51,7 +63,8 @@ window.addEventListener('load', function() {
         console.error('PDF generation error:', error);
         downloadBtn.textContent = '❌ Error - Try Again';
         downloadBtn.style.background = '#f05656';
-        document.body.removeChild(pdfContainer);
+        if (pdfContainer.parentNode) document.body.removeChild(pdfContainer);
+        if (style.parentNode) document.head.removeChild(style);
       });
     });
     

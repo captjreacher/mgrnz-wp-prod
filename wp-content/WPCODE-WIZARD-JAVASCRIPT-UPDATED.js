@@ -57,7 +57,7 @@ document.addEventListener("DOMContentLoaded", function () {
         2: "Current workflow",
         3: "Tools you use",
         4: "Pain points",
-        5: "Review & email"
+        5: "Review & submit"
     };
 
     function updateReview() {
@@ -110,15 +110,7 @@ document.addEventListener("DOMContentLoaded", function () {
             statusEl.classList.add("mgrnz-status-error");
             return false;
         }
-        if (currentStep === 5 && emailInput.value) {
-            const val = emailInput.value.trim();
-            const isValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(val);
-            if (!isValid) {
-                statusEl.textContent = "That email address doesn't look quite right.";
-                statusEl.classList.add("mgrnz-status-error");
-                return false;
-            }
-        }
+        // Step 5 is now review - no email validation needed
         return true;
     }
 
@@ -179,13 +171,21 @@ document.addEventListener("DOMContentLoaded", function () {
             nextBtn && (nextBtn.disabled = true);
             prevBtn && (prevBtn.disabled = true);
 
+            // Generate submission reference ID
+            const timestamp = Date.now();
+            const submissionRef = 'WIZ-' + timestamp.toString(36).toUpperCase();
+            
             const payload = {
                 goal: goalInput.value.trim(),
                 workflow: workflowInput.value.trim(),
                 tools: toolsInput.value.trim(),
                 pain_points: painInput.value.trim(),
-                email: emailInput.value.trim() || null
+                submission_ref: submissionRef,
+                timestamp: timestamp
             };
+            
+            // Store wizard data for quote page access
+            localStorage.setItem('mgrnz_wizard_data', JSON.stringify(payload));
 
             updateReview();
 

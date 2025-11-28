@@ -182,14 +182,28 @@ class MGRNZ_Conversation_Manager {
      * 
      * @param string $prompt Prompt for AI
      * @return string AI response
+     * @throws Exception If API call fails or returns invalid data
      */
     private function call_ai_for_questions($prompt) {
+        // Validate prompt
+        if (empty($prompt) || trim($prompt) === '') {
+            error_log('[Conversation Manager] Empty prompt provided to call_ai_for_questions');
+            throw new Exception('Empty prompt provided');
+        }
+        
         // Use a simplified version of the AI service for chat
         $provider = getenv('MGRNZ_AI_PROVIDER') ?: get_option('mgrnz_ai_provider', 'openai');
         $api_key = getenv('MGRNZ_AI_API_KEY') ?: get_option('mgrnz_ai_api_key', '');
         $model = getenv('MGRNZ_AI_MODEL') ?: get_option('mgrnz_ai_model', 
             $provider === 'anthropic' ? 'claude-3-5-sonnet-20241022' : 'gpt-4o-mini');
         
+        // Validate API key
+        if (empty($api_key)) {
+            error_log('[Conversation Manager] Missing API key for provider: ' . $provider);
+            throw new Exception('AI service not configured - missing API key');
+        }
+        
+        // Build request based on provider
         if ($provider === 'anthropic') {
             $url = 'https://api.anthropic.com/v1/messages';
             $body = json_encode([
@@ -227,25 +241,70 @@ class MGRNZ_Conversation_Manager {
             ];
         }
         
+        // Make API request
         $response = wp_remote_post($url, $args);
         
+        // Check for WordPress HTTP errors
         if (is_wp_error($response)) {
-            throw new Exception($response->get_error_message());
+            $error_message = $response->get_error_message();
+            error_log('[Conversation Manager] HTTP error from AI service: ' . $error_message);
+            throw new Exception('Failed to connect to AI service: ' . $error_message);
         }
         
+        // Check HTTP status code
         $status_code = wp_remote_retrieve_response_code($response);
         if ($status_code !== 200) {
-            throw new Exception('AI service returned status ' . $status_code);
+            $body = wp_remote_retrieve_body($response);
+            error_log('[Conversation Manager] AI service returned status ' . $status_code . ': ' . $body);
+            
+            // Provide more specific error messages
+            if ($status_code === 401) {
+                throw new Exception('AI service authentication failed - invalid API key');
+            } elseif ($status_code === 429) {
+                throw new Exception('AI service rate limit exceeded - please try again later');
+            } elseif ($status_code >= 500) {
+                throw new Exception('AI service is temporarily unavailable');
+            } else {
+                throw new Exception('AI service returned error status ' . $status_code);
+            }
         }
         
+        // Parse response body
         $body = wp_remote_retrieve_body($response);
-        $data = json_decode($body, true);
-        
-        if ($provider === 'anthropic') {
-            return $data['content'][0]['text'] ?? '';
-        } else {
-            return $data['choices'][0]['message']['content'] ?? '';
+        if (empty($body)) {
+            error_log('[Conversation Manager] Empty response body from AI service');
+            throw new Exception('AI service returned empty response');
         }
+        
+        $data = json_decode($body, true);
+        if (json_last_error() !== JSON_ERROR_NONE) {
+            error_log('[Conversation Manager] Failed to parse AI response JSON: ' . json_last_error_msg());
+            throw new Exception('Invalid response format from AI service');
+        }
+        
+        // Extract content based on provider
+        $content = '';
+        if ($provider === 'anthropic') {
+            if (!isset($data['content'][0]['text'])) {
+                error_log('[Conversation Manager] Anthropic response missing content: ' . print_r($data, true));
+                throw new Exception('Invalid response structure from Anthropic API');
+            }
+            $content = $data['content'][0]['text'];
+        } else {
+            if (!isset($data['choices'][0]['message']['content'])) {
+                error_log('[Conversation Manager] OpenAI response missing content: ' . print_r($data, true));
+                throw new Exception('Invalid response structure from OpenAI API');
+            }
+            $content = $data['choices'][0]['message']['content'];
+        }
+        
+        // Validate content is not empty
+        if (empty($content) || trim($content) === '') {
+            error_log('[Conversation Manager] AI service returned empty content');
+            throw new Exception('AI service returned empty response content');
+        }
+        
+        return $content;
     }
     
     /**
@@ -327,8 +386,16 @@ class MGRNZ_Conversation_Manager {
         try {
             $response = $this->call_ai_for_questions($prompt);
             
+            // Validate response is not empty
+            if (empty($response) || trim($response) === '') {
+                error_log('[Conversation Manager] AI returned empty response');
+                throw new Exception('Empty AI response');
+            }
+            
             // Check if we should transition states
             $next_action = $this->determine_next_action($response, $user_message);
+            
+            error_log('[Conversation Manager] Generated response - Length: ' . strlen($response) . ', Next action: ' . ($next_action ?? 'none'));
             
             return [
                 'message' => $response,
@@ -337,6 +404,7 @@ class MGRNZ_Conversation_Manager {
             
         } catch (Exception $e) {
             error_log('[Conversation Manager] Failed to generate response: ' . $e->getMessage());
+            error_log('[Conversation Manager] Exception trace: ' . $e->getTraceAsString());
             
             return [
                 'message' => "I'm having a bit of trouble processing that. Could you rephrase or provide more details?",
@@ -371,24 +439,49 @@ class MGRNZ_Conversation_Manager {
         $state = $this->session->conversation_state;
         $wizard_data = $this->session->wizard_data;
         
-        $prompt = "You are {$this->session->assistant_name}, an AI workflow automation consultant. ";
-        $prompt .= "You are having a conversation with a user about their workflow automation needs.\n\n";
-        $prompt .= "Original submission:\n";
-        $prompt .= "- Goal: " . ($wizard_data['goal'] ?? '') . "\n";
-        $prompt .= "- Workflow: " . ($wizard_data['workflow_description'] ?? '') . "\n";
-        $prompt .= "- Tools: " . ($wizard_data['tools'] ?? '') . "\n";
-        $prompt .= "- Pain Points: " . ($wizard_data['pain_points'] ?? '') . "\n\n";
-        $prompt .= "Conversation so far:\n{$history}\n";
-        $prompt .= "Current state: {$state}\n\n";
-        
-        if ($state === MGRNZ_Conversation_Session::STATE_CLARIFICATION) {
-            $prompt .= "Continue asking clarifying questions to understand their needs better. ";
-            $prompt .= "After 2-3 exchanges, you can transition to presenting service options.\n\n";
-        } elseif ($state === MGRNZ_Conversation_Session::STATE_UPSELL) {
-            $prompt .= "Present service opportunities naturally: consultation booking, cost estimates, or formal quotes.\n\n";
+        // Count how many questions have been asked
+        $messages = $this->session->get_messages();
+        $question_count = 0;
+        foreach ($messages as $msg) {
+            if ($msg->sender === 'assistant') {
+                $question_count++;
+            }
         }
         
-        $prompt .= "Respond to the user's latest message in a friendly, helpful way:";
+        $questions_remaining = 5 - $question_count;
+        
+        $prompt = "CRITICAL INSTRUCTIONS - READ CAREFULLY:\n\n";
+        
+        $prompt .= "You are a technical workflow analyst. You have a MAXIMUM of 5 questions total.\n";
+        $prompt .= "Questions asked so far: {$question_count}/5\n";
+        $prompt .= "Questions remaining: {$questions_remaining}\n\n";
+        
+        $prompt .= "PRIORITY ORDER (ask in this order):\n";
+        $prompt .= "1. Type of notifications/items (e.g., email types, ticket types)\n";
+        $prompt .= "2. Volume/frequency (e.g., how many per day)\n";
+        $prompt .= "3. Operating environment (e.g., Gmail, Outlook, Slack)\n";
+        $prompt .= "4. Time spent (if not already clear)\n";
+        $prompt .= "5. Most common actions (if critical)\n\n";
+        
+        $prompt .= "ABSOLUTE RULES:\n";
+        $prompt .= "- NEVER mention consultations, quotes, or services\n";
+        $prompt .= "- Ask ONE question per response (under 20 words)\n";
+        $prompt .= "- If you've asked 5 questions, say: \"Got it, generating your blueprint now.\"\n";
+        $prompt .= "- Skip questions if info is already clear from context\n\n";
+        
+        $prompt .= "USER'S WORKFLOW:\n";
+        $prompt .= "Goal: " . ($wizard_data['goal'] ?? '') . "\n";
+        $prompt .= "Workflow: " . ($wizard_data['workflow_description'] ?? '') . "\n";
+        $prompt .= "Tools: " . ($wizard_data['tools'] ?? '') . "\n";
+        $prompt .= "Pain Points: " . ($wizard_data['pain_points'] ?? '') . "\n\n";
+        
+        $prompt .= "CONVERSATION:\n{$history}\n\n";
+        
+        if ($questions_remaining <= 0) {
+            $prompt .= "You've reached the 5 question limit. Say EXACTLY: \"Perfect! I have everything I need. Please click the 'Generate Blueprint' button below to view your plan.\" (Nothing else)\n\n";
+        } else {
+            $prompt .= "Ask your next priority question (under 20 words):";
+        }
         
         return $prompt;
     }
@@ -401,20 +494,25 @@ class MGRNZ_Conversation_Manager {
      * @return string|null Next action or null
      */
     private function determine_next_action($response, $user_message) {
-        // Count messages in current state
+        // Count assistant messages (questions asked)
         $messages = $this->session->get_messages();
-        $state_message_count = 0;
+        $question_count = 0;
         
         foreach ($messages as $msg) {
-            if ($msg->sender === 'user' || $msg->sender === 'assistant') {
-                $state_message_count++;
+            if ($msg->sender === 'assistant') {
+                $question_count++;
             }
         }
         
-        // Transition logic based on state and message count
+        // Transition after 5 questions OR if AI says it's generating blueprint
         if ($this->session->conversation_state === MGRNZ_Conversation_Session::STATE_CLARIFICATION) {
-            if ($state_message_count >= 6) { // 3 exchanges (user + assistant)
-                return 'transition_to_upsell';
+            // Check if we've hit the limit or AI is ready to generate
+            if ($question_count >= 5 || 
+                stripos($response, 'generating your blueprint') !== false ||
+                stripos($response, 'generate your blueprint') !== false ||
+                stripos($response, 'click the') !== false ||
+                stripos($response, 'Generate Blueprint') !== false) {
+                return 'transition_to_blueprint';
             }
         }
         

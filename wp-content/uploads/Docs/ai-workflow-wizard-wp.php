@@ -21,12 +21,12 @@
     
     :root {
       --color-bg: #0f172a;
-      --color-card: #131c32;
-      --color-border: #2d3748;
+      --color-card: #0b0b0b;
+      --color-border: #1f1f1f;
       --color-accent: #ff4f00;
       --color-text: #ffffff;
-      --color-text-muted: #cbd5e0;
-      --color-text-dim: #718096;
+      --color-text-muted: #bbb;
+      --color-text-dim: #666;
     }
     
     * {
@@ -706,7 +706,7 @@
     <!-- Wizard Header -->
     <header class="wizard-header">
       <h1>AI Workflow Wizard</h1>
-      <p>Let's build your personalized AI workflow in 2 simple steps</p>
+      <p>Let's build your personalized AI workflow in 5 simple steps</p>
       <div id="debug-button-container"></div>
     </header>
 
@@ -714,14 +714,14 @@
     <form class="wizard-form" id="wizard-form">
       <!-- Progress Indicator -->
       <div class="wizard-progress">
-        <div class="wizard-progress-bar" id="progress-bar" style="width: 50%;"></div>
-        <div class="wizard-progress-text">Step <span id="current-step">1</span> of 2</div>
+        <div class="wizard-progress-bar" id="progress-bar" style="width: 20%;"></div>
+        <div class="wizard-progress-text">Step <span id="current-step">1</span> of 5</div>
       </div>
 
       <!-- Step 1: Goal -->
       <div class="wizard-step active" data-step="1">
-        <h2>What is the problem you're wanting to solve?</h2>
-        <p class="step-description">Don't hold back - tell us what's frustrating you or slowing you down.</p>
+        <h2>What's your main goal?</h2>
+        <p>Tell us what you're trying to achieve with AI in your workflow.</p>
         <textarea 
           id="goal" 
           name="goal" 
@@ -736,8 +736,8 @@
 
       <!-- Step 2: Current Workflow -->
       <div class="wizard-step" data-step="2">
-        <h2 style="color: #4ade80; margin-bottom: 0.5rem;">Ok, we can definitely help with that!</h2>
-        <p class="step-description" style="font-size: 1.0625rem; margin-bottom: 1.5rem;">Now tell me what the problem would look like if it was automated. Don't worry if your idea sounds fanciful - we can work through that!</p>
+        <h2>Describe your current workflow</h2>
+        <p>How do you currently handle this process? What tools do you use?</p>
         <textarea 
           id="workflow" 
           name="workflow" 
@@ -749,10 +749,231 @@
         <div class="char-count"><span id="workflow-count">0</span>/2000</div>
         <div class="wizard-buttons">
           <button type="button" class="btn-secondary btn wizard-back">← Back</button>
-          <button type="submit" class="btn wizard-submit">Build my AI workflow</button>
+          <button type="button" class="btn wizard-next">Next →</button>
         </div>
       </div>
 
+      <!-- Step 3: Tools -->
+      <div class="wizard-step" data-step="3">
+        <h2>What tools are you currently using?</h2>
+        <p>Select all that apply from each category.</p>
+        
+        <!-- Operating Systems -->
+        <div class="tools-category">
+          <h3 class="category-title">💻 Operating Systems</h3>
+          <div class="checkbox-group">
+            <label class="checkbox-item">
+              <input type="checkbox" name="tools" value="Windows" />
+              <span>Windows</span>
+            </label>
+            <label class="checkbox-item">
+              <input type="checkbox" name="tools" value="macOS" />
+              <span>macOS</span>
+            </label>
+            <label class="checkbox-item">
+              <input type="checkbox" name="tools" value="Linux/Unix" />
+              <span>Linux/Unix</span>
+            </label>
+            <label class="checkbox-item">
+              <input type="checkbox" name="tools" value="Android" />
+              <span>Android</span>
+            </label>
+            <label class="checkbox-item">
+              <input type="checkbox" name="tools" value="iOS" />
+              <span>iOS</span>
+            </label>
+          </div>
+        </div>
+
+        <!-- Office Tools -->
+        <div class="tools-category">
+          <h3 class="category-title">📄 Office & Productivity</h3>
+          <div class="checkbox-group">
+            <label class="checkbox-item">
+              <input type="checkbox" name="tools" value="Google Workspace" />
+              <span>Google Workspace</span>
+            </label>
+            <label class="checkbox-item">
+              <input type="checkbox" name="tools" value="Microsoft 365" />
+              <span>Microsoft 365</span>
+            </label>
+            <label class="checkbox-item">
+              <input type="checkbox" name="tools" value="LibreOffice" />
+              <span>LibreOffice</span>
+            </label>
+            <label class="checkbox-item">
+              <input type="checkbox" name="tools" value="Notion" />
+              <span>Notion</span>
+            </label>
+            <label class="checkbox-item">
+              <input type="checkbox" name="tools" value="Slack" />
+              <span>Slack</span>
+            </label>
+            <label class="checkbox-item">
+              <input type="checkbox" name="tools" value="Microsoft Teams" />
+              <span>Microsoft Teams</span>
+            </label>
+            <label class="checkbox-item">
+              <input type="checkbox" name="tools" value="Zoom" />
+              <span>Zoom</span>
+            </label>
+            <label class="checkbox-item">
+              <input type="checkbox" name="tools" value="Asana" />
+              <span>Asana</span>
+            </label>
+            <label class="checkbox-item">
+              <input type="checkbox" name="tools" value="Trello" />
+              <span>Trello</span>
+            </label>
+          </div>
+        </div>
+
+        <!-- Marketing Tools -->
+        <div class="tools-category">
+          <h3 class="category-title">📧 Marketing & Email</h3>
+          <div class="checkbox-group">
+            <label class="checkbox-item">
+              <input type="checkbox" name="tools" value="ActiveCampaign" />
+              <span>ActiveCampaign</span>
+            </label>
+            <label class="checkbox-item">
+              <input type="checkbox" name="tools" value="HubSpot Marketing" />
+              <span>HubSpot Marketing</span>
+            </label>
+            <label class="checkbox-item">
+              <input type="checkbox" name="tools" value="Salesforce Marketing Cloud" />
+              <span>Salesforce Marketing Cloud</span>
+            </label>
+            <label class="checkbox-item">
+              <input type="checkbox" name="tools" value="MailChimp" />
+              <span>MailChimp</span>
+            </label>
+            <label class="checkbox-item">
+              <input type="checkbox" name="tools" value="Monday.com" />
+              <span>Monday.com</span>
+            </label>
+            <label class="checkbox-item">
+              <input type="checkbox" name="tools" value="Outlook" />
+              <span>Outlook</span>
+            </label>
+            <label class="checkbox-item">
+              <input type="checkbox" name="tools" value="Gmail" />
+              <span>Gmail</span>
+            </label>
+          </div>
+        </div>
+
+        <!-- CRM Tools -->
+        <div class="tools-category">
+          <h3 class="category-title">🤝 CRM & Sales</h3>
+          <div class="checkbox-group">
+            <label class="checkbox-item">
+              <input type="checkbox" name="tools" value="Salesforce CRM" />
+              <span>Salesforce CRM</span>
+            </label>
+            <label class="checkbox-item">
+              <input type="checkbox" name="tools" value="HubSpot CRM" />
+              <span>HubSpot CRM</span>
+            </label>
+            <label class="checkbox-item">
+              <input type="checkbox" name="tools" value="Pipedrive" />
+              <span>Pipedrive</span>
+            </label>
+            <label class="checkbox-item">
+              <input type="checkbox" name="tools" value="Monday CRM" />
+              <span>Monday CRM</span>
+            </label>
+            <label class="checkbox-item">
+              <input type="checkbox" name="tools" value="Zoho CRM" />
+              <span>Zoho CRM</span>
+            </label>
+            <label class="checkbox-item">
+              <input type="checkbox" name="tools" value="Zendesk" />
+              <span>Zendesk</span>
+            </label>
+          </div>
+        </div>
+
+        <!-- Integration Tools -->
+        <div class="tools-category">
+          <h3 class="category-title">🔗 Integration & Automation</h3>
+          <div class="checkbox-group">
+            <label class="checkbox-item">
+              <input type="checkbox" name="tools" value="Make.com (Integromat)" />
+              <span>Make.com</span>
+            </label>
+            <label class="checkbox-item">
+              <input type="checkbox" name="tools" value="n8n" />
+              <span>n8n</span>
+            </label>
+            <label class="checkbox-item">
+              <input type="checkbox" name="tools" value="Power Automate" />
+              <span>Power Automate</span>
+            </label>
+            <label class="checkbox-item">
+              <input type="checkbox" name="tools" value="Zapier" />
+              <span>Zapier</span>
+            </label>
+            <label class="checkbox-item">
+              <input type="checkbox" name="tools" value="IFTTT" />
+              <span>IFTTT</span>
+            </label>
+          </div>
+        </div>
+
+        <!-- Other Tools -->
+        <div style="margin-top: 1.5rem;">
+          <label for="tools-other" style="display: block; color: var(--color-text-muted); margin-bottom: 0.5rem; font-size: 0.9375rem;">
+            Other tools (comma separated):
+          </label>
+          <input 
+            type="text" 
+            id="tools-other" 
+            placeholder="e.g., Jira, Airtable, Custom Software"
+            style="width: 100%; padding: 0.875rem 1rem; background: #000; border: 1px solid var(--color-border); border-radius: 8px; color: var(--color-text); font-family: inherit; font-size: 1rem;"
+          />
+        </div>
+        <div class="wizard-buttons">
+          <button type="button" class="btn-secondary btn wizard-back">← Back</button>
+          <button type="button" class="btn wizard-next">Next →</button>
+        </div>
+      </div>
+
+      <!-- Step 4: Pain Points -->
+      <div class="wizard-step" data-step="4">
+        <h2>What are your biggest pain points?</h2>
+        <p>What frustrates you most about your current process?</p>
+        <textarea 
+          id="pain_points" 
+          name="pain_points" 
+          rows="5" 
+          maxlength="1000" 
+          placeholder="Example: It's time-consuming, repetitive, and I often miss urgent requests. I can't scale this as we grow."
+          required
+        ></textarea>
+        <div class="char-count"><span id="pain-count">0</span>/1000</div>
+        <div class="wizard-buttons">
+          <button type="button" class="btn-secondary btn wizard-back">← Back</button>
+          <button type="button" class="btn wizard-next">Next →</button>
+        </div>
+      </div>
+
+      <!-- Step 5: Email (Optional) -->
+      <div class="wizard-step" data-step="5">
+        <h2>Get your personalized blueprint</h2>
+        <p>We'll generate a custom AI workflow blueprint for you. Optionally, enter your email to receive a copy.</p>
+        <input 
+          type="email" 
+          id="email" 
+          name="email" 
+          placeholder="your@email.com (optional)"
+          maxlength="254"
+        />
+        <div class="wizard-buttons">
+          <button type="button" class="btn-secondary btn wizard-back">← Back</button>
+          <button type="submit" class="btn wizard-submit">Build my AI workflow</button>
+        </div>
+      </div>
     </form>
 
     <!-- Progress Animation (Hidden Initially) -->
@@ -766,7 +987,7 @@
     <!-- Blueprint Section (Hidden Initially) -->
     <div class="blueprint-section" id="blueprint-section">
       <header class="blueprint-header">
-        <h2>Your 2-minute AI Automation Blueprint</h2>
+        <h2>Your AI Workflow Blueprint</h2>
         <p>Here's your personalized plan to transform your workflow with AI.</p>
       </header>
       <div class="blueprint-content" id="blueprint-content">
@@ -1012,7 +1233,7 @@
       
       // State
       let currentStep = 1;
-      const totalSteps = 2;
+      const totalSteps = 5;
       let wizardData = {};
       
       // Elements
@@ -1085,7 +1306,7 @@
         if (currentStep === 2) {
           const workflow = document.getElementById('workflow').value.trim();
           if (!workflow) {
-        <h2 style="color: #4ade80; margin-bottom: 0.5rem;">Ok, we can definitely help with that!</h2>
+            alert('Please describe your current workflow.');
             return false;
           }
         }

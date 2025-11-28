@@ -246,30 +246,145 @@ class MGRNZ_AI_Service {
         $workflow = $workflow_data['workflow_description'] ?? '';
         $tools = $workflow_data['tools'] ?? '';
         $pain_points = $workflow_data['pain_points'] ?? '';
+        $conversation_history = $workflow_data['conversation_history'] ?? '';
         
-        $prompt = "You are an AI workflow consultant. Based on the following information about a user's workflow, generate a detailed AI-enabled workflow blueprint.\n\n";
-        $prompt .= "USER INFORMATION:\n";
+        // Load template configuration
+        $template_path = __DIR__ . '/blueprint-template.php';
+        $template = file_exists($template_path) ? include $template_path : $this->get_default_template();
+        
+        // Load training documentation
+        $training_path = __DIR__ . '/ai-training-docs.php';
+        $training = file_exists($training_path) ? include $training_path : [];
+        
+        // Build prompt from template
+        $prompt = $template['system_role'] . "\n\n";
+        
+        // Add company context if available
+        if (!empty($training['company_context'])) {
+            $prompt .= "COMPANY CONTEXT:\n";
+            $prompt .= trim($training['company_context']) . "\n\n";
+        }
+        
+        $prompt .= "USER CONTEXT:\n";
         $prompt .= "- Goal: {$goal}\n";
         $prompt .= "- Current Workflow: {$workflow}\n";
-        $prompt .= "- Tools: {$tools}\n";
-        $prompt .= "- Pain Points: {$pain_points}\n\n";
-        $prompt .= "Generate a blueprint with the following sections:\n\n";
-        $prompt .= "1. WORKFLOW ANALYSIS\n";
-        $prompt .= "   - Summary of current state\n";
-        $prompt .= "   - Key inefficiencies identified\n\n";
-        $prompt .= "2. AI-ENABLED SOLUTION\n";
-        $prompt .= "   - Specific AI tools and techniques to apply\n";
-        $prompt .= "   - How they address the pain points\n\n";
-        $prompt .= "3. IMPLEMENTATION ROADMAP\n";
-        $prompt .= "   - Step-by-step action plan\n";
-        $prompt .= "   - Quick wins (can implement immediately)\n";
-        $prompt .= "   - Long-term improvements\n\n";
-        $prompt .= "4. TOOL RECOMMENDATIONS\n";
-        $prompt .= "   - Specific AI tools to use\n";
-        $prompt .= "   - Integration suggestions with existing tools\n\n";
-        $prompt .= "Format the response in clean markdown with clear headings and bullet points.";
+        $prompt .= "- Current Tools: {$tools}\n";
+        $prompt .= "- Pain Points: {$pain_points}\n";
+        
+        // Include conversation history if available
+        if (!empty($conversation_history)) {
+            $prompt .= "\n{$conversation_history}\n";
+            $prompt .= "IMPORTANT: Use the conversation history above to personalize this blueprint. The user has provided specific details about their workflow - incorporate these details throughout the blueprint instead of using generic examples.\n\n";
+        } else {
+            $prompt .= "\n";
+        }
+        
+        // Add pricing context if available
+        if (!empty($training['pricing_context'])) {
+            $prompt .= "PRICING GUIDELINES:\n";
+            $prompt .= trim($training['pricing_context']) . "\n\n";
+        }
+        
+        // Add technical guidelines if available
+        if (!empty($training['technical_guidelines'])) {
+            $prompt .= "TECHNICAL BEST PRACTICES:\n";
+            $prompt .= trim($training['technical_guidelines']) . "\n\n";
+        }
+        
+        // Add relevant use case examples if available
+        if (!empty($training['use_case_examples'])) {
+            $prompt .= "REFERENCE EXAMPLES (for context, not to copy directly):\n";
+            foreach (array_slice($training['use_case_examples'], 0, 2) as $example) {
+                $prompt .= "- {$example['scenario']}: {$example['solution']} (Saved {$example['time_saved']}, ROI in {$example['roi_months']} months)\n";
+            }
+            $prompt .= "\n";
+        }
+        
+        // Add technology stack
+        $prompt .= "PREFERRED TECHNOLOGY STACK (Use these defaults unless user needs dictate otherwise):\n";
+        foreach ($template['tech_stack'] as $category => $tool) {
+            $prompt .= "- {$category}: {$tool}\n";
+        }
+        $prompt .= "\n";
+        
+        // Add blueprint structure
+        $prompt .= "Please generate a professional Blueprint following the D.R.I.V.E.™ Framework:\n\n";
+        
+        foreach ($template['blueprint_structure'] as $section) {
+            $prompt .= "{$section['number']}. {$section['title']}\n";
+            foreach ($section['guidelines'] as $guideline) {
+                $prompt .= "   - {$guideline}\n";
+            }
+            $prompt .= "\n";
+        }
+        
+        // Add output formatting instructions
+        $format = $template['output_format'];
+        $prompt .= "Format the response in {$format['format']}. ";
+        $prompt .= "Use a {$format['tone']} tone with {$format['style']} explanations.";
+        
+        // Add additional instructions
+        if (!empty($template['additional_instructions'])) {
+            $prompt .= "\n\nAdditional Guidelines:\n";
+            foreach ($template['additional_instructions'] as $instruction) {
+                $prompt .= "- {$instruction}\n";
+            }
+        }
+        
+        // Add common pitfalls to avoid
+        if (!empty($training['pitfalls_to_mention'])) {
+            $prompt .= "\n\nCommon Pitfalls to Address:\n";
+            $count = 0;
+            foreach ($training['pitfalls_to_mention'] as $pitfall => $explanation) {
+                $prompt .= "- {$pitfall}: {$explanation}\n";
+                if (++$count >= 3) break; // Limit to top 3 to keep prompt concise
+            }
+        }
+        
+        // Add additional notes from training
+        if (!empty($training['additional_notes'])) {
+            $prompt .= "\n\nIMPORTANT REMINDERS:\n";
+            $prompt .= trim($training['additional_notes']) . "\n";
+        }
         
         return $prompt;
+    }
+    
+    /**
+     * Get default template if template file doesn't exist
+     * 
+     * @return array Default template configuration
+     */
+    private function get_default_template() {
+        return [
+            'system_role' => "You are a Senior AI Workflow Architect at MGRNZ. Your goal is to design a professional, automated solution using the MGRNZ D.R.I.V.E.™ Consulting Framework.",
+            'tech_stack' => [
+                'AI Engine' => 'OpenAI / ChatGPT',
+                'Orchestration' => 'Make.com (for all automation flows)',
+                'Database' => 'Supabase (for structured data storage)',
+                'Email/Marketing' => 'MailerLite',
+                'Productivity' => 'Google Workspace or Outlook',
+                'Version Control' => 'GitHub',
+                'Platform' => 'WordPress',
+            ],
+            'blueprint_structure' => [
+                ['number' => '1', 'title' => 'EXECUTIVE SUMMARY', 'guidelines' => ['Brief overview of the transformation.']],
+                ['number' => '2', 'title' => 'DISCOVER (Analysis)', 'guidelines' => ['Identify the core need and opportunity.', 'Analyze the current state vs. future state.']],
+                ['number' => '3', 'title' => 'READY (Preparation)', 'guidelines' => ['Detailed design requirements.', 'Data preparation and dependencies.']],
+                ['number' => '4', 'title' => 'IMPLEMENT (Execution)', 'guidelines' => ['The Core Build: Explain how Make.com, OpenAI, and Supabase work together.', 'Integration steps.']],
+                ['number' => '5', 'title' => 'VALIDATE (Quality Assurance)', 'guidelines' => ['User Acceptance Testing (UAT) criteria.', 'Documentation and training needs.']],
+                ['number' => '6', 'title' => 'EVOLVE (Optimization)', 'guidelines' => ['The Level Up Engine: How to monitor and improve over time.', 'Future scaling opportunities.']],
+            ],
+            'output_format' => [
+                'format' => 'professional Markdown with clear headers',
+                'tone' => 'professional, consultative',
+                'style' => 'detailed yet accessible',
+            ],
+            'additional_instructions' => [
+                'Use specific details from the conversation history when available.',
+                'Avoid generic examples - personalize based on user\'s actual workflow.',
+            ],
+        ];
     }
     
     /**
@@ -685,24 +800,30 @@ class MGRNZ_AI_Service {
         $tools = $wizard_data['tools'] ?? '';
         $pain_points = $wizard_data['pain_points'] ?? '';
         
-        $prompt = "You are an AI workflow automation consultant. The user has submitted the following information:\n\n";
-        $prompt .= "- Goal: {$goal}\n";
-        $prompt .= "- Current Workflow: {$workflow}\n";
-        $prompt .= "- Tools: {$tools}\n";
-        $prompt .= "- Pain Points: {$pain_points}\n\n";
-        $prompt .= "Your task:\n";
-        $prompt .= "1. Generate 2-5 clarifying questions to better understand their needs\n";
-        $prompt .= "2. Be conversational and friendly\n";
-        $prompt .= "3. Focus on understanding automation opportunities\n";
-        $prompt .= "4. Keep questions specific and actionable\n";
-        $prompt .= "5. Ask about time spent, specific pain points, integration requirements, and success criteria\n\n";
-        $prompt .= "Format your response as a friendly message with the questions. Start with a brief acknowledgment, then list the questions naturally in the conversation.\n\n";
-        $prompt .= "Example format:\n";
-        $prompt .= "Thanks for sharing your workflow details! I'd like to understand a bit more:\n\n";
-        $prompt .= "1. [First question]\n";
-        $prompt .= "2. [Second question]\n";
-        $prompt .= "3. [Third question]\n\n";
-        $prompt .= "Generate the clarifying questions now:";
+        $prompt = "You are a technical analyst. You have a MAXIMUM of 5 questions total to gather workflow data.\n\n";
+        
+        $prompt .= "USER SUBMITTED:\n";
+        $prompt .= "Goal: {$goal}\n";
+        $prompt .= "Workflow: {$workflow}\n\n";
+        
+        $prompt .= "PRIORITY ORDER (ask in this order):\n";
+        $prompt .= "1. Type of notifications/items (MOST IMPORTANT - ask this first)\n";
+        $prompt .= "2. Volume/frequency\n";
+        $prompt .= "3. Operating environment (platform/tools)\n";
+        $prompt .= "4. Time spent\n";
+        $prompt .= "5. Common actions\n\n";
+        
+        $prompt .= "RULES:\n";
+        $prompt .= "- NEVER mention consultations, quotes, or services\n";
+        $prompt .= "- Ask ONE question (under 20 words)\n";
+        $prompt .= "- Start with priority #1: type of notifications/items\n\n";
+        
+        $prompt .= "GOOD FIRST QUESTIONS:\n";
+        $prompt .= "\"What types of emails do you get most?\"\n";
+        $prompt .= "\"What types of notifications are you managing?\"\n";
+        $prompt .= "\"What kinds of requests come in most often?\"\n\n";
+        
+        $prompt .= "Generate your first question about notification/item types (under 20 words):";
         
         return $prompt;
     }

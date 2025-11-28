@@ -227,6 +227,73 @@ class MGRNZ_Email_Service {
     }
     
     /**
+     * Send blueprint email with attachment
+     * 
+     * @param string $to Recipient email address
+     * @param string $name Recipient name
+     * @param array $blueprint_data Blueprint data
+     * @param string $attachment_path Path to attachment file
+     * @return bool True on success
+     */
+    public function send_blueprint_with_attachment($to, $name, $blueprint_data, $attachment_path) {
+        // Validate email address
+        if (!is_email($to)) {
+            $this->log_error('Invalid email address: ' . $to);
+            return false;
+        }
+        
+        try {
+            // Prepare email data
+            $subject = 'Your AI Workflow Blueprint - ' . $this->site_name;
+            $template = $this->get_email_template('blueprint');
+            
+            // Build consult link
+            $consult_link = home_url('/book-consultation/');
+            
+            // Prepare template variables
+            $variables = [
+                'SITE_NAME' => $this->site_name,
+                'SITE_URL' => home_url(),
+                'BLUEPRINT_CONTENT' => $this->format_blueprint_for_email($blueprint_data['content'] ?? ''),
+                'BLUEPRINT_SUMMARY' => $blueprint_data['summary'] ?? '',
+                'USER_NAME' => $name,
+                'CONSULT_LINK' => $consult_link,
+                'SUBSCRIBE_LINK' => home_url('/newsletter/'),
+                'CURRENT_YEAR' => date('Y')
+            ];
+            
+            // Replace variables in template
+            $message = $this->replace_template_variables($template, $variables);
+            
+            // Set email headers
+            $headers = $this->get_email_headers();
+            
+            // Add attachment
+            $attachments = [];
+            if (file_exists($attachment_path)) {
+                $attachments[] = $attachment_path;
+            } else {
+                $this->log_error('Attachment file not found: ' . $attachment_path);
+            }
+            
+            // Send email
+            $sent = wp_mail($to, $subject, $message, $headers, $attachments);
+            
+            if ($sent) {
+                $this->log_success('Blueprint email with attachment sent to: ' . $to);
+            } else {
+                $this->log_error('Failed to send blueprint email with attachment to: ' . $to);
+            }
+            
+            return $sent;
+            
+        } catch (Exception $e) {
+            $this->log_error('Exception sending blueprint email: ' . $e->getMessage());
+            return false;
+        }
+    }
+    
+    /**
      * Send subscription confirmation email
      * 
      * @param string $email Subscriber email address
@@ -357,6 +424,18 @@ class MGRNZ_Email_Service {
             margin: 30px 0;
             border-radius: 4px;
         }
+        .drive-diagram {
+            text-align: center;
+            margin: 30px 0;
+            padding: 20px;
+            background-color: #ffffff;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+        }
+        .drive-diagram img {
+            max-width: 100%;
+            height: auto;
+        }
         .blueprint-section h2 {
             margin-top: 0;
             color: #0f172a;
@@ -447,6 +526,11 @@ class MGRNZ_Email_Service {
                 Thank you for using the AI Workflow Wizard! We\'ve analyzed your workflow and created a personalized blueprint to help you integrate AI into your processes.
             </div>
             
+            <div class="drive-diagram">
+                <img src="https://mgrnz.com/wp-content/uploads/2025/11/DRIVE_Public_14-07-2025.png" alt="MGRNZ D.R.I.V.E. Framework" />
+                <p style="font-size: 12px; color: #64748b; margin-top: 10px;">The MGRNZ D.R.I.V.E.™ Framework</p>
+            </div>
+
             <div class="blueprint-section">
                 {{BLUEPRINT_CONTENT}}
             </div>
