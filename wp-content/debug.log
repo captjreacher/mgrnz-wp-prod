@@ -14355,3 +14355,134 @@ This is a test paragraph.
 [28-Nov-2025 01:36:00 UTC] [AI WORKFLOW CACHE MISS] Key: mgrnz_blueprint_821d5e409316f35ac00572a29c26b1d7 | Time: 2025-11-28 01:36:00
 [28-Nov-2025 01:36:00 UTC] [AI WORKFLOW] Including conversation history from session: sess_MTqezq7CBQhafl64PkgMINcbSUAzijCs
 [28-Nov-2025 01:36:20 UTC] [AI WORKFLOW] Skipping cache - chat-based submission or bypass requested
+[28-Nov-2025 02:10:13 UTC] [AI WORKFLOW PLUGIN] Initialized | Version: 1.0.0 | PHP: 8.4.4 | WordPress: 6.8.3
+[28-Nov-2025 02:10:14 UTC] [AI WORKFLOW PLUGIN] Initialized | Version: 1.0.0 | PHP: 8.4.4 | WordPress: 6.8.3
+[28-Nov-2025 02:10:14 UTC] [AI Workflow] Cleaned up 0 expired conversation sessions
+[28-Nov-2025 02:10:15 UTC] [AI WORKFLOW PLUGIN] Initialized | Version: 1.0.0 | PHP: 8.4.4 | WordPress: 6.8.3
+[28-Nov-2025 02:10:16 UTC] [AI WORKFLOW PLUGIN] Initialized | Version: 1.0.0 | PHP: 8.4.4 | WordPress: 6.8.3
+[28-Nov-2025 02:10:37 UTC] [AI WORKFLOW PLUGIN] Initialized | Version: 1.0.0 | PHP: 8.4.4 | WordPress: 6.8.3
+[28-Nov-2025 02:10:37 UTC] [AI WORKFLOW PLUGIN] Initialized | Version: 1.0.0 | PHP: 8.4.4 | WordPress: 6.8.3
+[28-Nov-2025 02:10:37 UTC] [AI WORKFLOW PLUGIN] Initialized | Version: 1.0.0 | PHP: 8.4.4 | WordPress: 6.8.3
+[28-Nov-2025 02:10:47 UTC] [AI WORKFLOW PLUGIN] Initialized | Version: 1.0.0 | PHP: 8.4.4 | WordPress: 6.8.3
+[28-Nov-2025 02:11:09 UTC] [AI WORKFLOW PLUGIN] Initialized | Version: 1.0.0 | PHP: 8.4.4 | WordPress: 6.8.3
+[28-Nov-2025 02:11:10 UTC] [Conversation Manager] Generated response - Length: 94, Next action: none
+[28-Nov-2025 02:11:15 UTC] [AI WORKFLOW PLUGIN] Initialized | Version: 1.0.0 | PHP: 8.4.4 | WordPress: 6.8.3
+[28-Nov-2025 02:11:17 UTC] [Conversation Manager] Generated response - Length: 107, Next action: none
+[28-Nov-2025 02:11:26 UTC] [AI WORKFLOW PLUGIN] Initialized | Version: 1.0.0 | PHP: 8.4.4 | WordPress: 6.8.3
+[28-Nov-2025 02:11:28 UTC] [Conversation Manager] Generated response - Length: 94, Next action: none
+[28-Nov-2025 02:11:46 UTC] [AI WORKFLOW PLUGIN] Initialized | Version: 1.0.0 | PHP: 8.4.4 | WordPress: 6.8.3
+[28-Nov-2025 02:11:46 UTC] [AI WORKFLOW PLUGIN] Initialized | Version: 1.0.0 | PHP: 8.4.4 | WordPress: 6.8.3
+[28-Nov-2025 02:11:48 UTC] [Conversation Manager] Generated response - Length: 112, Next action: none
+[28-Nov-2025 02:12:01 UTC] [AI WORKFLOW PLUGIN] Initialized | Version: 1.0.0 | PHP: 8.4.4 | WordPress: 6.8.3
+[28-Nov-2025 02:12:03 UTC] [Conversation Manager] Generated response - Length: 104, Next action: transition_to_blueprint
+[28-Nov-2025 02:12:03 UTC] [Conversation Manager] Blueprint generation triggered for session: sess_w0ms7YhShRTT2LaotbcpGMlTAnllMzGm
+[28-Nov-2025 02:12:17 UTC] [AI WORKFLOW PLUGIN] Initialized | Version: 1.0.0 | PHP: 8.4.4 | WordPress: 6.8.3
+[28-Nov-2025 02:12:17 UTC] [AI WORKFLOW CACHE MISS] Key: mgrnz_blueprint_821d5e409316f35ac00572a29c26b1d7 | Time: 2025-11-28 02:12:17
+[28-Nov-2025 02:12:17 UTC] [AI WORKFLOW] Including conversation history from session: sess_w0ms7YhShRTT2LaotbcpGMlTAnllMzGm
+[28-Nov-2025 02:12:35 UTC] [AI WORKFLOW] Skipping cache - chat-based submission or bypass requested
+[28-Nov-2025 02:12:48 UTC] [AI WORKFLOW PLUGIN] Initialized | Version: 1.0.0 | PHP: 8.4.4 | WordPress: 6.8.3
+[28-Nov-2025 02:12:48 UTC] [AI WORKFLOW PLUGIN] Initialized | Version: 1.0.0 | PHP: 8.4.4 | WordPress: 6.8.3
+[28-Nov-2025 02:12:49 UTC] [AI WORKFLOW PLUGIN] Initialized | Version: 1.0.0 | PHP: 8.4.4 | WordPress: 6.8.3
+[28-Nov-2025 02:12:49 UTC] [AI WORKFLOW PLUGIN] Initialized | Version: 1.0.0 | PHP: 8.4.4 | WordPress: 6.8.3
+[28-Nov-2025 02:22:32 UTC] [AI WORKFLOW PLUGIN] Initialized | Version: 1.0.0 | PHP: 8.4.4 | WordPress: 6.8.3
+[28-Nov-2025 02:22:32 UTC] [AI WORKFLOW PLUGIN] Initialized | Version: 1.0.0 | PHP: 8.4.4 | WordPress: 6.8.3
+[28-Nov-2025 02:22:32 UTC] [PDF Generator] Generating HTML blueprint
+[28-Nov-2025 02:22:32 UTC] [PDF Generator] Blueprint data keys: ["content"]
+[28-Nov-2025 02:22:32 UTC] [PDF Generator] Content length: 112
+[28-Nov-2025 02:22:32 UTC] [PDF Generator] Content preview: <h2>Test Blueprint</h2><p>This is a test blueprint with some content.</p><ul><li>Item 1</li><li>Item 2</li></ul>
+[28-Nov-2025 02:22:32 UTC] [PDF Generator] HTML generated successfully, length: 4880
+[28-Nov-2025 02:22:33 UTC] [AI WORKFLOW PLUGIN] Initialized | Version: 1.0.0 | PHP: 8.4.4 | WordPress: 6.8.3
+[28-Nov-2025 02:24:10 UTC] [AI WORKFLOW PLUGIN] Initialized | Version: 1.0.0 | PHP: 8.4.4 | WordPress: 6.8.3
+[28-Nov-2025 02:24:10 UTC] [AI WORKFLOW PLUGIN] Initialized | Version: 1.0.0 | PHP: 8.4.4 | WordPress: 6.8.3
+[28-Nov-2025 02:24:11 UTC] [AI WORKFLOW PLUGIN] Initialized | Version: 1.0.0 | PHP: 8.4.4 | WordPress: 6.8.3
+[28-Nov-2025 02:24:13 UTC] [AI WORKFLOW PLUGIN] Initialized | Version: 1.0.0 | PHP: 8.4.4 | WordPress: 6.8.3
+[28-Nov-2025 02:24:13 UTC] [AI WORKFLOW PLUGIN] Initialized | Version: 1.0.0 | PHP: 8.4.4 | WordPress: 6.8.3
+[28-Nov-2025 02:24:14 UTC] [AI WORKFLOW PLUGIN] Initialized | Version: 1.0.0 | PHP: 8.4.4 | WordPress: 6.8.3
+[28-Nov-2025 02:24:14 UTC] [AI WORKFLOW PLUGIN] Initialized | Version: 1.0.0 | PHP: 8.4.4 | WordPress: 6.8.3
+[28-Nov-2025 02:24:14 UTC] [AI WORKFLOW PLUGIN] Initialized | Version: 1.0.0 | PHP: 8.4.4 | WordPress: 6.8.3
+[28-Nov-2025 02:24:20 UTC] [AI WORKFLOW PLUGIN] Initialized | Version: 1.0.0 | PHP: 8.4.4 | WordPress: 6.8.3
+[28-Nov-2025 02:24:23 UTC] [AI WORKFLOW PLUGIN] Initialized | Version: 1.0.0 | PHP: 8.4.4 | WordPress: 6.8.3
+[28-Nov-2025 02:24:23 UTC] [AI WORKFLOW CACHE MISS] Key: mgrnz_blueprint_821d5e409316f35ac00572a29c26b1d7 | Time: 2025-11-28 02:24:23
+[28-Nov-2025 02:24:23 UTC] [AI WORKFLOW] Including conversation history from session: sess_W4GvfW74VXYXXwDwS5fZCs0p4RiSqKa9
+[28-Nov-2025 02:24:45 UTC] [AI WORKFLOW] Skipping cache - chat-based submission or bypass requested
+[28-Nov-2025 02:24:52 UTC] [AI WORKFLOW PLUGIN] Initialized | Version: 1.0.0 | PHP: 8.4.4 | WordPress: 6.8.3
+[28-Nov-2025 02:24:52 UTC] [AI WORKFLOW PLUGIN] Initialized | Version: 1.0.0 | PHP: 8.4.4 | WordPress: 6.8.3
+[28-Nov-2025 02:24:53 UTC] [AI WORKFLOW PLUGIN] Initialized | Version: 1.0.0 | PHP: 8.4.4 | WordPress: 6.8.3
+[28-Nov-2025 02:24:53 UTC] [AI WORKFLOW PLUGIN] Initialized | Version: 1.0.0 | PHP: 8.4.4 | WordPress: 6.8.3
+[28-Nov-2025 02:25:51 UTC] [AI WORKFLOW PLUGIN] Initialized | Version: 1.0.0 | PHP: 8.4.4 | WordPress: 6.8.3
+[28-Nov-2025 02:25:51 UTC] [AI WORKFLOW PLUGIN] Initialized | Version: 1.0.0 | PHP: 8.4.4 | WordPress: 6.8.3
+[28-Nov-2025 02:25:52 UTC] [AI WORKFLOW PLUGIN] Initialized | Version: 1.0.0 | PHP: 8.4.4 | WordPress: 6.8.3
+[28-Nov-2025 02:25:54 UTC] [AI WORKFLOW PLUGIN] Initialized | Version: 1.0.0 | PHP: 8.4.4 | WordPress: 6.8.3
+[28-Nov-2025 02:25:54 UTC] [AI WORKFLOW PLUGIN] Initialized | Version: 1.0.0 | PHP: 8.4.4 | WordPress: 6.8.3
+[28-Nov-2025 02:25:55 UTC] [AI WORKFLOW PLUGIN] Initialized | Version: 1.0.0 | PHP: 8.4.4 | WordPress: 6.8.3
+[28-Nov-2025 02:25:56 UTC] [AI WORKFLOW PLUGIN] Initialized | Version: 1.0.0 | PHP: 8.4.4 | WordPress: 6.8.3
+[28-Nov-2025 02:35:38 UTC] [AI WORKFLOW PLUGIN] Initialized | Version: 1.0.0 | PHP: 8.4.4 | WordPress: 6.8.3
+[28-Nov-2025 02:35:39 UTC] [AI WORKFLOW PLUGIN] Initialized | Version: 1.0.0 | PHP: 8.4.4 | WordPress: 6.8.3
+[28-Nov-2025 02:35:39 UTC] [AI WORKFLOW PLUGIN] Initialized | Version: 1.0.0 | PHP: 8.4.4 | WordPress: 6.8.3
+[28-Nov-2025 02:35:40 UTC] [AI WORKFLOW PLUGIN] Initialized | Version: 1.0.0 | PHP: 8.4.4 | WordPress: 6.8.3
+[28-Nov-2025 02:35:41 UTC] [AI WORKFLOW PLUGIN] Initialized | Version: 1.0.0 | PHP: 8.4.4 | WordPress: 6.8.3
+[28-Nov-2025 02:36:52 UTC] [AI WORKFLOW PLUGIN] Initialized | Version: 1.0.0 | PHP: 8.4.4 | WordPress: 6.8.3
+[28-Nov-2025 02:36:52 UTC] [AI WORKFLOW PLUGIN] Initialized | Version: 1.0.0 | PHP: 8.4.4 | WordPress: 6.8.3
+[28-Nov-2025 02:36:52 UTC] [SUBSCRIBE BLUEPRINT] Using direct blueprint data from request
+[28-Nov-2025 02:36:52 UTC] [SUBSCRIBE BLUEPRINT] Detailed blueprint data check: {"has_blueprint_data":true,"blueprint_data_type":"array","has_content":true,"content_length":4558,"content_preview":"<p>\n\n\n<meta charset=\"UTF-8\">\n<meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n<title>Client Onboarding Automation Blueprint<\/title>\n\n\n<\/p><h2>EXECUTIVE SUMMARY<\/h2>\n<p>This docum","content_is_empty_string":false,"content_is_whitespace":false,"has_html":false,"html_length":0,"data_keys":["content"],"session_id":"direct_1764297412"}
+[28-Nov-2025 02:36:52 UTC] [PDF Generator] Generating HTML blueprint
+[28-Nov-2025 02:36:52 UTC] [PDF Generator] Blueprint data keys: ["content"]
+[28-Nov-2025 02:36:52 UTC] [PDF Generator] Content length: 4558
+[28-Nov-2025 02:36:52 UTC] [PDF Generator] Content preview: <p>
+
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Client Onboarding Automation Blueprint</title>
+
+
+</p><h2>EXECUTIVE SUMMARY</h2>
+<p>This docum
+[28-Nov-2025 02:36:52 UTC] [PDF Generator] HTML generated successfully, length: 9262
+[28-Nov-2025 02:36:52 UTC] [SUBSCRIBE BLUEPRINT] HTML file will open via viewer: http://mgrnz.local/wp-json/mgrnz/v1/view-blueprint/blueprint-ba5adbcc-1764297412.html
+[28-Nov-2025 02:36:52 UTC] [Subscribe Endpoint] Table does not exist: wpx7_mgrnz_blueprint_subscriptions
+[28-Nov-2025 02:36:52 UTC] [AI WORKFLOW EMAIL SUCCESS] Blueprint email with attachment sent to: test@example.com | Time: 2025-11-28 02:36:52
+[28-Nov-2025 02:36:53 UTC] [AI WORKFLOW PLUGIN] Initialized | Version: 1.0.0 | PHP: 8.4.4 | WordPress: 6.8.3
+[28-Nov-2025 02:36:53 UTC] [AI WORKFLOW PLUGIN] Initialized | Version: 1.0.0 | PHP: 8.4.4 | WordPress: 6.8.3
+[28-Nov-2025 02:36:54 UTC] [AI WORKFLOW PLUGIN] Initialized | Version: 1.0.0 | PHP: 8.4.4 | WordPress: 6.8.3
+[28-Nov-2025 02:40:31 UTC] [AI WORKFLOW PLUGIN] Initialized | Version: 1.0.0 | PHP: 8.4.4 | WordPress: 6.8.3
+[28-Nov-2025 02:40:31 UTC] [AI WORKFLOW PLUGIN] Initialized | Version: 1.0.0 | PHP: 8.4.4 | WordPress: 6.8.3
+[28-Nov-2025 02:40:32 UTC] [AI WORKFLOW PLUGIN] Initialized | Version: 1.0.0 | PHP: 8.4.4 | WordPress: 6.8.3
+[28-Nov-2025 02:45:47 UTC] [AI WORKFLOW PLUGIN] Initialized | Version: 1.0.0 | PHP: 8.4.4 | WordPress: 6.8.3
+[28-Nov-2025 02:45:47 UTC] [AI WORKFLOW PLUGIN] Initialized | Version: 1.0.0 | PHP: 8.4.4 | WordPress: 6.8.3
+[28-Nov-2025 02:45:49 UTC] [AI WORKFLOW PLUGIN] Initialized | Version: 1.0.0 | PHP: 8.4.4 | WordPress: 6.8.3
+[28-Nov-2025 02:45:50 UTC] [AI WORKFLOW PLUGIN] Initialized | Version: 1.0.0 | PHP: 8.4.4 | WordPress: 6.8.3
+[28-Nov-2025 02:45:58 UTC] [AI WORKFLOW PLUGIN] Initialized | Version: 1.0.0 | PHP: 8.4.4 | WordPress: 6.8.3
+[28-Nov-2025 02:45:59 UTC] [AI WORKFLOW PLUGIN] Initialized | Version: 1.0.0 | PHP: 8.4.4 | WordPress: 6.8.3
+[28-Nov-2025 02:45:59 UTC] [AI WORKFLOW PLUGIN] Initialized | Version: 1.0.0 | PHP: 8.4.4 | WordPress: 6.8.3
+[28-Nov-2025 02:45:59 UTC] [AI WORKFLOW PLUGIN] Initialized | Version: 1.0.0 | PHP: 8.4.4 | WordPress: 6.8.3
+[28-Nov-2025 02:46:05 UTC] [AI WORKFLOW PLUGIN] Initialized | Version: 1.0.0 | PHP: 8.4.4 | WordPress: 6.8.3
+[28-Nov-2025 02:46:08 UTC] [AI WORKFLOW PLUGIN] Initialized | Version: 1.0.0 | PHP: 8.4.4 | WordPress: 6.8.3
+[28-Nov-2025 02:46:08 UTC] [AI WORKFLOW CACHE MISS] Key: mgrnz_blueprint_821d5e409316f35ac00572a29c26b1d7 | Time: 2025-11-28 02:46:08
+[28-Nov-2025 02:46:08 UTC] [AI WORKFLOW] Including conversation history from session: sess_MieKCquPLVkfVb7CTROVSC2ShVpBtInx
+[28-Nov-2025 02:46:39 UTC] [AI WORKFLOW] Skipping cache - chat-based submission or bypass requested
+[28-Nov-2025 02:48:55 UTC] [AI WORKFLOW PLUGIN] Initialized | Version: 1.0.0 | PHP: 8.4.4 | WordPress: 6.8.3
+[28-Nov-2025 02:48:56 UTC] [AI WORKFLOW PLUGIN] Initialized | Version: 1.0.0 | PHP: 8.4.4 | WordPress: 6.8.3
+[28-Nov-2025 02:48:56 UTC] [AI WORKFLOW PLUGIN] Initialized | Version: 1.0.0 | PHP: 8.4.4 | WordPress: 6.8.3
+[28-Nov-2025 02:49:22 UTC] [AI WORKFLOW PLUGIN] Initialized | Version: 1.0.0 | PHP: 8.4.4 | WordPress: 6.8.3
+[28-Nov-2025 02:49:22 UTC] [SUBSCRIBE BLUEPRINT] Using direct blueprint data from request
+[28-Nov-2025 02:49:22 UTC] [SUBSCRIBE BLUEPRINT] Detailed blueprint data check: {"has_blueprint_data":true,"blueprint_data_type":"array","has_content":true,"content_length":5773,"content_preview":"<p>\n\n\n    <meta charset=\"UTF-8\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n    <title>Client Onboarding Automation Blueprint<\/title>\n\n\n    <\/p><h2>EXECUTIVE SUMMARY<\/h","content_is_empty_string":false,"content_is_whitespace":false,"has_html":false,"html_length":0,"data_keys":["content"],"session_id":"sess_MieKCquPLVkfVb7CTROVSC2ShVpBtInx"}
+[28-Nov-2025 02:49:22 UTC] [PDF Generator] Generating HTML blueprint
+[28-Nov-2025 02:49:22 UTC] [PDF Generator] Blueprint data keys: ["content"]
+[28-Nov-2025 02:49:22 UTC] [PDF Generator] Content length: 5773
+[28-Nov-2025 02:49:22 UTC] [PDF Generator] Content preview: <p>
+
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Client Onboarding Automation Blueprint</title>
+
+
+    </p><h2>EXECUTIVE SUMMARY</h
+[28-Nov-2025 02:49:22 UTC] [PDF Generator] HTML generated successfully, length: 10454
+[28-Nov-2025 02:49:22 UTC] [SUBSCRIBE BLUEPRINT] HTML file will open via viewer: http://mgrnz.local/wp-json/mgrnz/v1/view-blueprint/blueprint-0799210f-1764298162.html
+[28-Nov-2025 02:49:22 UTC] [Subscribe Endpoint] Table does not exist: wpx7_mgrnz_blueprint_subscriptions
+[28-Nov-2025 02:49:22 UTC] [AI WORKFLOW EMAIL SUCCESS] Blueprint email with attachment sent to: mike@mgrnz.com | Time: 2025-11-28 02:49:22
+[28-Nov-2025 02:49:22 UTC] [AI WORKFLOW PLUGIN] Initialized | Version: 1.0.0 | PHP: 8.4.4 | WordPress: 6.8.3
+[28-Nov-2025 02:49:23 UTC] [AI WORKFLOW PLUGIN] Initialized | Version: 1.0.0 | PHP: 8.4.4 | WordPress: 6.8.3
+[28-Nov-2025 02:49:23 UTC] [AI WORKFLOW PLUGIN] Initialized | Version: 1.0.0 | PHP: 8.4.4 | WordPress: 6.8.3
