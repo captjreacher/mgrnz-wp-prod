@@ -544,17 +544,20 @@ class MGRNZ_AI_Service {
      * @return string Cleaned content
      */
     private function clean_markdown_fences($content) {
-        // Remove ```html at the start
-        $content = preg_replace('/^```html\s*/i', '', $content);
+        // Remove ```html or """html at the start (with or without backticks/quotes)
+        $content = preg_replace('/^[`"]{3}html\s*/i', '', $content);
+        $content = preg_replace('/^[`"]{2}html\s*/i', '', $content);
         
-        // Remove ``` at the end
-        $content = preg_replace('/\s*```\s*$/m', '', $content);
+        // Remove ``` or """ at the end
+        $content = preg_replace('/\s*[`"]{3}\s*$/m', '', $content);
+        $content = preg_replace('/\s*[`"]{2}\s*$/m', '', $content);
         
-        // Remove any remaining standalone ``` lines
-        $content = preg_replace('/^```\s*$/m', '', $content);
+        // Remove any remaining standalone ``` or """ lines
+        $content = preg_replace('/^[`"]{3}\s*$/m', '', $content);
+        $content = preg_replace('/^[`"]{2}\s*$/m', '', $content);
         
-        // Remove any remaining ``` markers
-        $content = str_replace('```', '', $content);
+        // Remove any remaining ``` or """ markers
+        $content = str_replace(['```', '"""', '``', '""'], '', $content);
         
         return trim($content);
     }
