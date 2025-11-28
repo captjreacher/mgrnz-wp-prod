@@ -51,6 +51,18 @@ return [
         ],
         [
             'number' => '2',
+            'title' => 'ABOUT YOUR 2-MINUTE AUTOMATION',
+            'guidelines' => [
+                'Provide a grounded, contextual overview of the user\'s specific workflow type.',
+                'Explain what this type of automation is and why it matters in their industry/context.',
+                'Describe the typical components and technologies involved in this kind of workflow.',
+                'Highlight common watch-outs, challenges, or considerations specific to this automation type.',
+                'Make the user feel their idea is understood and validated with professional insight.',
+                'Use 2-3 paragraphs to give depth and context without being overly technical.',
+            ]
+        ],
+        [
+            'number' => '3',
             'title' => 'DISCOVER (Analysis)',
             'guidelines' => [
                 'Include this diagram: <img src="http://mgrnz.local/wp-content/uploads/2025/11/DRIVE_Public_14-07-2025.png" alt="DRIVE Framework" style="max-width: 100%; height: auto; margin: 20px 0;">',
@@ -61,7 +73,7 @@ return [
             ]
         ],
         [
-            'number' => '3',
+            'number' => '4',
             'title' => 'READY (Readiness)',
             'guidelines' => [
                 'Mandatory - include this statement first "The goal is to prepare for execution by completing detailed design and brand assets, conducting a unit test, and ensuring all resources and dependencies are in place."',
@@ -71,7 +83,7 @@ return [
             ]
         ],
         [
-            'number' => '4',
+            'number' => '5',
             'title' => 'IMPLEMENT (Execution)',
             'guidelines' => [
                 'Mandatory - include this statement first "This phase involves the core main build, executing integration testing, migrating data, and conducting model training to transform the concepts into a tangible solution."',
@@ -81,7 +93,7 @@ return [
             ]
         ],
         [
-            'number' => '5',
+            'number' => '6',
             'title' => 'VALIDATE (Quality Assurance)',
             'guidelines' => [
                 'Mandatory - include this statement first "This is the monitoring and refinement stage, focused on achieving user acceptance (UAT), completing documentation, and managing support and change to optimize performance."',
@@ -91,7 +103,7 @@ return [
             ]
         ],
         [
-            'number' => '6',
+            'number' => '7',
             'title' => 'EVOLVE (Optimization)',
             'guidelines' => [
                 'Mandatory to include this statementz: "The Evolve component is the dynamic, central core of the D.R.I.V.E.™ Consulting Framework, representing Elevate & Evolve. It\'s more than just the final step; it functions as the Level Up™ Engine , providing the continuous strategic oversight and quality assurance that underpins the entire methodology."',
