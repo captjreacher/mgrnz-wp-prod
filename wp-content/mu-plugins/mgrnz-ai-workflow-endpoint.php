@@ -122,6 +122,20 @@ add_action('rest_api_init', function () {
         ]
     ]);
     
+    // View blueprint HTML endpoint
+    register_rest_route('mgrnz/v1', '/view-blueprint/(?P<filename>[a-zA-Z0-9\-\.]+)', [
+        'methods'  => 'GET',
+        'permission_callback' => '__return_true',
+        'callback' => 'mgrnz_handle_view_blueprint',
+        'args' => [
+            'filename' => [
+                'required' => true,
+                'type' => 'string',
+                'sanitize_callback' => 'sanitize_file_name'
+            ]
+        ]
+    ]);
+    
     // State transition endpoint
     register_rest_route('mgrnz/v1', '/transition-state', [
         'methods'  => 'POST',
@@ -3410,4 +3424,40 @@ function mgrnz_handle_generate_blueprint($request) {
             'message' => $e->getMessage()
         ], 500);
     }
+}
+
+/**
+ * Handle view blueprint HTML file
+ * Serves HTML blueprint files with correct Content-Type header
+ * 
+ * @param WP_REST_Request $request
+ * @return void Outputs HTML directly
+ */
+function mgrnz_handle_view_blueprint($request) {
+    $filename = $request->get_param('filename');
+    
+    // Security: Only allow blueprint files
+    if (!preg_match('/^blueprint-[a-z0-9\-]+\.html$/', $filename)) {
+        status_header(403);
+        die('Invalid filename');
+    }
+    
+    // Get file path
+    $upload_dir = wp_upload_dir();
+    $file_path = $upload_dir['basedir'] . '/blueprints/' . $filename;
+    
+    // Check if file exists
+    if (!file_exists($file_path)) {
+        status_header(404);
+        die('Blueprint not found');
+    }
+    
+    // Serve the HTML file with correct headers
+    header('Content-Type: text/html; charset=UTF-8');
+    header('Content-Disposition: inline; filename="' . $filename . '"');
+    header('Cache-Control: no-cache, must-revalidate');
+    header('Expires: 0');
+    
+    readfile($file_path);
+    exit;
 }
