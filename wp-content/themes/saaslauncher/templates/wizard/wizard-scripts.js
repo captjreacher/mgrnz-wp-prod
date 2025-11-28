@@ -377,7 +377,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const workflowInput = document.getElementById('workflow');
 
     if (goalInput) goalInput.value = "I want to automate my client onboarding process.";
-    if (workflowInput) workflowInput.value = "Currently, when a new client signs up, I manually send them a welcome email, create a folder in Google Drive, and add them to my project management tool (Trello). It takes about 30 minutes per client.";
+    if (workflowInput) workflowInput.value = "Currently, when a new client signs up, I manually send them a welcome email, create a folder in my cloud storage, and add them to my project management system. It takes about 30 minutes per client.";
 
     console.log('? Data filled');
 
