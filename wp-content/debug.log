@@ -14520,3 +14520,19 @@ This is a test paragraph.
 [28-Nov-2025 03:42:10 UTC] [AI WORKFLOW PLUGIN] Initialized | Version: 1.0.0 | PHP: 8.4.4 | WordPress: 6.8.3
 [28-Nov-2025 03:42:10 UTC] [AI WORKFLOW PLUGIN] Initialized | Version: 1.0.0 | PHP: 8.4.4 | WordPress: 6.8.3
 [28-Nov-2025 03:42:12 UTC] [AI WORKFLOW PLUGIN] Initialized | Version: 1.0.0 | PHP: 8.4.4 | WordPress: 6.8.3
+[28-Nov-2025 04:31:37 UTC] [AI WORKFLOW PLUGIN] Initialized | Version: 1.0.0 | PHP: 8.4.4 | WordPress: 6.8.3
+[28-Nov-2025 04:31:38 UTC] [AI WORKFLOW PLUGIN] Initialized | Version: 1.0.0 | PHP: 8.4.4 | WordPress: 6.8.3
+[28-Nov-2025 04:31:39 UTC] [PDF Generator] Cleaned up 0 old blueprint files
+[28-Nov-2025 04:31:42 UTC] [AI WORKFLOW PLUGIN] Initialized | Version: 1.0.0 | PHP: 8.4.4 | WordPress: 6.8.3
+[28-Nov-2025 04:31:44 UTC] [AI WORKFLOW PLUGIN] Initialized | Version: 1.0.0 | PHP: 8.4.4 | WordPress: 6.8.3
+[28-Nov-2025 04:31:45 UTC] [AI WORKFLOW PLUGIN] Initialized | Version: 1.0.0 | PHP: 8.4.4 | WordPress: 6.8.3
+[28-Nov-2025 04:31:46 UTC] [AI WORKFLOW PLUGIN] Initialized | Version: 1.0.0 | PHP: 8.4.4 | WordPress: 6.8.3
+[28-Nov-2025 04:31:52 UTC] [AI WORKFLOW PLUGIN] Initialized | Version: 1.0.0 | PHP: 8.4.4 | WordPress: 6.8.3
+[28-Nov-2025 04:31:54 UTC] [AI WORKFLOW PLUGIN] Initialized | Version: 1.0.0 | PHP: 8.4.4 | WordPress: 6.8.3
+[28-Nov-2025 04:31:55 UTC] [AI WORKFLOW CACHE MISS] Key: mgrnz_blueprint_821d5e409316f35ac00572a29c26b1d7 | Time: 2025-11-28 04:31:55
+[28-Nov-2025 04:31:55 UTC] [AI WORKFLOW] Including conversation history from session: sess_62BP6oKte7gSBZps76Vms4Ij6xKymnD1
+[28-Nov-2025 04:32:19 UTC] [AI WORKFLOW] Skipping cache - chat-based submission or bypass requested
+[28-Nov-2025 04:32:42 UTC] [AI WORKFLOW PLUGIN] Initialized | Version: 1.0.0 | PHP: 8.4.4 | WordPress: 6.8.3
+[28-Nov-2025 04:32:42 UTC] [AI WORKFLOW PLUGIN] Initialized | Version: 1.0.0 | PHP: 8.4.4 | WordPress: 6.8.3
+[28-Nov-2025 04:32:42 UTC] [AI WORKFLOW PLUGIN] Initialized | Version: 1.0.0 | PHP: 8.4.4 | WordPress: 6.8.3
+[28-Nov-2025 04:32:43 UTC] [AI WORKFLOW PLUGIN] Initialized | Version: 1.0.0 | PHP: 8.4.4 | WordPress: 6.8.3
