@@ -161,10 +161,10 @@ class MGRNZ_PDF_Generator {
         $upload_dir = wp_upload_dir();
         $filename = basename($file_path);
         
-        // For HTML files, use REST API viewer to ensure proper Content-Type
+        // For HTML files, use standalone viewer (bypasses WordPress entirely)
         if (strpos($filename, '.html') !== false) {
-            $viewer_url = rest_url('mgrnz/v1/view-blueprint/' . $filename);
-            error_log('[PDF Generator] Generated REST API viewer URL: ' . $viewer_url);
+            $viewer_url = home_url('/blueprint-pdf-viewer.php?f=' . urlencode($filename));
+            error_log('[PDF Generator] Generated standalone viewer URL: ' . $viewer_url);
             return $viewer_url;
         }
         
