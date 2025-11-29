@@ -115,7 +115,7 @@ $table_prefix = 'wpx7_';
 date_default_timezone_set('UTC');
 
 // Increase nonce lifetime to handle time differences (default is 1 day)
-define('NONCE_LIFE', 2 * DAY_IN_SECONDS); // 2 days
+define('NONCE_LIFE', 172800); // 2 days (2 * 86400 seconds)
 
 // Disable caching
 define('WP_CACHE', env('WP_CACHE', false));
