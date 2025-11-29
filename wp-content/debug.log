@@ -14648,3 +14648,40 @@ Stack trace:
 #1 C:\Users\user\Local Sites\mgrnz\app\public\wp-admin\admin-ajax.php(22): require_once('C:\\Users\\user\\L...')
 #2 {main}
   thrown in C:\Users\user\Local Sites\mgrnz\app\public\wp-config.php on line 118
+[29-Nov-2025 02:17:43 UTC] [AI WORKFLOW PLUGIN] Initialized | Version: 1.0.0 | PHP: 8.4.4 | WordPress: 6.8.3
+[29-Nov-2025 02:17:44 UTC] [AI WORKFLOW PLUGIN] Initialized | Version: 1.0.0 | PHP: 8.4.4 | WordPress: 6.8.3
+[29-Nov-2025 02:17:52 UTC] [AI WORKFLOW PLUGIN] Initialized | Version: 1.0.0 | PHP: 8.4.4 | WordPress: 6.8.3
+[29-Nov-2025 02:18:00 UTC] [AI Workflow] Cleaned up 0 expired conversation sessions
+[29-Nov-2025 02:18:00 UTC] [AI WORKFLOW PLUGIN] Initialized | Version: 1.0.0 | PHP: 8.4.4 | WordPress: 6.8.3
+[29-Nov-2025 02:18:01 UTC] [AI WORKFLOW PLUGIN] Initialized | Version: 1.0.0 | PHP: 8.4.4 | WordPress: 6.8.3
+[29-Nov-2025 02:18:02 UTC] [AI WORKFLOW PLUGIN] Initialized | Version: 1.0.0 | PHP: 8.4.4 | WordPress: 6.8.3
+[29-Nov-2025 02:18:05 UTC] [AI WORKFLOW PLUGIN] Initialized | Version: 1.0.0 | PHP: 8.4.4 | WordPress: 6.8.3
+[29-Nov-2025 02:18:08 UTC] [AI WORKFLOW PLUGIN] Initialized | Version: 1.0.0 | PHP: 8.4.4 | WordPress: 6.8.3
+[29-Nov-2025 02:18:08 UTC] [AI WORKFLOW CACHE MISS] Key: mgrnz_blueprint_9d679322a8be74dbffbec576bfb5db0d | Time: 2025-11-29 02:18:08
+[29-Nov-2025 02:18:08 UTC] [AI WORKFLOW] Including conversation history from session: sess_BOeUS8lY0sf09ptO1MnUEXMJIa5VY14q
+[29-Nov-2025 02:18:30 UTC] [AI WORKFLOW] Skipping cache - chat-based submission or bypass requested
+[29-Nov-2025 02:18:37 UTC] [AI WORKFLOW PLUGIN] Initialized | Version: 1.0.0 | PHP: 8.4.4 | WordPress: 6.8.3
+[29-Nov-2025 02:18:38 UTC] [AI WORKFLOW PLUGIN] Initialized | Version: 1.0.0 | PHP: 8.4.4 | WordPress: 6.8.3
+[29-Nov-2025 02:18:38 UTC] [AI WORKFLOW PLUGIN] Initialized | Version: 1.0.0 | PHP: 8.4.4 | WordPress: 6.8.3
+[29-Nov-2025 02:18:39 UTC] [AI WORKFLOW PLUGIN] Initialized | Version: 1.0.0 | PHP: 8.4.4 | WordPress: 6.8.3
+[29-Nov-2025 02:18:39 UTC] [AI WORKFLOW PLUGIN] Initialized | Version: 1.0.0 | PHP: 8.4.4 | WordPress: 6.8.3
+[29-Nov-2025 02:25:17 UTC] [AI WORKFLOW PLUGIN] Initialized | Version: 1.0.0 | PHP: 8.4.4 | WordPress: 6.8.3
+[29-Nov-2025 02:25:17 UTC] [AI WORKFLOW PLUGIN] Initialized | Version: 1.0.0 | PHP: 8.4.4 | WordPress: 6.8.3
+[29-Nov-2025 02:25:20 UTC] [AI WORKFLOW PLUGIN] Initialized | Version: 1.0.0 | PHP: 8.4.4 | WordPress: 6.8.3
+[29-Nov-2025 02:25:21 UTC] [AI WORKFLOW PLUGIN] Initialized | Version: 1.0.0 | PHP: 8.4.4 | WordPress: 6.8.3
+[29-Nov-2025 02:25:22 UTC] [AI WORKFLOW PLUGIN] Initialized | Version: 1.0.0 | PHP: 8.4.4 | WordPress: 6.8.3
+[29-Nov-2025 02:25:22 UTC] [AI WORKFLOW PLUGIN] Initialized | Version: 1.0.0 | PHP: 8.4.4 | WordPress: 6.8.3
+[29-Nov-2025 02:25:23 UTC] [AI WORKFLOW PLUGIN] Initialized | Version: 1.0.0 | PHP: 8.4.4 | WordPress: 6.8.3
+[29-Nov-2025 02:25:23 UTC] [AI WORKFLOW PLUGIN] Initialized | Version: 1.0.0 | PHP: 8.4.4 | WordPress: 6.8.3
+[29-Nov-2025 02:25:27 UTC] [AI WORKFLOW PLUGIN] Initialized | Version: 1.0.0 | PHP: 8.4.4 | WordPress: 6.8.3
+[29-Nov-2025 02:25:30 UTC] [AI WORKFLOW PLUGIN] Initialized | Version: 1.0.0 | PHP: 8.4.4 | WordPress: 6.8.3
+[29-Nov-2025 02:25:30 UTC] [AI WORKFLOW CACHE MISS] Key: mgrnz_blueprint_9d679322a8be74dbffbec576bfb5db0d | Time: 2025-11-29 02:25:30
+[29-Nov-2025 02:25:30 UTC] [AI WORKFLOW] Including conversation history from session: sess_NB6ln8RK0YB71Z3mnHTSKqBGPP7f6NAY
+[29-Nov-2025 02:25:53 UTC] [AI WORKFLOW] Skipping cache - chat-based submission or bypass requested
+[29-Nov-2025 02:26:00 UTC] [AI WORKFLOW PLUGIN] Initialized | Version: 1.0.0 | PHP: 8.4.4 | WordPress: 6.8.3
+[29-Nov-2025 02:26:01 UTC] [AI WORKFLOW PLUGIN] Initialized | Version: 1.0.0 | PHP: 8.4.4 | WordPress: 6.8.3
+[29-Nov-2025 02:26:01 UTC] [AI WORKFLOW PLUGIN] Initialized | Version: 1.0.0 | PHP: 8.4.4 | WordPress: 6.8.3
+[29-Nov-2025 02:26:02 UTC] [AI WORKFLOW PLUGIN] Initialized | Version: 1.0.0 | PHP: 8.4.4 | WordPress: 6.8.3
+[29-Nov-2025 02:26:02 UTC] [AI WORKFLOW PLUGIN] Initialized | Version: 1.0.0 | PHP: 8.4.4 | WordPress: 6.8.3
+[29-Nov-2025 02:26:28 UTC] [AI WORKFLOW PLUGIN] Initialized | Version: 1.0.0 | PHP: 8.4.4 | WordPress: 6.8.3
+[29-Nov-2025 02:26:28 UTC] [AI WORKFLOW PLUGIN] Initialized | Version: 1.0.0 | PHP: 8.4.4 | WordPress: 6.8.3
