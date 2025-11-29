@@ -3437,9 +3437,9 @@ function mgrnz_handle_view_blueprint($request) {
     $filename = $request->get_param('filename');
     
     // Security: Only allow blueprint files
-    if (!preg_match('/^blueprint-[a-z0-9\-]+\.html$/', $filename)) {
+    if (!preg_match('/^blueprint-[a-zA-Z0-9\-]+\.html$/', $filename)) {
         status_header(403);
-        die('Invalid filename');
+        die('Invalid filename: ' . esc_html($filename));
     }
     
     // Get file path

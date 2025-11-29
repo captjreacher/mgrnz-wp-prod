@@ -154,19 +154,23 @@ class MGRNZ_PDF_Generator {
     public function get_download_url($file_path) {
         // If it's already a URL, return as-is
         if (strpos($file_path, 'http') === 0 || strpos($file_path, '/wp-json/') === 0) {
+            error_log('[PDF Generator] File path is already a URL: ' . $file_path);
             return $file_path;
         }
         
         $upload_dir = wp_upload_dir();
         $filename = basename($file_path);
         
-        // For HTML files, use direct viewer to ensure proper Content-Type
+        // For HTML files, use REST API viewer to ensure proper Content-Type
         if (strpos($filename, '.html') !== false) {
-            return site_url('/wp-content/mu-plugins/blueprint-viewer-direct.php?file=' . urlencode($filename));
+            $viewer_url = rest_url('mgrnz/v1/view-blueprint/' . $filename);
+            error_log('[PDF Generator] Generated REST API viewer URL: ' . $viewer_url);
+            return $viewer_url;
         }
         
         // For actual PDF files, return direct download URL
         $file_url = str_replace($upload_dir['basedir'], $upload_dir['baseurl'], $file_path);
+        error_log('[PDF Generator] Generated direct file URL: ' . $file_url);
         return $file_url;
     }
     
