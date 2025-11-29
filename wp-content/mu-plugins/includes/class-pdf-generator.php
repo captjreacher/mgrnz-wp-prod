@@ -66,13 +66,8 @@ class MGRNZ_PDF_Generator {
             // Add header with branding
             $this->add_pdf_header($pdf);
             
-            // Add blueprint content
+            // Add blueprint content (plain text only, no diagrams/images)
             $this->add_blueprint_content($pdf, $blueprint_data);
-            
-            // Add diagram if available
-            if (isset($blueprint_data['diagram']) && !empty($blueprint_data['diagram'])) {
-                $this->add_diagram_to_pdf($pdf, $blueprint_data['diagram']);
-            }
             
             // Add footer with contact info
             $this->add_pdf_footer($pdf);
@@ -217,12 +212,19 @@ class MGRNZ_PDF_Generator {
     }
     
     /**
-     * Add blueprint content to PDF
+     * Add blueprint content to PDF (plain text only)
      */
     private function add_blueprint_content($pdf, $blueprint_data) {
         $content = $blueprint_data['content'] ?? '';
+        
+        // Strip all HTML tags and decode entities
+        $content = html_entity_decode(strip_tags($content), ENT_QUOTES | ENT_HTML5, 'UTF-8');
+        
+        // Set font for content
         $pdf->SetFont('helvetica', '', 11);
-        $pdf->MultiCell(0, 5, strip_tags($content), 0, 'L');
+        
+        // Add content as plain text
+        $pdf->MultiCell(0, 5, $content, 0, 'L', false, 1, '', '', true, 0, false, true, 0, 'T', false);
     }
     
     /**
@@ -266,12 +268,15 @@ class MGRNZ_PDF_Generator {
     }
     
     /**
-     * Generate blueprint HTML
+     * Generate blueprint HTML (simplified - no images, plain text only)
      */
     private function generate_blueprint_html($blueprint_data, $user_data) {
         $content = $blueprint_data['content'] ?? 'No content available';
         
-        // Build complete HTML document with print-to-PDF functionality
+        // Strip any HTML tags and keep only plain text
+        $content = strip_tags($content);
+        
+        // Build simple HTML document with print-to-PDF functionality
         $html = '<!DOCTYPE html>
 <html lang="en">
 <head>
