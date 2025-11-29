@@ -20,31 +20,21 @@ class MGRNZ_PDF_Generator {
         error_log('[PDF Generator] Starting PDF generation for session: ' . $session_id);
         
         try {
-            // Try to find the autoloader in multiple possible locations
-            $possible_paths = [
-                __DIR__ . '/../vendor/autoload.php',
-                WP_CONTENT_DIR . '/mu-plugins/vendor/autoload.php',
-                ABSPATH . 'wp-content/mu-plugins/vendor/autoload.php'
-            ];
-            
-            $autoload_loaded = false;
-            
-            foreach ($possible_paths as $path) {
-                if (file_exists($path)) {
-                    require_once $path;
-                    error_log('[PDF Generator] Autoloader found and loaded at: ' . $path);
-                    $autoload_loaded = true;
-                    break;
+            // Load Composer autoloader if not already loaded
+            if (!class_exists('TCPDF')) {
+                $autoloader_path = WP_CONTENT_DIR . '/mu-plugins/vendor/autoload.php';
+                
+                if (file_exists($autoloader_path)) {
+                    require_once $autoloader_path;
+                    error_log('[PDF Generator] Autoloader loaded from: ' . $autoloader_path);
+                } else {
+                    error_log('[PDF Generator] Autoloader not found at: ' . $autoloader_path);
                 }
             }
             
-            if (!$autoload_loaded) {
-                error_log('[PDF Generator] WARNING: Could not find autoloader in any expected location.');
-            }
-            
-            // Check if TCPDF is available
+            // Check if TCPDF is available after loading autoloader
             if (!class_exists('TCPDF')) {
-                error_log('[PDF Generator] TCPDF class not found. Using HTML fallback.');
+                error_log('[PDF Generator] TCPDF class still not available after autoloader. Using HTML fallback.');
                 return $this->generate_simple_pdf($blueprint_data, $user_data, $session_id);
             }
             
@@ -113,8 +103,11 @@ class MGRNZ_PDF_Generator {
     
     /**
      * Generate simple HTML-based fallback (opens print dialog for PDF save)
+     * This is only used if TCPDF is not available
      */
     private function generate_simple_pdf($blueprint_data, $user_data, $session_id) {
+        error_log('[PDF Generator] Using HTML fallback - TCPDF not available');
+        
         try {
             // Generate HTML version
             $html = $this->generate_blueprint_html($blueprint_data, $user_data);
@@ -134,7 +127,7 @@ class MGRNZ_PDF_Generator {
             // Write HTML to file
             file_put_contents($file_path, $html);
             
-            error_log('[PDF Generator] HTML file created: ' . $file_path);
+            error_log('[PDF Generator] HTML fallback file created: ' . $file_path);
             
             // Return the file path (not URL) - the handler will convert it
             return $file_path;
@@ -164,19 +157,20 @@ class MGRNZ_PDF_Generator {
      * @return string Download URL
      */
     public function get_download_url($file_path) {
-        // If it's already a URL (from generate_simple_pdf), return as-is
+        // If it's already a URL, return as-is
         if (strpos($file_path, 'http') === 0 || strpos($file_path, '/wp-json/') === 0) {
             return $file_path;
         }
         
-        // For HTML files, use the direct viewer (bypasses REST API header issues)
-        if (strpos($file_path, '.html') !== false) {
-            $filename = basename($file_path);
+        $upload_dir = wp_upload_dir();
+        $filename = basename($file_path);
+        
+        // For HTML files, use direct viewer to ensure proper Content-Type
+        if (strpos($filename, '.html') !== false) {
             return site_url('/wp-content/mu-plugins/blueprint-viewer-direct.php?file=' . urlencode($filename));
         }
         
-        // For PDF files, return direct URL
-        $upload_dir = wp_upload_dir();
+        // For actual PDF files, return direct download URL
         $file_url = str_replace($upload_dir['basedir'], $upload_dir['baseurl'], $file_path);
         return $file_url;
     }
