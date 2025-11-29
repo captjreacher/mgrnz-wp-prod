@@ -275,13 +275,13 @@ document.addEventListener("DOMContentLoaded", function () {
       .then(data => {
         clearInterval(msgInterval);
         if (data.success) {
-          // Save to localStorage for the subscribe/download page
-          localStorage.setItem('mgrnz_blueprint_download', data.blueprint);
-          console.log('[WIZARD] Blueprint saved to localStorage after API response:', {
-            length: data.blueprint ? data.blueprint.length : 0,
-            preview: data.blueprint ? data.blueprint.substring(0, 100) + '...' : 'EMPTY',
-            hasContent: !!data.blueprint
-          });
+          // Save download URL to localStorage for the subscribe/download page
+          if (data.download_url) {
+            localStorage.setItem('mgrnz_blueprint_url', data.download_url);
+            console.log('[WIZARD] Blueprint URL saved to localStorage:', data.download_url);
+          } else {
+            console.error('[WIZARD] No download_url in API response!');
+          }
 
           // Save wizard data including submission ref
           const wizardData = {
@@ -332,23 +332,12 @@ document.addEventListener("DOMContentLoaded", function () {
   if (downloadBtn) {
     downloadBtn.addEventListener("click", function () {
       console.log("Download blueprint clicked");
-      // Save blueprint HTML to localStorage so it can be downloaded as PDF after subscription
-      const blueprintContent = document.getElementById("blueprint-content");
-      if (blueprintContent) {
-        const blueprintHTML = blueprintContent.innerHTML;
-        if (blueprintHTML && blueprintHTML.trim().length > 0) {
-          localStorage.setItem('mgrnz_blueprint_download', blueprintHTML);
-          console.log('[WIZARD] Blueprint re-saved from DOM on download click:', {
-            length: blueprintHTML.length,
-            preview: blueprintHTML.substring(0, 100) + '...',
-            elementFound: true
-          });
-        } else {
-          console.warn('[WIZARD] Blueprint content is empty! Not overwriting localStorage.');
-          console.warn('[WIZARD] Current localStorage value:', localStorage.getItem('mgrnz_blueprint_download'));
-        }
+      // Download URL should already be in localStorage from API response
+      const downloadUrl = localStorage.getItem('mgrnz_blueprint_url');
+      if (downloadUrl) {
+        console.log('[WIZARD] Download URL found in localStorage:', downloadUrl);
       } else {
-        console.error('[WIZARD] Blueprint content element not found!');
+        console.error('[WIZARD] No download URL in localStorage!');
       }
       // Navigate to subscribe page
       window.location.href = '/wizard-subscribe-page';
