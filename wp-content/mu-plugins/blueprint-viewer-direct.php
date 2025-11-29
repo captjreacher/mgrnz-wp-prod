@@ -42,10 +42,16 @@ $html = file_get_contents($file_path);
 // Clear output buffer
 ob_end_clean();
 
+// Remove any existing headers
+header_remove();
+
 // Set proper headers - MUST be before any output
-header('Content-Type: text/html; charset=utf-8');
-header('Content-Disposition: inline'); // Open in browser, not download
-header('Cache-Control: no-cache, must-revalidate');
+header('HTTP/1.1 200 OK');
+header('Content-Type: text/html; charset=UTF-8', true);
+header('Content-Disposition: inline; filename="blueprint.html"');
+header('Cache-Control: no-cache, no-store, must-revalidate');
+header('Pragma: no-cache');
+header('Expires: 0');
 header('X-Content-Type-Options: nosniff');
 
 // Output the HTML
