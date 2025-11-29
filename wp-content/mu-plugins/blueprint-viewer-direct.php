@@ -37,6 +37,7 @@ if (ob_get_level()) {
 
 // Set proper headers - MUST be before any output
 header('Content-Type: text/html; charset=utf-8');
+header('Content-Disposition: inline'); // Open in browser, not download
 header('Cache-Control: no-cache, must-revalidate');
 header('X-Content-Type-Options: nosniff');
 
