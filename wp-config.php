@@ -111,6 +111,12 @@ $table_prefix = 'wpx7_';
 // ============================================
 // Local Development Settings
 // ============================================
+// Set timezone to match server (prevents nonce/session issues)
+date_default_timezone_set('UTC');
+
+// Increase nonce lifetime to handle time differences (default is 1 day)
+define('NONCE_LIFE', 2 * DAY_IN_SECONDS); // 2 days
+
 // Disable caching
 define('WP_CACHE', env('WP_CACHE', false));
 
