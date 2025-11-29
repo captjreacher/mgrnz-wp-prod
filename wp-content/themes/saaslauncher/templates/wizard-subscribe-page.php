@@ -232,7 +232,22 @@ document.addEventListener('DOMContentLoaded', function() {
                 body: JSON.stringify(requestData)
             });
 
-            const subData = await subResponse.json();
+            console.log('Response status:', subResponse.status);
+            console.log('Response headers:', Object.fromEntries(subResponse.headers.entries()));
+            
+            // Get response text first to see what we're actually receiving
+            const responseText = await subResponse.text();
+            console.log('Raw response:', responseText.substring(0, 500));
+            
+            // Try to parse as JSON
+            let subData;
+            try {
+                subData = JSON.parse(responseText);
+            } catch (e) {
+                console.error('JSON parse error:', e);
+                console.error('Response was not JSON:', responseText);
+                throw new Error('Server returned invalid response. Check console for details.');
+            }
             
             console.log('API Response:', subData);
 
