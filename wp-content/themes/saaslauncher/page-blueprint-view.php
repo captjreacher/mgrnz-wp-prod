@@ -1,24 +1,29 @@
 <?php
 /**
- * Template Name: Blueprint Viewer
- * Description: Displays blueprint content inline
+ * Simple Blueprint PDF Viewer
+ * Place this file in: public_html/wp/blueprint-pdf-viewer.php
  */
 
-// Get blueprint filename from query parameter
-$filename = isset($_GET['file']) ? sanitize_file_name($_GET['file']) : '';
+$file = $_GET['f'] ?? '';
 
-if (empty($filename) || !preg_match('/^blueprint-[a-zA-Z0-9_\-]+\.html$/', $filename)) {
-    wp_die('Invalid blueprint file');
+// Security: Only allow blueprint HTML files
+if (!preg_match('/^blueprint-[a-zA-Z0-9\-]+\.html$/', $file)) {
+    http_response_code(403);
+    die('Invalid filename');
 }
 
-$upload_dir = wp_upload_dir();
-$file_path = $upload_dir['basedir'] . '/blueprints/' . $filename;
+// Get file path
+$path = __DIR__ . '/wp-content/uploads/blueprints/' . $file;
 
-if (!file_exists($file_path)) {
-    wp_die('Blueprint not found');
+// Check if file exists
+if (!file_exists($path)) {
+    http_response_code(404);
+    die('Blueprint not found');
 }
 
-// Read and output the HTML content directly
-$html = file_get_contents($file_path);
-echo $html;
+// Serve with correct headers
+header('Content-Type: text/html; charset=UTF-8');
+header('Cache-Control: no-cache');
+
+readfile($path);
 exit;
