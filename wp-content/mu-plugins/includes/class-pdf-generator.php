@@ -169,10 +169,10 @@ class MGRNZ_PDF_Generator {
             return $file_path;
         }
         
-        // For HTML files, use the viewer endpoint
+        // For HTML files, use the direct viewer (bypasses REST API header issues)
         if (strpos($file_path, '.html') !== false) {
             $filename = basename($file_path);
-            return rest_url('mgrnz/v1/view-blueprint/' . $filename);
+            return site_url('/wp-content/mu-plugins/blueprint-viewer-direct.php?file=' . urlencode($filename));
         }
         
         // For PDF files, return direct URL
