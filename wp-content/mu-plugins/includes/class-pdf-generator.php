@@ -391,9 +391,9 @@ class MGRNZ_PDF_Generator {
 <body>
     ' . $auto_print_section . '
     
-    <table width="100%" cellpadding="0" cellspacing="0" style="margin:0; padding:0;">
+    <table width="100%" cellpadding="0" cellspacing="0" style="margin:0; padding:0; -webkit-print-color-adjust: exact; color-adjust: exact;">
         <tr>
-            <td style="background-color: #1e293b; padding: 40px 20px 30px; text-align: center; border-bottom: 5px solid #ff4f00;">
+            <td style="background-color: #1e293b; padding: 40px 20px 30px; text-align: center; border-bottom: 5px solid #ff4f00; -webkit-print-color-adjust: exact; color-adjust: exact;">
                 <h1 style="color: #ffffff; font-size: 36px; margin: 0 0 10px 0; font-weight: 800; font-family: Inter, Helvetica, Arial, sans-serif;">AI Workflow Blueprint</h1>
                 <p style="color: #e2e8f0; font-size: 18px; font-weight: 500; margin: 0; font-family: Inter, Helvetica, Arial, sans-serif;">Your Personalized Automation Strategy</p>
             </td>
