@@ -391,26 +391,34 @@ class MGRNZ_PDF_Generator {
 <body>
     ' . $auto_print_section . '
     
-    <div class="header">
-        <h1>AI Workflow Blueprint</h1>
-        <p>Your Personalized Automation Strategy</p>
-    </div>
+    <table width="100%" cellpadding="0" cellspacing="0" style="margin:0; padding:0;">
+        <tr>
+            <td style="background-color: #1e293b; padding: 40px 20px 30px; text-align: center; border-bottom: 5px solid #ff4f00;">
+                <h1 style="color: #ffffff; font-size: 36px; margin: 0 0 10px 0; font-weight: 800; font-family: Inter, Helvetica, Arial, sans-serif;">AI Workflow Blueprint</h1>
+                <p style="color: #e2e8f0; font-size: 18px; font-weight: 500; margin: 0; font-family: Inter, Helvetica, Arial, sans-serif;">Your Personalized Automation Strategy</p>
+            </td>
+        </tr>
+    </table>
     
-    <div class="meta">
-        <p><strong>Prepared for:</strong> ' . esc_html($user_data['name'] ?? 'Valued Client') . '</p>
-        <p><strong>Email:</strong> ' . esc_html($user_data['email'] ?? '') . '</p>
-        <p><strong>Date:</strong> ' . date('F j, Y g:i A') . '</p>
+    <div style="background: #f9fafb; padding: 20px; margin: 30px 40px; border-radius: 8px; border-left: 5px solid #ff4f00;">
+        <p style="margin: 8px 0; color: #4b5563; font-size: 14px;"><strong style="color: #111827;">Prepared for:</strong> ' . esc_html($user_data['name'] ?? 'Valued Client') . '</p>
+        <p style="margin: 8px 0; color: #4b5563; font-size: 14px;"><strong style="color: #111827;">Email:</strong> ' . esc_html($user_data['email'] ?? '') . '</p>
+        <p style="margin: 8px 0; color: #4b5563; font-size: 14px;"><strong style="color: #111827;">Date:</strong> ' . date('F j, Y g:i A') . '</p>
     </div>
     
     <div class="content">
         ' . $content . '
     </div>
     
-    <div class="footer">
-        <p><strong>MGRNZ - AI Workflow Automation</strong></p>
-        <p>www.mgrnz.com | info@mgrnz.com</p>
-        <p>&copy; ' . date('Y') . ' MGRNZ. All rights reserved.</p>
-    </div>
+    <table width="100%" cellpadding="0" cellspacing="0" style="margin:50px 0 0 0; padding:0;">
+        <tr>
+            <td style="background-color: #1e293b; padding: 30px 20px; text-align: center; border-top: 5px solid #ff4f00;">
+                <p style="color: #ffffff; font-size: 15px; font-weight: 700; margin: 5px 0; font-family: Inter, Helvetica, Arial, sans-serif;">MGRNZ - AI Workflow Automation</p>
+                <p style="color: #e2e8f0; font-size: 13px; margin: 5px 0; font-family: Inter, Helvetica, Arial, sans-serif;">www.mgrnz.com | info@mgrnz.com</p>
+                <p style="color: #e2e8f0; font-size: 13px; margin: 5px 0; font-family: Inter, Helvetica, Arial, sans-serif;">&copy; ' . date('Y') . ' MGRNZ. All rights reserved.</p>
+            </td>
+        </tr>
+    </table>
 </body>
 </html>';
     }
