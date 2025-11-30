@@ -3749,6 +3749,14 @@ function mgrnz_handle_generate_pdf_preview($request) {
 add_action('wp_ajax_mgrnz_generate_pdf', 'mgrnz_handle_generate_pdf_ajax');
 add_action('wp_ajax_nopriv_mgrnz_generate_pdf', 'mgrnz_handle_generate_pdf_ajax');
 
+// Simple test endpoint
+add_action('wp_ajax_mgrnz_test', 'mgrnz_test_ajax');
+add_action('wp_ajax_nopriv_mgrnz_test', 'mgrnz_test_ajax');
+
+function mgrnz_test_ajax() {
+    wp_send_json_success(['message' => 'AJAX is working!', 'time' => current_time('mysql')]);
+}
+
 function mgrnz_handle_generate_pdf_ajax() {
     // Support both JSON input and POST data
     $data = null;

@@ -234,8 +234,12 @@ class MGRNZ_PDF_Generator_V2 {
         $content = $blueprint_data['content'] ?? 'No content available';
         
         // FIX: Replace local URLs with production URLs so Api2Pdf can access images
-        $content = str_replace('http://mgrnz.local', 'https://mgrnz.com', $content);
-        $content = str_replace('http://localhost', 'https://mgrnz.com', $content);
+        // Handle /wp/ subdirectory installation
+        $content = str_replace('http://mgrnz.local', 'https://mgrnz.com/wp', $content);
+        $content = str_replace('http://localhost', 'https://mgrnz.com/wp', $content);
+        
+        // Also handle cases where the URL might already have /wp/
+        $content = str_replace('https://mgrnz.com/wp/wp/', 'https://mgrnz.com/wp/', $content);
         
         // Don't strip all tags - preserve images and structure
         // Only strip potentially dangerous tags
