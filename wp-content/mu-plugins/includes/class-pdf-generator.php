@@ -6,7 +6,7 @@
  * Uses Api2Pdf (Cloud API) for high-quality rendering
  */
 
-class MGRNZ_PDF_Generator {
+class MGRNZ_PDF_Generator_V2 {
     
     // Api2Pdf API Key
     private $api_key = '21f8e7ef-e58e-471c-b83f-a47b20514b80';
@@ -460,4 +460,4 @@ add_action('init', function() {
     }
 });
 
-add_action('mgrnz_cleanup_old_pdfs', ['MGRNZ_PDF_Generator', 'cleanup_old_pdfs']);
+add_action('mgrnz_cleanup_old_pdfs', ['MGRNZ_PDF_Generator_V2', 'cleanup_old_pdfs']);

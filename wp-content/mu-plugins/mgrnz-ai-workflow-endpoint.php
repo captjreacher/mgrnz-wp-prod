@@ -28,7 +28,7 @@ if (!class_exists('MGRNZ_Blueprint_Cache')) {
 if (!class_exists('MGRNZ_Conversation_Manager')) {
     require_once __DIR__ . '/includes/class-conversation-manager.php';
 }
-if (!class_exists('MGRNZ_PDF_Generator')) {
+if (!class_exists('MGRNZ_PDF_Generator_V2')) {
     require_once __DIR__ . '/includes/class-pdf-generator.php';
 }
 if (!class_exists('MGRNZ_Conversation_Analytics')) {
@@ -3505,7 +3505,7 @@ function mgrnz_handle_generate_pdf_preview($request) {
         ];
         
         // Generate PDF using the PDF Generator class
-        $pdf_generator = new MGRNZ_PDF_Generator();
+        $pdf_generator = new MGRNZ_PDF_Generator_V2();
         $pdf_path = $pdf_generator->generate_blueprint_pdf($blueprint_data, $user_data, $session_id);
         
         if (is_wp_error($pdf_path)) {
