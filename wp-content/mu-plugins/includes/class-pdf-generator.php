@@ -67,6 +67,8 @@ class MGRNZ_PDF_Generator {
      * Call Api2Pdf API
      */
     private function call_api2pdf($html) {
+        // DEBUG: Force custom implementation to rule out plugin issues
+        /*
         // Try to use the "Save Page to PDF" plugin's library if available
         if (class_exists('Api2Pdf_Library')) {
             try {
@@ -107,6 +109,7 @@ class MGRNZ_PDF_Generator {
                 // Fall through to custom implementation below
             }
         }
+        */
         
         // Fallback: Use our custom implementation
         $endpoint = 'https://v2.api2pdf.com/chrome/html';
@@ -400,6 +403,7 @@ class MGRNZ_PDF_Generator {
             <td style="background-color: #1e293b; padding: 40px 20px 30px; text-align: center; border-bottom: 5px solid #ff4f00; -webkit-print-color-adjust: exact; color-adjust: exact;">
                 <h1 style="color: #ffffff; font-size: 36px; margin: 0 0 10px 0; font-weight: 800; font-family: Inter, Helvetica, Arial, sans-serif;">AI Workflow Blueprint</h1>
                 <p style="color: #e2e8f0; font-size: 18px; font-weight: 500; margin: 0; font-family: Inter, Helvetica, Arial, sans-serif;">Your Personalized Automation Strategy</p>
+                <p style="color: #64748b; font-size: 10px; margin-top: 10px;">Generated: ' . date('Y-m-d H:i:s') . '</p>
             </td>
         </tr>
     </table>
