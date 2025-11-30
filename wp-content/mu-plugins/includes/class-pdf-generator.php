@@ -88,10 +88,10 @@ class MGRNZ_PDF_Generator {
                     [
                         'landscape' => false,
                         'printBackground' => true,
-                        'marginTop' => 0.5,
-                        'marginBottom' => 0.5,
-                        'marginLeft' => 0.5,
-                        'marginRight' => 0.5
+                        'marginTop' => 0, // Set to 0 for full bleed
+                        'marginBottom' => 0,
+                        'marginLeft' => 0,
+                        'marginRight' => 0
                     ]
                 );
                 
@@ -116,10 +116,10 @@ class MGRNZ_PDF_Generator {
             'options' => [
                 'landscape' => false,
                 'printBackground' => true,
-                'marginTop' => 0.5,
-                'marginBottom' => 0.5,
-                'marginLeft' => 0.5,
-                'marginRight' => 0.5,
+                'marginTop' => 0, // Set to 0 for full bleed
+                'marginBottom' => 0,
+                'marginLeft' => 0,
+                'marginRight' => 0,
                 'scale' => 1
             ]
         ];
