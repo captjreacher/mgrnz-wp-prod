@@ -108,6 +108,13 @@ add_action('rest_api_init', function () {
         'callback' => 'mgrnz_handle_download_blueprint',
     ]);
     
+    // Generate PDF preview endpoint (uses Api2Pdf)
+    register_rest_route('mgrnz/v1', '/generate-pdf-preview', [
+        'methods'  => 'POST',
+        'permission_callback' => '__return_true', // Public endpoint with rate limiting
+        'callback' => 'mgrnz_handle_generate_pdf_preview',
+    ]);
+    
     // Token-based blueprint download endpoint
     register_rest_route('mgrnz/v1', '/download-blueprint/(?P<token>[a-zA-Z0-9]+)', [
         'methods'  => 'GET',
@@ -3460,4 +3467,70 @@ function mgrnz_handle_view_blueprint($request) {
     
     readfile($file_path);
     exit;
+}
+
+/**
+ * Handle generate PDF preview
+ * Uses Api2Pdf to generate a high-quality PDF from blueprint HTML
+ * 
+ * @param WP_REST_Request $request
+ * @return WP_REST_Response
+ */
+function mgrnz_handle_generate_pdf_preview($request) {
+    $logger = new MGRNZ_Error_Logger();
+    
+    try {
+        // Get blueprint HTML from request
+        $blueprint_html = $request->get_param('blueprint_html');
+        
+        if (empty($blueprint_html)) {
+            return new WP_REST_Response([
+                'success' => false,
+                'message' => 'No blueprint HTML provided'
+            ], 400);
+        }
+        
+        // Get user data (if provided)
+        $user_data = [
+            'name' => $request->get_param('user_name') ?? 'Preview User',
+            'email' => $request->get_param('user_email') ?? ''
+        ];
+        
+        // Generate unique session ID for this preview
+        $session_id = 'preview-' . uniqid();
+        
+        // Prepare blueprint data
+        $blueprint_data = [
+            'content' => $blueprint_html
+        ];
+        
+        // Generate PDF using the PDF Generator class
+        $pdf_generator = new MGRNZ_PDF_Generator();
+        $pdf_path = $pdf_generator->generate_blueprint_pdf($blueprint_data, $user_data, $session_id);
+        
+        if (is_wp_error($pdf_path)) {
+            throw new Exception($pdf_path->get_error_message());
+        }
+        
+        // Get download URL
+        $download_url = $pdf_generator->get_download_url($pdf_path);
+        
+        return new WP_REST_Response([
+            'success' => true,
+            'download_url' => $download_url
+        ], 200);
+        
+    } catch (Exception $e) {
+        error_log('[PDF PREVIEW] Error: ' . $e->getMessage());
+        $logger->log_error(
+            MGRNZ_Error_Logger::CATEGORY_SUBMISSION,
+            'PDF preview generation failed: ' . $e->getMessage(),
+            []
+        );
+        
+        return new WP_REST_Response([
+            'success' => false,
+            'message' => 'PDF generation failed: ' . $e->getMessage()
+        ], 500);
+    }
 }
