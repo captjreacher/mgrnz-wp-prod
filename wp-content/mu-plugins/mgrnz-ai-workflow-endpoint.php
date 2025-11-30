@@ -1,15 +1,3 @@
-<?php
-/**
- * Plugin Name: MGRNZ AI Workflow Endpoint
- * Description: Receives wizard submissions from /start-using-ai and logs/returns JSON.
- * Author: MGRNZ
- * Version: 1.0.0
- */
-
-// Load required classes (only if not already loaded by wizard file)
-if (!class_exists('MGRNZ_Error_Logger')) {
-    require_once __DIR__ . '/includes/class-error-logger.php';
-}
 if (!class_exists('MGRNZ_Submission_CPT')) {
     require_once __DIR__ . '/includes/class-submission-cpt.php';
 }
@@ -17,19 +5,6 @@ if (!class_exists('MGRNZ_AI_Service')) {
     require_once __DIR__ . '/includes/class-ai-service.php';
 }
 if (!class_exists('MGRNZ_Email_Service')) {
-    require_once __DIR__ . '/includes/class-email-service.php';
-}
-if (!class_exists('MGRNZ_AI_Settings')) {
-    require_once __DIR__ . '/includes/class-ai-settings.php';
-}
-if (!class_exists('MGRNZ_Blueprint_Cache')) {
-    require_once __DIR__ . '/includes/class-blueprint-cache.php';
-}
-if (!class_exists('MGRNZ_Conversation_Manager')) {
-    require_once __DIR__ . '/includes/class-conversation-manager.php';
-}
-if (!class_exists('MGRNZ_PDF_Generator_V2')) {
-    require_once __DIR__ . '/includes/class-pdf-generator.php';
 }
 if (!class_exists('MGRNZ_Conversation_Analytics')) {
     require_once __DIR__ . '/includes/class-conversation-analytics.php';

@@ -14889,3 +14889,65 @@ Stack trace:
 [30-Nov-2025 09:37:34 UTC] [AI WORKFLOW PLUGIN] Initialized | Version: 1.0.0 | PHP: 8.4.4 | WordPress: 6.8.3
 [30-Nov-2025 09:39:35 UTC] [AI WORKFLOW PLUGIN] Initialized | Version: 1.0.0 | PHP: 8.4.4 | WordPress: 6.8.3
 [30-Nov-2025 09:39:35 UTC] [AI WORKFLOW PLUGIN] Initialized | Version: 1.0.0 | PHP: 8.4.4 | WordPress: 6.8.3
+[30-Nov-2025 09:41:36 UTC] [AI WORKFLOW PLUGIN] Initialized | Version: 1.0.0 | PHP: 8.4.4 | WordPress: 6.8.3
+[30-Nov-2025 09:41:37 UTC] [AI WORKFLOW PLUGIN] Initialized | Version: 1.0.0 | PHP: 8.4.4 | WordPress: 6.8.3
+[30-Nov-2025 09:43:37 UTC] [AI WORKFLOW PLUGIN] Initialized | Version: 1.0.0 | PHP: 8.4.4 | WordPress: 6.8.3
+[30-Nov-2025 09:43:37 UTC] [AI WORKFLOW PLUGIN] Initialized | Version: 1.0.0 | PHP: 8.4.4 | WordPress: 6.8.3
+[30-Nov-2025 09:45:33 UTC] [AI WORKFLOW PLUGIN] Initialized | Version: 1.0.0 | PHP: 8.4.4 | WordPress: 6.8.3
+[30-Nov-2025 09:45:33 UTC] [AI WORKFLOW PLUGIN] Initialized | Version: 1.0.0 | PHP: 8.4.4 | WordPress: 6.8.3
+[30-Nov-2025 09:45:43 UTC] [AI WORKFLOW PLUGIN] Initialized | Version: 1.0.0 | PHP: 8.4.4 | WordPress: 6.8.3
+[30-Nov-2025 09:45:43 UTC] [AI WORKFLOW PLUGIN] Initialized | Version: 1.0.0 | PHP: 8.4.4 | WordPress: 6.8.3
+[30-Nov-2025 09:45:45 UTC] [AI WORKFLOW PLUGIN] Initialized | Version: 1.0.0 | PHP: 8.4.4 | WordPress: 6.8.3
+[30-Nov-2025 09:45:46 UTC] [AI WORKFLOW PLUGIN] Initialized | Version: 1.0.0 | PHP: 8.4.4 | WordPress: 6.8.3
+[30-Nov-2025 09:45:47 UTC] [AI WORKFLOW PLUGIN] Initialized | Version: 1.0.0 | PHP: 8.4.4 | WordPress: 6.8.3
+[30-Nov-2025 09:45:48 UTC] PHP Notice:  Function WP_Duotone::get_filter_svg was called <strong>incorrectly</strong>. "##292373" in theme.json settings.color.duotone is not a hex or rgb string. Please see <a href="https://developer.wordpress.org/advanced-administration/debug/debug-wordpress/">Debugging in WordPress</a> for more information. (This message was added in version 6.3.0.) in C:\Users\user\Local Sites\mgrnz\app\public\wp-includes\functions.php on line 6121
+[30-Nov-2025 09:45:53 UTC] [AI WORKFLOW PLUGIN] Initialized | Version: 1.0.0 | PHP: 8.4.4 | WordPress: 6.8.3
+[30-Nov-2025 09:47:53 UTC] [AI WORKFLOW PLUGIN] Initialized | Version: 1.0.0 | PHP: 8.4.4 | WordPress: 6.8.3
+[30-Nov-2025 09:47:54 UTC] [AI WORKFLOW PLUGIN] Initialized | Version: 1.0.0 | PHP: 8.4.4 | WordPress: 6.8.3
+[30-Nov-2025 09:48:47 UTC] [AI WORKFLOW PLUGIN] Initialized | Version: 1.0.0 | PHP: 8.4.4 | WordPress: 6.8.3
+[30-Nov-2025 09:48:48 UTC] [AI WORKFLOW PLUGIN] Initialized | Version: 1.0.0 | PHP: 8.4.4 | WordPress: 6.8.3
+[30-Nov-2025 09:48:57 UTC] [AI WORKFLOW PLUGIN] Initialized | Version: 1.0.0 | PHP: 8.4.4 | WordPress: 6.8.3
+[30-Nov-2025 09:49:08 UTC] [AI WORKFLOW PLUGIN] Initialized | Version: 1.0.0 | PHP: 8.4.4 | WordPress: 6.8.3
+[30-Nov-2025 09:51:09 UTC] [AI WORKFLOW PLUGIN] Initialized | Version: 1.0.0 | PHP: 8.4.4 | WordPress: 6.8.3
+[30-Nov-2025 09:51:10 UTC] [AI WORKFLOW PLUGIN] Initialized | Version: 1.0.0 | PHP: 8.4.4 | WordPress: 6.8.3
+[30-Nov-2025 09:53:10 UTC] [AI WORKFLOW PLUGIN] Initialized | Version: 1.0.0 | PHP: 8.4.4 | WordPress: 6.8.3
+[30-Nov-2025 09:53:10 UTC] [AI WORKFLOW PLUGIN] Initialized | Version: 1.0.0 | PHP: 8.4.4 | WordPress: 6.8.3
+[30-Nov-2025 09:53:55 UTC] [AI WORKFLOW PLUGIN] Initialized | Version: 1.0.0 | PHP: 8.4.4 | WordPress: 6.8.3
+[30-Nov-2025 09:53:55 UTC] [AI WORKFLOW PLUGIN] Initialized | Version: 1.0.0 | PHP: 8.4.4 | WordPress: 6.8.3
+[30-Nov-2025 09:53:56 UTC] PHP Warning:  Undefined array key "savePageToPdf_support" in C:\Users\user\Local Sites\mgrnz\app\public\wp-content\plugins\save-page-to-pdf\save-page-to-pdf.php on line 114
+[30-Nov-2025 09:55:11 UTC] [AI WORKFLOW PLUGIN] Initialized | Version: 1.0.0 | PHP: 8.4.4 | WordPress: 6.8.3
+[30-Nov-2025 09:55:11 UTC] [AI WORKFLOW PLUGIN] Initialized | Version: 1.0.0 | PHP: 8.4.4 | WordPress: 6.8.3
+[30-Nov-2025 09:55:11 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at C:\Users\user\Local Sites\mgrnz\app\public\wp-content\mu-plugins\mgrnz-ai-workflow-endpoint.php:1) in C:\Users\user\Local Sites\mgrnz\app\public\wp-includes\http.php on line 514
+[30-Nov-2025 09:55:11 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at C:\Users\user\Local Sites\mgrnz\app\public\wp-content\mu-plugins\mgrnz-ai-workflow-endpoint.php:1) in C:\Users\user\Local Sites\mgrnz\app\public\wp-includes\http.php on line 515
+[30-Nov-2025 09:55:11 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at C:\Users\user\Local Sites\mgrnz\app\public\wp-content\mu-plugins\mgrnz-ai-workflow-endpoint.php:1) in C:\Users\user\Local Sites\mgrnz\app\public\wp-admin\admin-ajax.php on line 27
+[30-Nov-2025 09:55:11 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at C:\Users\user\Local Sites\mgrnz\app\public\wp-content\mu-plugins\mgrnz-ai-workflow-endpoint.php:1) in C:\Users\user\Local Sites\mgrnz\app\public\wp-admin\admin-ajax.php on line 28
+[30-Nov-2025 09:55:11 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at C:\Users\user\Local Sites\mgrnz\app\public\wp-content\mu-plugins\mgrnz-ai-workflow-endpoint.php:1) in C:\Users\user\Local Sites\mgrnz\app\public\wp-includes\functions.php on line 7031
+[30-Nov-2025 09:55:11 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at C:\Users\user\Local Sites\mgrnz\app\public\wp-content\mu-plugins\mgrnz-ai-workflow-endpoint.php:1) in C:\Users\user\Local Sites\mgrnz\app\public\wp-includes\functions.php on line 7168
+[30-Nov-2025 09:55:11 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at C:\Users\user\Local Sites\mgrnz\app\public\wp-content\mu-plugins\mgrnz-ai-workflow-endpoint.php:1) in C:\Users\user\Local Sites\mgrnz\app\public\wp-includes\functions.php on line 7144
+[30-Nov-2025 09:57:12 UTC] [AI WORKFLOW PLUGIN] Initialized | Version: 1.0.0 | PHP: 8.4.4 | WordPress: 6.8.3
+[30-Nov-2025 09:57:12 UTC] [AI WORKFLOW PLUGIN] Initialized | Version: 1.0.0 | PHP: 8.4.4 | WordPress: 6.8.3
+[30-Nov-2025 09:57:13 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at C:\Users\user\Local Sites\mgrnz\app\public\wp-content\mu-plugins\mgrnz-ai-workflow-endpoint.php:1) in C:\Users\user\Local Sites\mgrnz\app\public\wp-includes\http.php on line 514
+[30-Nov-2025 09:57:13 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at C:\Users\user\Local Sites\mgrnz\app\public\wp-content\mu-plugins\mgrnz-ai-workflow-endpoint.php:1) in C:\Users\user\Local Sites\mgrnz\app\public\wp-includes\http.php on line 515
+[30-Nov-2025 09:57:13 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at C:\Users\user\Local Sites\mgrnz\app\public\wp-content\mu-plugins\mgrnz-ai-workflow-endpoint.php:1) in C:\Users\user\Local Sites\mgrnz\app\public\wp-admin\admin-ajax.php on line 27
+[30-Nov-2025 09:57:13 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at C:\Users\user\Local Sites\mgrnz\app\public\wp-content\mu-plugins\mgrnz-ai-workflow-endpoint.php:1) in C:\Users\user\Local Sites\mgrnz\app\public\wp-admin\admin-ajax.php on line 28
+[30-Nov-2025 09:57:13 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at C:\Users\user\Local Sites\mgrnz\app\public\wp-content\mu-plugins\mgrnz-ai-workflow-endpoint.php:1) in C:\Users\user\Local Sites\mgrnz\app\public\wp-includes\functions.php on line 7031
+[30-Nov-2025 09:57:13 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at C:\Users\user\Local Sites\mgrnz\app\public\wp-content\mu-plugins\mgrnz-ai-workflow-endpoint.php:1) in C:\Users\user\Local Sites\mgrnz\app\public\wp-includes\functions.php on line 7168
+[30-Nov-2025 09:57:13 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at C:\Users\user\Local Sites\mgrnz\app\public\wp-content\mu-plugins\mgrnz-ai-workflow-endpoint.php:1) in C:\Users\user\Local Sites\mgrnz\app\public\wp-includes\functions.php on line 7144
+[30-Nov-2025 09:59:13 UTC] [AI WORKFLOW PLUGIN] Initialized | Version: 1.0.0 | PHP: 8.4.4 | WordPress: 6.8.3
+[30-Nov-2025 09:59:13 UTC] [AI WORKFLOW PLUGIN] Initialized | Version: 1.0.0 | PHP: 8.4.4 | WordPress: 6.8.3
+[30-Nov-2025 09:59:13 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at C:\Users\user\Local Sites\mgrnz\app\public\wp-content\mu-plugins\mgrnz-ai-workflow-endpoint.php:1) in C:\Users\user\Local Sites\mgrnz\app\public\wp-includes\http.php on line 514
+[30-Nov-2025 09:59:13 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at C:\Users\user\Local Sites\mgrnz\app\public\wp-content\mu-plugins\mgrnz-ai-workflow-endpoint.php:1) in C:\Users\user\Local Sites\mgrnz\app\public\wp-includes\http.php on line 515
+[30-Nov-2025 09:59:13 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at C:\Users\user\Local Sites\mgrnz\app\public\wp-content\mu-plugins\mgrnz-ai-workflow-endpoint.php:1) in C:\Users\user\Local Sites\mgrnz\app\public\wp-admin\admin-ajax.php on line 27
+[30-Nov-2025 09:59:13 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at C:\Users\user\Local Sites\mgrnz\app\public\wp-content\mu-plugins\mgrnz-ai-workflow-endpoint.php:1) in C:\Users\user\Local Sites\mgrnz\app\public\wp-admin\admin-ajax.php on line 28
+[30-Nov-2025 09:59:13 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at C:\Users\user\Local Sites\mgrnz\app\public\wp-content\mu-plugins\mgrnz-ai-workflow-endpoint.php:1) in C:\Users\user\Local Sites\mgrnz\app\public\wp-includes\functions.php on line 7031
+[30-Nov-2025 09:59:14 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at C:\Users\user\Local Sites\mgrnz\app\public\wp-content\mu-plugins\mgrnz-ai-workflow-endpoint.php:1) in C:\Users\user\Local Sites\mgrnz\app\public\wp-includes\functions.php on line 7168
+[30-Nov-2025 09:59:14 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at C:\Users\user\Local Sites\mgrnz\app\public\wp-content\mu-plugins\mgrnz-ai-workflow-endpoint.php:1) in C:\Users\user\Local Sites\mgrnz\app\public\wp-includes\functions.php on line 7144
+[30-Nov-2025 10:01:14 UTC] [AI WORKFLOW PLUGIN] Initialized | Version: 1.0.0 | PHP: 8.4.4 | WordPress: 6.8.3
+[30-Nov-2025 10:01:14 UTC] [AI WORKFLOW PLUGIN] Initialized | Version: 1.0.0 | PHP: 8.4.4 | WordPress: 6.8.3
+[30-Nov-2025 10:01:15 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at C:\Users\user\Local Sites\mgrnz\app\public\wp-content\mu-plugins\mgrnz-ai-workflow-endpoint.php:1) in C:\Users\user\Local Sites\mgrnz\app\public\wp-includes\http.php on line 514
+[30-Nov-2025 10:01:15 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at C:\Users\user\Local Sites\mgrnz\app\public\wp-content\mu-plugins\mgrnz-ai-workflow-endpoint.php:1) in C:\Users\user\Local Sites\mgrnz\app\public\wp-includes\http.php on line 515
+[30-Nov-2025 10:01:15 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at C:\Users\user\Local Sites\mgrnz\app\public\wp-content\mu-plugins\mgrnz-ai-workflow-endpoint.php:1) in C:\Users\user\Local Sites\mgrnz\app\public\wp-admin\admin-ajax.php on line 27
+[30-Nov-2025 10:01:15 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at C:\Users\user\Local Sites\mgrnz\app\public\wp-content\mu-plugins\mgrnz-ai-workflow-endpoint.php:1) in C:\Users\user\Local Sites\mgrnz\app\public\wp-admin\admin-ajax.php on line 28
+[30-Nov-2025 10:01:15 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at C:\Users\user\Local Sites\mgrnz\app\public\wp-content\mu-plugins\mgrnz-ai-workflow-endpoint.php:1) in C:\Users\user\Local Sites\mgrnz\app\public\wp-includes\functions.php on line 7031
+[30-Nov-2025 10:01:15 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at C:\Users\user\Local Sites\mgrnz\app\public\wp-content\mu-plugins\mgrnz-ai-workflow-endpoint.php:1) in C:\Users\user\Local Sites\mgrnz\app\public\wp-includes\functions.php on line 7168
+[30-Nov-2025 10:01:15 UTC] PHP Warning:  Cannot modify header information - headers already sent by (output started at C:\Users\user\Local Sites\mgrnz\app\public\wp-content\mu-plugins\mgrnz-ai-workflow-endpoint.php:1) in C:\Users\user\Local Sites\mgrnz\app\public\wp-includes\functions.php on line 7144
