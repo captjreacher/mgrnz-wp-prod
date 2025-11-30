@@ -67,6 +67,48 @@ class MGRNZ_PDF_Generator {
      * Call Api2Pdf API
      */
     private function call_api2pdf($html) {
+        // Try to use the "Save Page to PDF" plugin's library if available
+        if (class_exists('Api2Pdf_Library')) {
+            try {
+                $options = get_option('savePageToPdf_options');
+                $api_key = $options['savePageToPdf_apiKey'] ?? $this->api_key;
+                
+                if (empty($api_key)) {
+                    error_log('[PDF Generator] No API key found in plugin settings, using hardcoded key');
+                    $api_key = $this->api_key;
+                }
+                
+                $client = new Api2Pdf_Library($api_key);
+                
+                // Use Chrome headless API from HTML
+                $result = $client->api2pdf_headless_chrome_from_html(
+                    $html,
+                    false, // inline
+                    'My-AI-Blueprint.pdf', // filename
+                    [
+                        'landscape' => false,
+                        'printBackground' => true,
+                        'marginTop' => 0.5,
+                        'marginBottom' => 0.5,
+                        'marginLeft' => 0.5,
+                        'marginRight' => 0.5
+                    ]
+                );
+                
+                if (isset($result->pdf) && !empty($result->pdf)) {
+                    error_log('[PDF Generator] Using Save Page to PDF plugin - PDF URL: ' . $result->pdf);
+                    return $result->pdf;
+                } else {
+                    throw new Exception('No PDF URL in plugin response');
+                }
+                
+            } catch (Exception $e) {
+                error_log('[PDF Generator] Plugin library failed: ' . $e->getMessage() . ' - Falling back to custom implementation');
+                // Fall through to custom implementation below
+            }
+        }
+        
+        // Fallback: Use our custom implementation
         $endpoint = 'https://v2.api2pdf.com/chrome/html';
         
         $body = [

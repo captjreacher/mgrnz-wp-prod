@@ -14695,3 +14695,88 @@ Stack trace:
 [30-Nov-2025 05:22:05 UTC] [AI Workflow] Cleaned up 0 expired conversation sessions
 [30-Nov-2025 05:24:37 UTC] [AI WORKFLOW PLUGIN] Initialized | Version: 1.0.0 | PHP: 8.4.4 | WordPress: 6.8.3
 [30-Nov-2025 05:24:38 UTC] [AI WORKFLOW PLUGIN] Initialized | Version: 1.0.0 | PHP: 8.4.4 | WordPress: 6.8.3
+[30-Nov-2025 06:08:16 UTC] [AI WORKFLOW PLUGIN] Initialized | Version: 1.0.0 | PHP: 8.4.4 | WordPress: 6.8.3
+[30-Nov-2025 06:08:16 UTC] [AI WORKFLOW PLUGIN] Initialized | Version: 1.0.0 | PHP: 8.4.4 | WordPress: 6.8.3
+[30-Nov-2025 06:08:19 UTC] [AI WORKFLOW PLUGIN] Initialized | Version: 1.0.0 | PHP: 8.4.4 | WordPress: 6.8.3
+[30-Nov-2025 06:08:20 UTC] [AI WORKFLOW PLUGIN] Initialized | Version: 1.0.0 | PHP: 8.4.4 | WordPress: 6.8.3
+[30-Nov-2025 06:08:41 UTC] [AI WORKFLOW PLUGIN] Initialized | Version: 1.0.0 | PHP: 8.4.4 | WordPress: 6.8.3
+[30-Nov-2025 06:08:42 UTC] [AI WORKFLOW PLUGIN] Initialized | Version: 1.0.0 | PHP: 8.4.4 | WordPress: 6.8.3
+[30-Nov-2025 06:08:42 UTC] [AI WORKFLOW PLUGIN] Initialized | Version: 1.0.0 | PHP: 8.4.4 | WordPress: 6.8.3
+[30-Nov-2025 06:08:42 UTC] [AI WORKFLOW PLUGIN] Initialized | Version: 1.0.0 | PHP: 8.4.4 | WordPress: 6.8.3
+[30-Nov-2025 06:08:49 UTC] [AI WORKFLOW PLUGIN] Initialized | Version: 1.0.0 | PHP: 8.4.4 | WordPress: 6.8.3
+[30-Nov-2025 06:08:49 UTC] [AI WORKFLOW PLUGIN] Initialized | Version: 1.0.0 | PHP: 8.4.4 | WordPress: 6.8.3
+[30-Nov-2025 06:08:53 UTC] [AI WORKFLOW PLUGIN] Initialized | Version: 1.0.0 | PHP: 8.4.4 | WordPress: 6.8.3
+[30-Nov-2025 06:08:53 UTC] [AI WORKFLOW PLUGIN] Initialized | Version: 1.0.0 | PHP: 8.4.4 | WordPress: 6.8.3
+[30-Nov-2025 06:08:55 UTC] [AI WORKFLOW PLUGIN] Initialized | Version: 1.0.0 | PHP: 8.4.4 | WordPress: 6.8.3
+[30-Nov-2025 06:09:01 UTC] [AI WORKFLOW PLUGIN] Initialized | Version: 1.0.0 | PHP: 8.4.4 | WordPress: 6.8.3
+[30-Nov-2025 06:09:09 UTC] [AI WORKFLOW PLUGIN] Initialized | Version: 1.0.0 | PHP: 8.4.4 | WordPress: 6.8.3
+[30-Nov-2025 06:09:19 UTC] [AI WORKFLOW PLUGIN] Initialized | Version: 1.0.0 | PHP: 8.4.4 | WordPress: 6.8.3
+[30-Nov-2025 06:09:19 UTC] [AI WORKFLOW PLUGIN] Initialized | Version: 1.0.0 | PHP: 8.4.4 | WordPress: 6.8.3
+[30-Nov-2025 06:10:09 UTC] [AI WORKFLOW PLUGIN] Initialized | Version: 1.0.0 | PHP: 8.4.4 | WordPress: 6.8.3
+[30-Nov-2025 06:10:09 UTC] [AI WORKFLOW PLUGIN] Initialized | Version: 1.0.0 | PHP: 8.4.4 | WordPress: 6.8.3
+[30-Nov-2025 06:10:11 UTC] [AI WORKFLOW PLUGIN] Initialized | Version: 1.0.0 | PHP: 8.4.4 | WordPress: 6.8.3
+[30-Nov-2025 06:10:11 UTC] [AI WORKFLOW PLUGIN] Initialized | Version: 1.0.0 | PHP: 8.4.4 | WordPress: 6.8.3
+[30-Nov-2025 06:10:12 UTC] [AI WORKFLOW PLUGIN] Initialized | Version: 1.0.0 | PHP: 8.4.4 | WordPress: 6.8.3
+[30-Nov-2025 06:10:14 UTC] [AI WORKFLOW PLUGIN] Initialized | Version: 1.0.0 | PHP: 8.4.4 | WordPress: 6.8.3
+[30-Nov-2025 06:10:19 UTC] [AI WORKFLOW PLUGIN] Initialized | Version: 1.0.0 | PHP: 8.4.4 | WordPress: 6.8.3
+[30-Nov-2025 06:10:21 UTC] [AI WORKFLOW PLUGIN] Initialized | Version: 1.0.0 | PHP: 8.4.4 | WordPress: 6.8.3
+[30-Nov-2025 06:10:26 UTC] [AI WORKFLOW PLUGIN] Initialized | Version: 1.0.0 | PHP: 8.4.4 | WordPress: 6.8.3
+[30-Nov-2025 06:10:38 UTC] [AI WORKFLOW PLUGIN] Initialized | Version: 1.0.0 | PHP: 8.4.4 | WordPress: 6.8.3
+[30-Nov-2025 06:10:38 UTC] [AI WORKFLOW PLUGIN] Initialized | Version: 1.0.0 | PHP: 8.4.4 | WordPress: 6.8.3
+[30-Nov-2025 06:10:44 UTC] [AI WORKFLOW PLUGIN] Initialized | Version: 1.0.0 | PHP: 8.4.4 | WordPress: 6.8.3
+[30-Nov-2025 06:10:46 UTC] [AI WORKFLOW PLUGIN] Initialized | Version: 1.0.0 | PHP: 8.4.4 | WordPress: 6.8.3
+[30-Nov-2025 06:10:48 UTC] [AI WORKFLOW PLUGIN] Initialized | Version: 1.0.0 | PHP: 8.4.4 | WordPress: 6.8.3
+[30-Nov-2025 06:10:57 UTC] [AI WORKFLOW PLUGIN] Initialized | Version: 1.0.0 | PHP: 8.4.4 | WordPress: 6.8.3
+[30-Nov-2025 06:10:57 UTC] PHP Warning:  Trying to access array offset on false in C:\Users\user\Local Sites\mgrnz\app\public\wp-content\plugins\save-page-to-pdf\save-page-to-pdf.php on line 46
+[30-Nov-2025 06:10:57 UTC] PHP Warning:  Trying to access array offset on false in C:\Users\user\Local Sites\mgrnz\app\public\wp-content\plugins\save-page-to-pdf\save-page-to-pdf.php on line 53
+[30-Nov-2025 06:10:57 UTC] PHP Warning:  Undefined variable $checked in C:\Users\user\Local Sites\mgrnz\app\public\wp-content\plugins\save-page-to-pdf\save-page-to-pdf.php on line 54
+[30-Nov-2025 06:10:58 UTC] [AI WORKFLOW PLUGIN] Initialized | Version: 1.0.0 | PHP: 8.4.4 | WordPress: 6.8.3
+[30-Nov-2025 06:11:09 UTC] [AI WORKFLOW PLUGIN] Initialized | Version: 1.0.0 | PHP: 8.4.4 | WordPress: 6.8.3
+[30-Nov-2025 06:11:09 UTC] PHP Warning:  Undefined array key "text_string" in C:\Users\user\Local Sites\mgrnz\app\public\wp-content\plugins\save-page-to-pdf\save-page-to-pdf.php on line 77
+[30-Nov-2025 06:11:09 UTC] PHP Deprecated:  stripslashes(): Passing null to parameter #1 ($string) of type string is deprecated in C:\Users\user\Local Sites\mgrnz\app\public\wp-includes\kses.php on line 2263
+[30-Nov-2025 06:11:09 UTC] [AI WORKFLOW PLUGIN] Initialized | Version: 1.0.0 | PHP: 8.4.4 | WordPress: 6.8.3
+[30-Nov-2025 06:11:10 UTC] PHP Warning:  Undefined array key "savePageToPdf_support" in C:\Users\user\Local Sites\mgrnz\app\public\wp-content\plugins\save-page-to-pdf\save-page-to-pdf.php on line 53
+[30-Nov-2025 06:11:10 UTC] PHP Warning:  Undefined variable $checked in C:\Users\user\Local Sites\mgrnz\app\public\wp-content\plugins\save-page-to-pdf\save-page-to-pdf.php on line 54
+[30-Nov-2025 06:11:10 UTC] [AI WORKFLOW PLUGIN] Initialized | Version: 1.0.0 | PHP: 8.4.4 | WordPress: 6.8.3
+[30-Nov-2025 06:12:10 UTC] [AI WORKFLOW PLUGIN] Initialized | Version: 1.0.0 | PHP: 8.4.4 | WordPress: 6.8.3
+[30-Nov-2025 06:12:10 UTC] [AI WORKFLOW PLUGIN] Initialized | Version: 1.0.0 | PHP: 8.4.4 | WordPress: 6.8.3
+[30-Nov-2025 06:14:11 UTC] [AI WORKFLOW PLUGIN] Initialized | Version: 1.0.0 | PHP: 8.4.4 | WordPress: 6.8.3
+[30-Nov-2025 06:14:11 UTC] [AI WORKFLOW PLUGIN] Initialized | Version: 1.0.0 | PHP: 8.4.4 | WordPress: 6.8.3
+[30-Nov-2025 06:16:12 UTC] [AI WORKFLOW PLUGIN] Initialized | Version: 1.0.0 | PHP: 8.4.4 | WordPress: 6.8.3
+[30-Nov-2025 06:16:13 UTC] [AI WORKFLOW PLUGIN] Initialized | Version: 1.0.0 | PHP: 8.4.4 | WordPress: 6.8.3
+[30-Nov-2025 06:18:13 UTC] [AI WORKFLOW PLUGIN] Initialized | Version: 1.0.0 | PHP: 8.4.4 | WordPress: 6.8.3
+[30-Nov-2025 06:18:13 UTC] [AI WORKFLOW PLUGIN] Initialized | Version: 1.0.0 | PHP: 8.4.4 | WordPress: 6.8.3
+[30-Nov-2025 06:20:14 UTC] [AI WORKFLOW PLUGIN] Initialized | Version: 1.0.0 | PHP: 8.4.4 | WordPress: 6.8.3
+[30-Nov-2025 06:20:14 UTC] [AI WORKFLOW PLUGIN] Initialized | Version: 1.0.0 | PHP: 8.4.4 | WordPress: 6.8.3
+[30-Nov-2025 06:22:15 UTC] [AI WORKFLOW PLUGIN] Initialized | Version: 1.0.0 | PHP: 8.4.4 | WordPress: 6.8.3
+[30-Nov-2025 06:22:15 UTC] [AI WORKFLOW PLUGIN] Initialized | Version: 1.0.0 | PHP: 8.4.4 | WordPress: 6.8.3
+[30-Nov-2025 06:24:16 UTC] [AI WORKFLOW PLUGIN] Initialized | Version: 1.0.0 | PHP: 8.4.4 | WordPress: 6.8.3
+[30-Nov-2025 06:24:16 UTC] [AI WORKFLOW PLUGIN] Initialized | Version: 1.0.0 | PHP: 8.4.4 | WordPress: 6.8.3
+[30-Nov-2025 06:26:17 UTC] [AI WORKFLOW PLUGIN] Initialized | Version: 1.0.0 | PHP: 8.4.4 | WordPress: 6.8.3
+[30-Nov-2025 06:26:17 UTC] [AI WORKFLOW PLUGIN] Initialized | Version: 1.0.0 | PHP: 8.4.4 | WordPress: 6.8.3
+[30-Nov-2025 06:28:18 UTC] [AI WORKFLOW PLUGIN] Initialized | Version: 1.0.0 | PHP: 8.4.4 | WordPress: 6.8.3
+[30-Nov-2025 06:28:18 UTC] [AI WORKFLOW PLUGIN] Initialized | Version: 1.0.0 | PHP: 8.4.4 | WordPress: 6.8.3
+[30-Nov-2025 06:30:19 UTC] [AI WORKFLOW PLUGIN] Initialized | Version: 1.0.0 | PHP: 8.4.4 | WordPress: 6.8.3
+[30-Nov-2025 06:30:19 UTC] [AI WORKFLOW PLUGIN] Initialized | Version: 1.0.0 | PHP: 8.4.4 | WordPress: 6.8.3
+[30-Nov-2025 06:32:20 UTC] [AI WORKFLOW PLUGIN] Initialized | Version: 1.0.0 | PHP: 8.4.4 | WordPress: 6.8.3
+[30-Nov-2025 06:32:20 UTC] [AI WORKFLOW PLUGIN] Initialized | Version: 1.0.0 | PHP: 8.4.4 | WordPress: 6.8.3
+[30-Nov-2025 06:34:21 UTC] [AI WORKFLOW PLUGIN] Initialized | Version: 1.0.0 | PHP: 8.4.4 | WordPress: 6.8.3
+[30-Nov-2025 06:34:21 UTC] [AI WORKFLOW PLUGIN] Initialized | Version: 1.0.0 | PHP: 8.4.4 | WordPress: 6.8.3
+[30-Nov-2025 06:36:22 UTC] [AI WORKFLOW PLUGIN] Initialized | Version: 1.0.0 | PHP: 8.4.4 | WordPress: 6.8.3
+[30-Nov-2025 06:36:22 UTC] [AI WORKFLOW PLUGIN] Initialized | Version: 1.0.0 | PHP: 8.4.4 | WordPress: 6.8.3
+[30-Nov-2025 08:07:20 UTC] [AI WORKFLOW PLUGIN] Initialized | Version: 1.0.0 | PHP: 8.4.4 | WordPress: 6.8.3
+[30-Nov-2025 08:07:36 UTC] [AI WORKFLOW PLUGIN] Initialized | Version: 1.0.0 | PHP: 8.4.4 | WordPress: 6.8.3
+[30-Nov-2025 08:09:21 UTC] [AI WORKFLOW PLUGIN] Initialized | Version: 1.0.0 | PHP: 8.4.4 | WordPress: 6.8.3
+[30-Nov-2025 08:09:21 UTC] [AI WORKFLOW PLUGIN] Initialized | Version: 1.0.0 | PHP: 8.4.4 | WordPress: 6.8.3
+[30-Nov-2025 08:11:22 UTC] [AI WORKFLOW PLUGIN] Initialized | Version: 1.0.0 | PHP: 8.4.4 | WordPress: 6.8.3
+[30-Nov-2025 08:11:22 UTC] [AI WORKFLOW PLUGIN] Initialized | Version: 1.0.0 | PHP: 8.4.4 | WordPress: 6.8.3
+[30-Nov-2025 08:13:23 UTC] [AI WORKFLOW PLUGIN] Initialized | Version: 1.0.0 | PHP: 8.4.4 | WordPress: 6.8.3
+[30-Nov-2025 08:13:23 UTC] [AI WORKFLOW PLUGIN] Initialized | Version: 1.0.0 | PHP: 8.4.4 | WordPress: 6.8.3
+[30-Nov-2025 08:15:24 UTC] [AI WORKFLOW PLUGIN] Initialized | Version: 1.0.0 | PHP: 8.4.4 | WordPress: 6.8.3
+[30-Nov-2025 08:15:24 UTC] [AI WORKFLOW PLUGIN] Initialized | Version: 1.0.0 | PHP: 8.4.4 | WordPress: 6.8.3
+[30-Nov-2025 08:17:25 UTC] [AI WORKFLOW PLUGIN] Initialized | Version: 1.0.0 | PHP: 8.4.4 | WordPress: 6.8.3
+[30-Nov-2025 08:17:25 UTC] [AI WORKFLOW PLUGIN] Initialized | Version: 1.0.0 | PHP: 8.4.4 | WordPress: 6.8.3
+[30-Nov-2025 08:19:26 UTC] [AI WORKFLOW PLUGIN] Initialized | Version: 1.0.0 | PHP: 8.4.4 | WordPress: 6.8.3
+[30-Nov-2025 08:19:26 UTC] [AI WORKFLOW PLUGIN] Initialized | Version: 1.0.0 | PHP: 8.4.4 | WordPress: 6.8.3
+[30-Nov-2025 08:21:27 UTC] [AI WORKFLOW PLUGIN] Initialized | Version: 1.0.0 | PHP: 8.4.4 | WordPress: 6.8.3
+[30-Nov-2025 08:21:27 UTC] [AI WORKFLOW PLUGIN] Initialized | Version: 1.0.0 | PHP: 8.4.4 | WordPress: 6.8.3
