@@ -230,9 +230,13 @@ class MGRNZ_PDF_Generator {
     private function generate_blueprint_html($blueprint_data, $user_data, $for_api = false) {
         $content = $blueprint_data['content'] ?? 'No content available';
         
+        // FIX: Replace local URLs with production URLs so Api2Pdf can access images
+        $content = str_replace('http://mgrnz.local', 'https://mgrnz.com', $content);
+        $content = str_replace('http://localhost', 'https://mgrnz.com', $content);
+        
         // Don't strip all tags - preserve images and structure
         // Only strip potentially dangerous tags
-        $content = strip_tags($content, '<h1><h2><h3><h4><p><strong><em><ul><ol><li><br><img><div><span>');
+        $content = strip_tags($content, '<h1><h2><h3><h4><p><strong><em><ul><ol><li><br><img><div><span><table><tr><td>');
         
         // Styles - Using solid colors for better PDF compatibility
         $styles = '
