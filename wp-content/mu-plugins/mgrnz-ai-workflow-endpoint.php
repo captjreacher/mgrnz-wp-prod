@@ -1,3 +1,29 @@
+<?php
+/**
+ * Plugin Name: MGRNZ AI Workflow Endpoint
+ * Description: Receives wizard submissions from /start-using-ai and logs/returns JSON.
+ * Author: MGRNZ
+ * Version: 1.0.0
+ */
+
+// Prevent direct access
+if (!defined('ABSPATH')) {
+    exit;
+}
+
+// Temporary: Flush rewrite rules if requested
+if (isset($_GET['flush_rules'])) {
+    add_action('init', function() {
+        flush_rewrite_rules();
+        echo "Rules flushed";
+        exit;
+    });
+}
+
+// Load required classes (only if not already loaded by wizard file)
+if (!class_exists('MGRNZ_Error_Logger')) {
+    require_once __DIR__ . '/includes/class-error-logger.php';
+}
 if (!class_exists('MGRNZ_Submission_CPT')) {
     require_once __DIR__ . '/includes/class-submission-cpt.php';
 }
@@ -5,6 +31,19 @@ if (!class_exists('MGRNZ_AI_Service')) {
     require_once __DIR__ . '/includes/class-ai-service.php';
 }
 if (!class_exists('MGRNZ_Email_Service')) {
+    require_once __DIR__ . '/includes/class-email-service.php';
+}
+if (!class_exists('MGRNZ_AI_Settings')) {
+    require_once __DIR__ . '/includes/class-ai-settings.php';
+}
+if (!class_exists('MGRNZ_Blueprint_Cache')) {
+    require_once __DIR__ . '/includes/class-blueprint-cache.php';
+}
+if (!class_exists('MGRNZ_Conversation_Manager')) {
+    require_once __DIR__ . '/includes/class-conversation-manager.php';
+}
+if (!class_exists('MGRNZ_PDF_Generator_V2')) {
+    require_once __DIR__ . '/includes/class-pdf-generator.php';
 }
 if (!class_exists('MGRNZ_Conversation_Analytics')) {
     require_once __DIR__ . '/includes/class-conversation-analytics.php';
@@ -213,6 +252,187 @@ function mgrnz_verify_nonce($request) {
  * Handle AI workflow submission
  *
  * @param WP_REST_Request $request
+ * @return WP_REST_Response
+ */
+function mgrnz_handle_ai_workflow_submission($request) {
+}
+if (!class_exists('MGRNZ_Conversation_Analytics')) {
+    require_once __DIR__ . '/includes/class-conversation-analytics.php';
+}
+if (!class_exists('MGRNZ_Analytics_Dashboard')) {
+    require_once __DIR__ . '/includes/class-analytics-dashboard.php';
+}
+
+// Initialize settings page
+new MGRNZ_AI_Settings();
+
+/**
+ * Register REST API endpoints
+ */
+add_action('rest_api_init', function () {
+    // Main workflow submission endpoint (public access with rate limiting)
+    register_rest_route('mgrnz/v1', '/ai-workflow', [
+        'methods'  => 'POST',
+        'permission_callback' => '__return_true', // Public endpoint, protected by rate limiting
+        'callback' => 'mgrnz_handle_ai_workflow_submission',
+    ]);
+    
+    // Newsletter subscription endpoint
+    register_rest_route('mgrnz/v1', '/subscribe', [
+        'methods'  => 'POST',
+        'permission_callback' => 'mgrnz_verify_nonce',
+        'callback' => 'mgrnz_handle_subscription',
+    ]);
+    
+    // Start chat session endpoint
+    register_rest_route('mgrnz/v1', '/start-chat', [
+        'methods'  => 'POST',
+        'permission_callback' => '__return_true', // Public endpoint with rate limiting
+        'callback' => 'mgrnz_handle_start_chat',
+    ]);
+    
+    // Chat message endpoint
+    register_rest_route('mgrnz/v1', '/chat-message', [
+        'methods'  => 'POST',
+        'permission_callback' => '__return_true', // Public endpoint with rate limiting
+        'callback' => 'mgrnz_handle_chat_message',
+    ]);
+    
+    // Generate estimate endpoint
+    register_rest_route('mgrnz/v1', '/generate-estimate', [
+        'methods'  => 'POST',
+        'permission_callback' => '__return_true', // Public endpoint with rate limiting
+        'callback' => 'mgrnz_handle_generate_estimate',
+    ]);
+    
+    // Request quote endpoint
+    register_rest_route('mgrnz/v1', '/request-quote', [
+        'methods'  => 'POST',
+        'permission_callback' => '__return_true', // Public endpoint with rate limiting
+        'callback' => 'mgrnz_handle_request_quote',
+    ]);
+    
+    // Generate blueprint endpoint (for chat-based wizard)
+    register_rest_route('mgrnz/v1', '/generate-blueprint', [
+        'methods'  => 'POST',
+        'permission_callback' => '__return_true',
+        'callback' => 'mgrnz_handle_generate_blueprint',
+    ]);
+    
+    // Blueprint subscription endpoint
+    register_rest_route('mgrnz/v1', '/subscribe-blueprint', [
+        'methods'  => 'POST',
+        'permission_callback' => '__return_true', // Public endpoint with rate limiting
+        'callback' => 'mgrnz_handle_subscribe_blueprint',
+    ]);
+    
+    // Download blueprint endpoint
+    register_rest_route('mgrnz/v1', '/download-blueprint', [
+        'methods'  => 'POST',
+        'permission_callback' => '__return_true', // Public endpoint with rate limiting
+        'callback' => 'mgrnz_handle_download_blueprint',
+    ]);
+    
+    // Generate PDF preview endpoint (uses Api2Pdf)
+    register_rest_route('mgrnz/v1', '/generate-pdf-preview', [
+        'methods'  => 'POST',
+        'permission_callback' => '__return_true', // Public endpoint with rate limiting
+        'callback' => 'mgrnz_handle_generate_pdf_preview',
+    ]);
+    
+    // Token-based blueprint download endpoint
+    register_rest_route('mgrnz/v1', '/download-blueprint/(?P<token>[a-zA-Z0-9]+)', [
+        'methods'  => 'GET',
+        'permission_callback' => '__return_true',
+        'callback' => 'mgrnz_handle_token_download',
+        'args' => [
+            'token' => [
+                'required' => true,
+                'type' => 'string',
+                'sanitize_callback' => 'sanitize_text_field'
+            ]
+        ]
+    ]);
+    
+    // View blueprint HTML endpoint
+    register_rest_route('mgrnz/v1', '/view-blueprint/(?P<filename>[a-zA-Z0-9\-\.]+)', [
+        'methods'  => 'GET',
+        'permission_callback' => '__return_true',
+        'callback' => 'mgrnz_handle_view_blueprint',
+        'args' => [
+            'filename' => [
+                'required' => true,
+                'type' => 'string',
+                'sanitize_callback' => 'sanitize_file_name'
+            ]
+        ]
+    ]);
+    
+    // State transition endpoint
+    register_rest_route('mgrnz/v1', '/transition-state', [
+        'methods'  => 'POST',
+        'permission_callback' => '__return_true', // Public endpoint with rate limiting
+        'callback' => 'mgrnz_handle_state_transition',
+    ]);
+    
+    // Upsell action endpoints
+    register_rest_route('mgrnz/v1', '/track-consultation', [
+        'methods'  => 'POST',
+        'permission_callback' => '__return_true', // Public endpoint with rate limiting
+        'callback' => 'mgrnz_handle_track_consultation',
+    ]);
+    
+    register_rest_route('mgrnz/v1', '/track-additional-workflow', [
+        'methods'  => 'POST',
+        'permission_callback' => '__return_true', // Public endpoint with rate limiting
+        'callback' => 'mgrnz_handle_track_additional_workflow',
+    ]);
+    
+    // GDPR data deletion endpoint
+    register_rest_route('mgrnz/v1', '/delete-session-data', [
+        'methods'  => 'POST',
+        'permission_callback' => '__return_true', // Public endpoint with validation
+        'callback' => 'mgrnz_handle_delete_session_data',
+    ]);
+    
+    // Generic event tracking endpoint
+    register_rest_route('mgrnz/v1', '/track-event', [
+        'methods'  => 'POST',
+        'permission_callback' => '__return_true', // Public endpoint with rate limiting
+        'callback' => 'mgrnz_handle_track_event',
+    ]);
+    
+    // Wizard completion flow endpoints
+    register_rest_route('mgrnz/v1', '/wizard-subscribe', [
+        'methods'  => 'POST',
+        'permission_callback' => '__return_true', // Public endpoint with rate limiting
+        'callback' => 'mgrnz_handle_wizard_subscribe',
+    ]);
+    
+    register_rest_route('mgrnz/v1', '/wizard-request-quote', [
+        'methods'  => 'POST',
+        'permission_callback' => '__return_true', // Public endpoint with rate limiting
+        'callback' => 'mgrnz_handle_wizard_request_quote',
+    ]);
+    
+    // Cache management endpoints (admin only)
+    register_rest_route('mgrnz/v1', '/ai-workflow/cache/stats', [
+        'methods'  => 'GET',
+        'permission_callback' => function() {
+            return current_user_can('manage_options');
+        },
+        'callback' => 'mgrnz_get_cache_stats',
+    ]);
+    
+    register_rest_route('mgrnz/v1', '/ai-workflow/cache/clear', [
+        'methods'  => 'POST',
+        'permission_callback' => function() {
+            return current_user_can('manage_options');
+        },
+        'callback' => 'mgrnz_clear_cache',
+    ]);
+});
+
  * @return WP_REST_Response
  */
 function mgrnz_handle_ai_workflow_submission($request) {
