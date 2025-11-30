@@ -248,13 +248,21 @@ function mgrnz_verify_nonce($request) {
     return true;
 }
 
-/**
- * Handle AI workflow submission
- *
- * @param WP_REST_Request $request
- * @return WP_REST_Response
- */
-function mgrnz_handle_ai_workflow_submission($request) {
+
+if (!class_exists('MGRNZ_Email_Service')) {
+    require_once __DIR__ . '/includes/class-email-service.php';
+}
+if (!class_exists('MGRNZ_AI_Settings')) {
+    require_once __DIR__ . '/includes/class-ai-settings.php';
+}
+if (!class_exists('MGRNZ_Blueprint_Cache')) {
+    require_once __DIR__ . '/includes/class-blueprint-cache.php';
+}
+if (!class_exists('MGRNZ_Conversation_Manager')) {
+    require_once __DIR__ . '/includes/class-conversation-manager.php';
+}
+if (!class_exists('MGRNZ_PDF_Generator_V2')) {
+    require_once __DIR__ . '/includes/class-pdf-generator.php';
 }
 if (!class_exists('MGRNZ_Conversation_Analytics')) {
     require_once __DIR__ . '/includes/class-conversation-analytics.php';
@@ -433,6 +441,10 @@ add_action('rest_api_init', function () {
     ]);
 });
 
+/**
+ * Handle AI workflow submission
+ *
+ * @param WP_REST_Request $request
  * @return WP_REST_Response
  */
 function mgrnz_handle_ai_workflow_submission($request) {
