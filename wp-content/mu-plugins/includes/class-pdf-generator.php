@@ -3,10 +3,13 @@
  * PDF Generator Class
  * 
  * Generates PDF documents for blueprint downloads
- * Uses TCPDF library for PDF generation
+ * Uses Api2Pdf (Cloud API) for high-quality rendering
  */
 
 class MGRNZ_PDF_Generator {
+    
+    // Api2Pdf API Key
+    private $api_key = '21f8e7ef-e58e-471c-b83f-a47b20514b80';
     
     /**
      * Generate PDF from blueprint data
@@ -17,128 +20,126 @@ class MGRNZ_PDF_Generator {
      * @return string|WP_Error Path to generated PDF or error
      */
     public function generate_blueprint_pdf($blueprint_data, $user_data, $session_id) {
-        error_log('[PDF Generator] Starting PDF generation for session: ' . $session_id);
+        error_log('[PDF Generator] Starting PDF generation via Api2Pdf for session: ' . $session_id);
         
         try {
-            // Load Composer autoloader if not already loaded
-            if (!class_exists('TCPDF')) {
-                $autoloader_path = WP_CONTENT_DIR . '/mu-plugins/vendor/autoload.php';
-                
-                if (file_exists($autoloader_path)) {
-                    require_once $autoloader_path;
-                    error_log('[PDF Generator] Autoloader loaded from: ' . $autoloader_path);
-                } else {
-                    error_log('[PDF Generator] Autoloader not found at: ' . $autoloader_path);
-                }
+            // 1. Generate HTML content (clean version for API)
+            $html = $this->generate_blueprint_html($blueprint_data, $user_data, true);
+            
+            // 2. Call Api2Pdf
+            $pdf_url = $this->call_api2pdf($html);
+            
+            if (is_wp_error($pdf_url)) {
+                throw new Exception($pdf_url->get_error_message());
             }
             
-            // Check if TCPDF is available after loading autoloader
-            if (!class_exists('TCPDF')) {
-                error_log('[PDF Generator] TCPDF class still not available after autoloader. Using HTML fallback.');
-                return $this->generate_simple_pdf($blueprint_data, $user_data, $session_id);
-            }
+            error_log('[PDF Generator] PDF generated successfully at URL: ' . $pdf_url);
             
-            error_log('[PDF Generator] TCPDF available. Generating PDF...');
-            
-            // Create new PDF document
-            $pdf = new TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
-            
-            // Set document information
-            $pdf->SetCreator('MGRNZ AI Workflow Wizard');
-            $pdf->SetAuthor('MGRNZ');
-            $pdf->SetTitle('AI Workflow Blueprint');
-            $pdf->SetSubject('Workflow Automation Blueprint');
-            
-            // Remove default header/footer
-            $pdf->setPrintHeader(false);
-            $pdf->setPrintFooter(false);
-            
-            // Set margins
-            $pdf->SetMargins(15, 15, 15);
-            $pdf->SetAutoPageBreak(true, 15);
-            
-            // Add a page
-            $pdf->AddPage();
-            
-            // Set font
-            $pdf->SetFont('helvetica', '', 11);
-            
-            // Add header with branding
-            $this->add_pdf_header($pdf);
-            
-            // Add blueprint content (plain text only, no diagrams/images)
-            $this->add_blueprint_content($pdf, $blueprint_data);
-            
-            // Add footer with contact info
-            $this->add_pdf_footer($pdf);
-            
-            // Generate filename
+            // 3. Download the PDF to local server
             $filename = $this->generate_filename($session_id, 'pdf');
             $upload_dir = wp_upload_dir();
             $pdf_dir = $upload_dir['basedir'] . '/blueprints';
             
-            // Create directory if it doesn't exist
             if (!file_exists($pdf_dir)) {
                 wp_mkdir_p($pdf_dir);
             }
             
-            $pdf_path = $pdf_dir . '/' . $filename;
+            $local_path = $pdf_dir . '/' . $filename;
             
-            // Output PDF to file
-            $pdf->Output($pdf_path, 'F');
+            $file_content = file_get_contents($pdf_url);
+            if ($file_content === false) {
+                throw new Exception('Failed to download PDF from Api2Pdf');
+            }
             
-            return $pdf_path;
+            file_put_contents($local_path, $file_content);
+            error_log('[PDF Generator] PDF saved locally to: ' . $local_path);
+            
+            return $local_path;
             
         } catch (Exception $e) {
             error_log('[PDF Generator] Error: ' . $e->getMessage());
-            // Fallback to HTML if PDF generation fails
+            // Fallback to HTML if API fails
             return $this->generate_simple_pdf($blueprint_data, $user_data, $session_id);
         }
     }
     
     /**
-     * Generate simple HTML-based fallback (opens print dialog for PDF save)
-     * This is only used if TCPDF is not available
+     * Call Api2Pdf API
+     */
+    private function call_api2pdf($html) {
+        $endpoint = 'https://v2.api2pdf.com/chrome/html';
+        
+        $body = [
+            'html' => $html,
+            'options' => [
+                'landscape' => false,
+                'printBackground' => true,
+                'marginTop' => 0.5,
+                'marginBottom' => 0.5,
+                'marginLeft' => 0.5,
+                'marginRight' => 0.5,
+                'scale' => 1
+            ]
+        ];
+        
+        $response = wp_remote_post($endpoint, [
+            'headers' => [
+                'Authorization' => $this->api_key,
+                'Content-Type' => 'application/json'
+            ],
+            'body' => json_encode($body),
+            'timeout' => 30 // Wait up to 30 seconds
+        ]);
+        
+        if (is_wp_error($response)) {
+            return $response;
+        }
+        
+        $code = wp_remote_retrieve_response_code($response);
+        $body = wp_remote_retrieve_body($response);
+        $data = json_decode($body, true);
+        
+        if ($code !== 200) {
+            error_log('[PDF Generator] Api2Pdf Error (' . $code . '): ' . $body);
+            return new WP_Error('api_error', 'Api2Pdf failed: ' . ($data['error'] ?? 'Unknown error'));
+        }
+        
+        if (empty($data['FileUrl'])) {
+            return new WP_Error('api_error', 'No FileUrl in Api2Pdf response');
+        }
+        
+        return $data['FileUrl'];
+    }
+    
+    /**
+     * Generate simple HTML-based fallback
      */
     private function generate_simple_pdf($blueprint_data, $user_data, $session_id) {
-        error_log('[PDF Generator] Using HTML fallback - TCPDF not available');
+        error_log('[PDF Generator] Using HTML fallback');
         
         try {
-            // Generate HTML version
-            $html = $this->generate_blueprint_html($blueprint_data, $user_data);
+            $html = $this->generate_blueprint_html($blueprint_data, $user_data, false); // false = include auto-print script
             
-            // Save as HTML file
             $filename = $this->generate_filename($session_id, 'html');
             $upload_dir = wp_upload_dir();
             $pdf_dir = $upload_dir['basedir'] . '/blueprints';
             
-            // Create directory if it doesn't exist
             if (!file_exists($pdf_dir)) {
                 wp_mkdir_p($pdf_dir);
             }
             
             $file_path = $pdf_dir . '/' . $filename;
-            
-            // Write HTML to file
             file_put_contents($file_path, $html);
             
-            error_log('[PDF Generator] HTML fallback file created: ' . $file_path);
-            
-            // Return the file path (not URL) - the handler will convert it
             return $file_path;
             
         } catch (Exception $e) {
-            error_log('[PDF Generator] Fallback error: ' . $e->getMessage());
             return new WP_Error('pdf_generation_failed', 'Failed to generate document: ' . $e->getMessage());
         }
     }
     
     /**
-     * Generate filename for blueprint
-     * 
-     * @param string $session_id Session ID
-     * @param string $extension File extension (default: pdf)
-     * @return string Filename
+     * Generate filename
      */
     private function generate_filename($session_id, $extension = 'pdf') {
         $safe_session = preg_replace('/[^a-zA-Z0-9_-]/', '', $session_id);
@@ -146,110 +147,124 @@ class MGRNZ_PDF_Generator {
     }
     
     /**
-     * Get download URL for generated file
-     * 
-     * @param string $file_path Full file path
-     * @return string Download URL
+     * Get download URL
      */
     public function get_download_url($file_path) {
-        // If it's already a URL, return as-is
-        if (strpos($file_path, 'http') === 0 || strpos($file_path, '/wp-json/') === 0) {
-            error_log('[PDF Generator] File path is already a URL: ' . $file_path);
-            return $file_path;
-        }
+        if (strpos($file_path, 'http') === 0) return $file_path;
         
         $upload_dir = wp_upload_dir();
         $filename = basename($file_path);
         
-        // For HTML files, use standalone viewer (bypasses WordPress entirely)
+        // For HTML files, use viewer
         if (strpos($filename, '.html') !== false) {
-            $viewer_url = home_url('/blueprint-pdf-viewer.php?f=' . urlencode($filename));
-            error_log('[PDF Generator] Generated standalone viewer URL: ' . $viewer_url);
-            return $viewer_url;
+            return home_url('/blueprint-pdf-viewer.php?f=' . urlencode($filename));
         }
         
-        // For actual PDF files, return direct download URL
-        $file_url = str_replace($upload_dir['basedir'], $upload_dir['baseurl'], $file_path);
-        error_log('[PDF Generator] Generated direct file URL: ' . $file_url);
-        return $file_url;
+        // For PDF files, direct download
+        return str_replace($upload_dir['basedir'], $upload_dir['baseurl'], $file_path);
     }
     
     /**
-     * Format content for HTML display
-     * 
-     * @param string $content Markdown or plain text content
-     * @return string Formatted HTML
+     * Format content for HTML
      */
     private function format_content_for_html($content) {
-        if (empty($content)) {
-            return '';
-        }
+        if (empty($content)) return '';
         
-        // Basic markdown-like formatting
         $html = $content;
-        
-        // Headers
         $html = preg_replace('/^### (.+)$/m', '<h3>$1</h3>', $html);
         $html = preg_replace('/^## (.+)$/m', '<h2>$1</h2>', $html);
         $html = preg_replace('/^# (.+)$/m', '<h1>$1</h1>', $html);
-        
-        // Bold
         $html = preg_replace('/\*\*(.+?)\*\*/', '<strong>$1</strong>', $html);
-        
-        // Lists
         $html = preg_replace('/^- (.+)$/m', '<li>$1</li>', $html);
         $html = preg_replace('/(<li>.*<\/li>)/s', '<ul>$1</ul>', $html);
-        
-        // Line breaks
         $html = nl2br($html);
-        
         return $html;
     }
     
     /**
-     * Add PDF header
+     * Generate blueprint HTML
+     * @param bool $for_api If true, removes auto-print script and buttons
      */
-    private function add_pdf_header($pdf) {
-        $pdf->SetFont('helvetica', 'B', 20);
-        $pdf->Cell(0, 10, 'AI Workflow Blueprint', 0, 1, 'C');
-        $pdf->Ln(5);
-    }
-    
-    /**
-     * Add blueprint content to PDF (plain text only)
-     */
-    private function add_blueprint_content($pdf, $blueprint_data) {
-        $content = $blueprint_data['content'] ?? '';
+    private function generate_blueprint_html($blueprint_data, $user_data, $for_api = false) {
+        $content = $blueprint_data['content'] ?? 'No content available';
+        $content = strip_tags($content);
         
-        // Strip all HTML tags and decode entities
-        $content = html_entity_decode(strip_tags($content), ENT_QUOTES | ENT_HTML5, 'UTF-8');
+        // Styles
+        $styles = '
+            @import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap");
+            * { margin: 0; padding: 0; box-sizing: border-box; }
+            body {
+                font-family: "Inter", Helvetica, Arial, sans-serif;
+                line-height: 1.6;
+                color: #1f2937;
+                background: #ffffff;
+                padding: 40px;
+                max-width: 900px;
+                margin: 0 auto;
+            }
+            .header { text-align: center; margin-bottom: 40px; padding-bottom: 20px; border-bottom: 3px solid #ff4f00; }
+            .header h1 { color: #111827; font-size: 32px; margin-bottom: 10px; font-weight: 800; }
+            .header p { color: #6b7280; font-size: 16px; }
+            .meta { background: #f9fafb; padding: 20px; border-radius: 8px; margin-bottom: 30px; border-left: 4px solid #ff4f00; }
+            .meta p { margin: 5px 0; color: #4b5563; }
+            .content h2 { color: #111827; font-size: 24px; margin: 30px 0 15px 0; padding-bottom: 10px; border-bottom: 1px solid #e5e7eb; font-weight: 700; page-break-after: avoid; }
+            .content h3 { color: #374151; font-size: 20px; margin: 25px 0 12px 0; font-weight: 600; page-break-after: avoid; }
+            .content p { margin: 12px 0; color: #374151; text-align: justify; }
+            .content ul { margin: 15px 0 15px 30px; }
+            .content li { margin: 8px 0; color: #4b5563; }
+            .content strong { color: #111827; font-weight: 700; }
+            .footer { margin-top: 50px; padding-top: 20px; border-top: 1px solid #e5e7eb; text-align: center; color: #9ca3af; font-size: 12px; }
+            .no-print { background: #eff6ff; border: 1px solid #bfdbfe; border-radius: 8px; padding: 20px; margin-bottom: 30px; text-align: center; }
+            .no-print button { background: #2563eb; color: white; border: none; padding: 10px 20px; border-radius: 6px; cursor: pointer; font-weight: 600; margin-top: 10px; }
+            @media print { .no-print { display: none !important; } body { padding: 0; } }
+        ';
         
-        // Set font for content
-        $pdf->SetFont('helvetica', '', 11);
+        $auto_print_section = '';
+        if (!$for_api) {
+            $auto_print_section = '
+            <div class="no-print">
+                <h2>📄 Ready to Save as PDF!</h2>
+                <p>Choose "Save as PDF" in the print dialog.</p>
+                <button onclick="window.print()">🖨️ Print / Save</button>
+            </div>
+            <script>window.onload = function() { setTimeout(function() { window.print(); }, 500); };</script>
+            ';
+        }
         
-        // Add content as plain text
-        $pdf->MultiCell(0, 5, $content, 0, 'L', false, 1, '', '', true, 0, false, true, 0, 'T', false);
-    }
+        return '<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>AI Workflow Blueprint</title>
+    <style>' . $styles . '</style>
+</head>
+<body>
+    ' . $auto_print_section . '
     
-    /**
-     * Add diagram to PDF
-     */
-    private function add_diagram_to_pdf($pdf, $diagram_data) {
-        // Placeholder for diagram rendering
-        $pdf->Ln(10);
-        $pdf->SetFont('helvetica', 'B', 12);
-        $pdf->Cell(0, 10, 'Workflow Diagram', 0, 1, 'L');
-    }
+    <div class="header">
+        <h1>AI Workflow Blueprint</h1>
+        <p>Your Personalized Automation Strategy</p>
+    </div>
     
-    /**
-     * Add PDF footer
-     */
-    private function add_pdf_footer($pdf) {
-        $pdf->Ln(10);
-        $pdf->SetFont('helvetica', 'I', 9);
-        $pdf->Cell(0, 10, 'MGRNZ - AI Workflow Automation | www.mgrnz.com', 0, 1, 'C');
-    }
+    <div class="meta">
+        <p><strong>Prepared for:</strong> ' . esc_html($user_data['name'] ?? 'Valued Client') . '</p>
+        <p><strong>Email:</strong> ' . esc_html($user_data['email'] ?? '') . '</p>
+        <p><strong>Date:</strong> ' . date('F j, Y g:i A') . '</p>
+    </div>
     
+    <div class="content">
+        ' . $this->format_content_for_html($content) . '
+    </div>
+    
+    <div class="footer">
+        <p><strong>MGRNZ - AI Workflow Automation</strong></p>
+        <p>www.mgrnz.com | info@mgrnz.com</p>
+        <p>&copy; ' . date('Y') . ' MGRNZ. All rights reserved.</p>
+    </div>
+</body>
+</html>';
+    }
+
     /**
      * Cleanup old PDF files
      */
@@ -270,190 +285,9 @@ class MGRNZ_PDF_Generator {
             }
         }
     }
-    
-    /**
-     * Generate blueprint HTML (simplified - no images, plain text only)
-     */
-    private function generate_blueprint_html($blueprint_data, $user_data) {
-        $content = $blueprint_data['content'] ?? 'No content available';
-        
-        // Strip any HTML tags and keep only plain text
-        $content = strip_tags($content);
-        
-        // Build simple HTML document with print-to-PDF functionality
-        $html = '<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Your AI Automation Blueprint</title>
-    <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
-            line-height: 1.6;
-            color: #1e293b;
-            background: #ffffff;
-            padding: 40px;
-            max-width: 900px;
-            margin: 0 auto;
-        }
-        .header {
-            text-align: center;
-            margin-bottom: 40px;
-            padding-bottom: 20px;
-            border-bottom: 3px solid #ff4f00;
-        }
-        .header h1 {
-            color: #0f172a;
-            font-size: 32px;
-            margin-bottom: 10px;
-        }
-        .header p {
-            color: #64748b;
-            font-size: 16px;
-        }
-        .meta {
-            background: #f8fafc;
-            padding: 20px;
-            border-radius: 8px;
-            margin-bottom: 30px;
-            border-left: 4px solid #ff4f00;
-        }
-        .meta p {
-            margin: 5px 0;
-            color: #475569;
-        }
-        .content {
-            margin: 30px 0;
-        }
-        .content h2 {
-            color: #0f172a;
-            font-size: 24px;
-            margin: 30px 0 15px 0;
-            padding-bottom: 10px;
-            border-bottom: 2px solid #e2e8f0;
-        }
-        .content h3 {
-            color: #1e293b;
-            font-size: 20px;
-            margin: 25px 0 12px 0;
-        }
-        .content p {
-            margin: 12px 0;
-            color: #334155;
-        }
-        .content ul, .content ol {
-            margin: 15px 0 15px 30px;
-        }
-        .content li {
-            margin: 8px 0;
-            color: #475569;
-        }
-        .content strong {
-            color: #0f172a;
-            font-weight: 600;
-        }
-        .footer {
-            margin-top: 50px;
-            padding-top: 20px;
-            border-top: 2px solid #e2e8f0;
-            text-align: center;
-            color: #64748b;
-            font-size: 14px;
-        }
-        .footer p {
-            margin: 8px 0;
-        }
-        .no-print {
-            background: #f0f9ff;
-            border: 2px solid #0284c7;
-            border-radius: 8px;
-            padding: 20px;
-            margin-bottom: 30px;
-            text-align: center;
-        }
-        .no-print h2 {
-            color: #0369a1;
-            font-size: 20px;
-            margin-bottom: 10px;
-        }
-        .no-print p {
-            color: #0c4a6e;
-            margin: 8px 0;
-        }
-        .no-print button {
-            background: #0284c7;
-            color: white;
-            border: none;
-            padding: 12px 24px;
-            border-radius: 6px;
-            cursor: pointer;
-            font-size: 16px;
-            font-weight: 600;
-            margin-top: 15px;
-            transition: background 0.2s;
-        }
-        .no-print button:hover {
-            background: #0369a1;
-        }
-        @media print {
-            .no-print { display: none !important; }
-            body { padding: 20px; }
-            * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
-        }
-    </style>
-    <script>
-        // Automatically open print dialog when loaded
-        window.onload = function() {
-            setTimeout(function() {
-                window.print();
-            }, 500);
-        };
-    </script>
-</head>
-<body>
-    <div class="no-print">
-        <h2>📄 Ready to Save as PDF!</h2>
-        <p>Your blueprint is ready. The print dialog should open automatically.</p>
-        <p><strong>Choose "Save as PDF"</strong> as your printer destination to save this document.</p>
-        <button onclick="window.print()">🖨️ Print / Save as PDF</button>
-    </div>
-    
-    <div class="header">
-        <h1>AI Workflow Blueprint</h1>
-        <p>Your Personalized Automation Strategy</p>
-    </div>
-    
-    <div class="meta">
-        <p><strong>Prepared for:</strong> ' . esc_html($user_data['name'] ?? 'Valued Client') . '</p>
-        <p><strong>Email:</strong> ' . esc_html($user_data['email'] ?? '') . '</p>
-        <p><strong>Date:</strong> ' . date('F j, Y g:i A') . '</p>
-    </div>
-    
-    <div class="content">
-        ' . $this->format_content_for_html($content) . '
-    </div>
-    
-    <div class="footer">
-        <p><strong>MGRNZ - AI Workflow Automation</strong></p>
-        <p>www.mgrnz.com | info@mgrnz.com</p>
-        <p style="margin-top: 15px; font-size: 11px;">
-            <em>Disclaimer: This blueprint was generated by AI based on the information provided.
-            While we strive for accuracy, please verify all technical details and costs before implementation.</em>
-        </p>
-        <p style="margin-top: 10px;">&copy; ' . date('Y') . ' MGRNZ. All rights reserved.</p>
-    </div>
-</body>
-</html>';
-        
-        error_log('[PDF Generator] HTML generated successfully, length: ' . strlen($html));
-        
-        return $html;
-    }
 }
 
-// Schedule cleanup cron job
+// Schedule cleanup
 add_action('init', function() {
     if (!wp_next_scheduled('mgrnz_cleanup_old_pdfs')) {
         wp_schedule_event(time(), 'daily', 'mgrnz_cleanup_old_pdfs');

@@ -275,12 +275,15 @@ document.addEventListener("DOMContentLoaded", function () {
       .then(data => {
         clearInterval(msgInterval);
         if (data.success) {
-          // Save download URL to localStorage for the subscribe/download page
+          // Save blueprint HTML to localStorage (Critical for subscribe page)
+          if (data.blueprint) {
+            localStorage.setItem('mgrnz_blueprint_download', data.blueprint);
+            console.log('[WIZARD] Blueprint HTML saved to localStorage');
+          }
+
+          // Also save URL if available (future proofing)
           if (data.download_url) {
             localStorage.setItem('mgrnz_blueprint_url', data.download_url);
-            console.log('[WIZARD] Blueprint URL saved to localStorage:', data.download_url);
-          } else {
-            console.error('[WIZARD] No download_url in API response!');
           }
 
           // Save wizard data including submission ref
