@@ -229,9 +229,12 @@ class MGRNZ_PDF_Generator {
      */
     private function generate_blueprint_html($blueprint_data, $user_data, $for_api = false) {
         $content = $blueprint_data['content'] ?? 'No content available';
-        $content = strip_tags($content);
         
-        // Styles
+        // Don't strip all tags - preserve images and structure
+        // Only strip potentially dangerous tags
+        $content = strip_tags($content, '<h1><h2><h3><h4><p><strong><em><ul><ol><li><br><img><div><span>');
+        
+        // Styles - Using solid colors for better PDF compatibility
         $styles = '
             @import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap");
             * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -240,25 +243,130 @@ class MGRNZ_PDF_Generator {
                 line-height: 1.6;
                 color: #1f2937;
                 background: #ffffff;
-                padding: 40px;
-                max-width: 900px;
-                margin: 0 auto;
+                padding: 0;
+                margin: 0;
             }
-            .header { text-align: center; margin-bottom: 40px; padding-bottom: 20px; border-bottom: 3px solid #ff4f00; }
-            .header h1 { color: #111827; font-size: 32px; margin-bottom: 10px; font-weight: 800; }
-            .header p { color: #6b7280; font-size: 16px; }
-            .meta { background: #f9fafb; padding: 20px; border-radius: 8px; margin-bottom: 30px; border-left: 4px solid #ff4f00; }
-            .meta p { margin: 5px 0; color: #4b5563; }
-            .content h2 { color: #111827; font-size: 24px; margin: 30px 0 15px 0; padding-bottom: 10px; border-bottom: 1px solid #e5e7eb; font-weight: 700; page-break-after: avoid; }
-            .content h3 { color: #374151; font-size: 20px; margin: 25px 0 12px 0; font-weight: 600; page-break-after: avoid; }
-            .content p { margin: 12px 0; color: #374151; text-align: justify; }
-            .content ul { margin: 15px 0 15px 30px; }
-            .content li { margin: 8px 0; color: #4b5563; }
-            .content strong { color: #111827; font-weight: 700; }
-            .footer { margin-top: 50px; padding-top: 20px; border-top: 1px solid #e5e7eb; text-align: center; color: #9ca3af; font-size: 12px; }
-            .no-print { background: #eff6ff; border: 1px solid #bfdbfe; border-radius: 8px; padding: 20px; margin-bottom: 30px; text-align: center; }
-            .no-print button { background: #2563eb; color: white; border: none; padding: 10px 20px; border-radius: 6px; cursor: pointer; font-weight: 600; margin-top: 10px; }
-            @media print { .no-print { display: none !important; } body { padding: 0; } }
+            .header { 
+                text-align: center; 
+                padding: 40px 20px 30px;
+                background-color: #1e293b;
+                border-bottom: 5px solid #ff4f00;
+                margin-bottom: 30px;
+            }
+            .header h1 { 
+                color: #ffffff !important; 
+                font-size: 36px; 
+                margin: 0 0 10px 0; 
+                font-weight: 800;
+            }
+            .header p { 
+                color: #e2e8f0 !important; 
+                font-size: 18px;
+                font-weight: 500;
+                margin: 0;
+            }
+            .meta { 
+                background: #f9fafb; 
+                padding: 20px; 
+                margin: 0 40px 30px 40px;
+                border-radius: 8px; 
+                border-left: 5px solid #ff4f00;
+            }
+            .meta p { margin: 8px 0; color: #4b5563; font-size: 14px; }
+            .meta strong { color: #111827; }
+            .content {
+                padding: 0 40px;
+            }
+            .content h1 {
+                color: #111827; 
+                font-size: 28px; 
+                margin: 30px 0 15px 0; 
+                padding-bottom: 10px; 
+               border-bottom: 3px solid #ff4f00; 
+                font-weight: 800;
+            }
+            .content h2 { 
+                color: #111827 !important; 
+                font-size: 24px; 
+                margin: 30px 0 15px 0; 
+                padding-bottom: 10px; 
+                border-bottom: 2px solid #ff4f00 !important; 
+                font-weight: 700; 
+                page-break-after: avoid;
+            }
+            .content h3 { 
+                color: #374151 !important; 
+                font-size: 20px; 
+                margin: 25px 0 12px 0; 
+                font-weight: 600; 
+                page-break-after: avoid;
+            }
+            .content p { 
+                margin: 12px 0; 
+                color: #374151; 
+                text-align: justify;
+                font-size: 14px;
+                line-height: 1.8;
+            }
+            .content ul, .content ol { 
+                margin: 15px 0 15px 30px;
+            }
+            .content li { 
+                margin: 8px 0; 
+                color: #4b5563;
+                font-size: 14px;
+                line-height: 1.6;
+            }
+            .content strong { 
+                color: #111827; 
+                font-weight: 700;
+            }
+            .content img {
+                max-width: 100% !important;
+                height: auto !important;
+                display: block;
+                margin: 20px auto;
+                border: 2px solid #e5e7eb;
+                border-radius: 8px;
+            }
+            .footer { 
+                margin-top: 50px; 
+                padding: 30px 20px;
+                background-color: #1e293b;
+                border-top: 5px solid #ff4f00;
+                text-align: center;
+            }
+            .footer p {
+                color: #e2e8f0 !important;
+                font-size: 13px;
+                margin: 5px 0;
+            }
+            .footer strong {
+                color: #ffffff !important;
+                font-size: 15px;
+                font-weight: 700;
+            }
+            .no-print { 
+                background: #eff6ff; 
+                border: 1px solid #bfdbfe; 
+                border-radius: 8px; 
+                padding: 20px; 
+                margin: 20px; 
+                text-align: center;
+            }
+            .no-print button { 
+                background: #2563eb; 
+                color: white; 
+                border: none; 
+                padding: 10px 20px; 
+                border-radius: 6px; 
+                cursor: pointer; 
+                font-weight: 600; 
+                margin-top: 10px;
+            }
+            @media print { 
+                .no-print { display: none !important; } 
+            }
         ';
         
         $auto_print_section = '';
@@ -295,7 +403,7 @@ class MGRNZ_PDF_Generator {
     </div>
     
     <div class="content">
-        ' . $this->format_content_for_html($content) . '
+        ' . $content . '
     </div>
     
     <div class="footer">
