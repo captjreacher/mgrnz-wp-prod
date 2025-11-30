@@ -3509,3 +3509,52 @@ function mgrnz_handle_generate_pdf_preview($request) {
         ], 500);
     }
 }
+
+/**
+ * Handle PDF generation via Admin AJAX
+ * Fallback for when REST API is not working
+ */
+add_action('wp_ajax_mgrnz_generate_pdf', 'mgrnz_handle_generate_pdf_ajax');
+add_action('wp_ajax_nopriv_mgrnz_generate_pdf', 'mgrnz_handle_generate_pdf_ajax');
+
+function mgrnz_handle_generate_pdf_ajax() {
+    // Check for JSON input
+    $input = file_get_contents('php://input');
+    $data = json_decode($input, true);
+    
+    if (empty($data['blueprint_html'])) {
+        wp_send_json_error(['message' => 'No blueprint HTML provided']);
+    }
+    
+    try {
+        // Load generator class if needed
+        if (!class_exists('MGRNZ_PDF_Generator_V2')) {
+            require_once __DIR__ . '/includes/class-pdf-generator.php';
+        }
+        
+        $blueprint_html = $data['blueprint_html'];
+        $user_data = [
+            'name' => $data['user_name'] ?? 'Valued Client',
+            'email' => $data['user_email'] ?? ''
+        ];
+        $session_id = 'ajax-' . uniqid();
+        
+        // Generate PDF
+        $pdf_generator = new MGRNZ_PDF_Generator_V2();
+        $blueprint_data = ['content' => $blueprint_html];
+        
+        $pdf_path = $pdf_generator->generate_blueprint_pdf($blueprint_data, $user_data, $session_id);
+        
+        if (is_wp_error($pdf_path)) {
+            throw new Exception($pdf_path->get_error_message());
+        }
+        
+        // Get URL
+        $download_url = $pdf_generator->get_download_url($pdf_path);
+        
+        wp_send_json_success(['download_url' => $download_url]);
+        
+    } catch (Exception $e) {
+        wp_send_json_error(['message' => $e->getMessage()]);
+    }
+}
