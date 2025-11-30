@@ -3750,12 +3750,27 @@ add_action('wp_ajax_mgrnz_generate_pdf', 'mgrnz_handle_generate_pdf_ajax');
 add_action('wp_ajax_nopriv_mgrnz_generate_pdf', 'mgrnz_handle_generate_pdf_ajax');
 
 function mgrnz_handle_generate_pdf_ajax() {
-    // Check for JSON input
+    // Support both JSON input and POST data
+    $data = null;
+    
+    // Try JSON first (from fetch with Content-Type: application/json)
     $input = file_get_contents('php://input');
-    $data = json_decode($input, true);
+    if (!empty($input)) {
+        $data = json_decode($input, true);
+    }
+    
+    // Fallback to POST data
+    if (empty($data)) {
+        $data = $_POST;
+    }
+    
+    // Log for debugging
+    error_log('[AJAX PDF] Request received. Data: ' . print_r($data, true));
     
     if (empty($data['blueprint_html'])) {
+        error_log('[AJAX PDF] Error: No blueprint HTML provided');
         wp_send_json_error(['message' => 'No blueprint HTML provided']);
+        return;
     }
     
     try {
@@ -3763,6 +3778,8 @@ function mgrnz_handle_generate_pdf_ajax() {
         if (!class_exists('MGRNZ_PDF_Generator_V2')) {
             require_once __DIR__ . '/includes/class-pdf-generator.php';
         }
+        
+        error_log('[AJAX PDF] Generating PDF...');
         
         $blueprint_html = $data['blueprint_html'];
         $user_data = [
@@ -3784,9 +3801,12 @@ function mgrnz_handle_generate_pdf_ajax() {
         // Get URL
         $download_url = $pdf_generator->get_download_url($pdf_path);
         
+        error_log('[AJAX PDF] Success! Download URL: ' . $download_url);
+        
         wp_send_json_success(['download_url' => $download_url]);
         
     } catch (Exception $e) {
+        error_log('[AJAX PDF] Exception: ' . $e->getMessage());
         wp_send_json_error(['message' => $e->getMessage()]);
     }
 }

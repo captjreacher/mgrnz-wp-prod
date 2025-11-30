@@ -15064,3 +15064,103 @@ Stack trace:
 [30-Nov-2025 13:12:10 UTC] PHP Warning:  Undefined array key "savePageToPdf_support" in C:\Users\user\Local Sites\mgrnz\app\public\wp-content\plugins\save-page-to-pdf\save-page-to-pdf.php on line 114
 [30-Nov-2025 13:12:11 UTC] [AI WORKFLOW PLUGIN] Initialized | Version: 1.0.0 | PHP: 8.4.4 | WordPress: 6.8.3
 [30-Nov-2025 13:12:12 UTC] [AI WORKFLOW PLUGIN] Initialized | Version: 1.0.0 | PHP: 8.4.4 | WordPress: 6.8.3
+[30-Nov-2025 18:37:10 UTC] [AI WORKFLOW PLUGIN] Initialized | Version: 1.0.0 | PHP: 8.4.4 | WordPress: 6.8.3
+[30-Nov-2025 18:37:23 UTC] [AI WORKFLOW PLUGIN] Initialized | Version: 1.0.0 | PHP: 8.4.4 | WordPress: 6.8.3
+[30-Nov-2025 18:37:28 UTC] [AI WORKFLOW PLUGIN] Initialized | Version: 1.0.0 | PHP: 8.4.4 | WordPress: 6.8.3
+[30-Nov-2025 18:37:29 UTC] [AI WORKFLOW PLUGIN] Initialized | Version: 1.0.0 | PHP: 8.4.4 | WordPress: 6.8.3
+[30-Nov-2025 18:37:38 UTC] [AI WORKFLOW PLUGIN] Initialized | Version: 1.0.0 | PHP: 8.4.4 | WordPress: 6.8.3
+[30-Nov-2025 18:37:49 UTC] [AI WORKFLOW PLUGIN] Initialized | Version: 1.0.0 | PHP: 8.4.4 | WordPress: 6.8.3
+[30-Nov-2025 18:37:49 UTC] [AI WORKFLOW PLUGIN] Initialized | Version: 1.0.0 | PHP: 8.4.4 | WordPress: 6.8.3
+[30-Nov-2025 18:37:50 UTC] [AI WORKFLOW PLUGIN] Initialized | Version: 1.0.0 | PHP: 8.4.4 | WordPress: 6.8.3
+[30-Nov-2025 18:37:51 UTC] [AI WORKFLOW PLUGIN] Initialized | Version: 1.0.0 | PHP: 8.4.4 | WordPress: 6.8.3
+[30-Nov-2025 18:37:52 UTC] [AI WORKFLOW PLUGIN] Initialized | Version: 1.0.0 | PHP: 8.4.4 | WordPress: 6.8.3
+[30-Nov-2025 18:37:57 UTC] [AI WORKFLOW PLUGIN] Initialized | Version: 1.0.0 | PHP: 8.4.4 | WordPress: 6.8.3
+[30-Nov-2025 18:37:58 UTC] [AI WORKFLOW PLUGIN] Initialized | Version: 1.0.0 | PHP: 8.4.4 | WordPress: 6.8.3
+[30-Nov-2025 18:38:04 UTC] [AI WORKFLOW PLUGIN] Initialized | Version: 1.0.0 | PHP: 8.4.4 | WordPress: 6.8.3
+[30-Nov-2025 18:38:04 UTC] [AI WORKFLOW PLUGIN] Initialized | Version: 1.0.0 | PHP: 8.4.4 | WordPress: 6.8.3
+[30-Nov-2025 18:38:06 UTC] [AI WORKFLOW PLUGIN] Initialized | Version: 1.0.0 | PHP: 8.4.4 | WordPress: 6.8.3
+[30-Nov-2025 18:38:12 UTC] [AI WORKFLOW PLUGIN] Initialized | Version: 1.0.0 | PHP: 8.4.4 | WordPress: 6.8.3
+[30-Nov-2025 18:38:15 UTC] [AI WORKFLOW PLUGIN] Initialized | Version: 1.0.0 | PHP: 8.4.4 | WordPress: 6.8.3
+[30-Nov-2025 18:38:15 UTC] [AI WORKFLOW PLUGIN] Initialized | Version: 1.0.0 | PHP: 8.4.4 | WordPress: 6.8.3
+[30-Nov-2025 18:38:19 UTC] [AI WORKFLOW PLUGIN] Initialized | Version: 1.0.0 | PHP: 8.4.4 | WordPress: 6.8.3
+[30-Nov-2025 18:38:24 UTC] PHP Notice:  Function WP_Duotone::get_filter_svg was called <strong>incorrectly</strong>. "##292373" in theme.json settings.color.duotone is not a hex or rgb string. Please see <a href="https://developer.wordpress.org/advanced-administration/debug/debug-wordpress/">Debugging in WordPress</a> for more information. (This message was added in version 6.3.0.) in C:\Users\user\Local Sites\mgrnz\app\public\wp-includes\functions.php on line 6121
+[30-Nov-2025 18:38:32 UTC] [AI WORKFLOW PLUGIN] Initialized | Version: 1.0.0 | PHP: 8.4.4 | WordPress: 6.8.3
+[30-Nov-2025 18:38:33 UTC] [AI WORKFLOW PLUGIN] Initialized | Version: 1.0.0 | PHP: 8.4.4 | WordPress: 6.8.3
+[30-Nov-2025 18:38:33 UTC] [AI WORKFLOW PLUGIN] Initialized | Version: 1.0.0 | PHP: 8.4.4 | WordPress: 6.8.3
+[30-Nov-2025 18:38:33 UTC] [AI WORKFLOW PLUGIN] Initialized | Version: 1.0.0 | PHP: 8.4.4 | WordPress: 6.8.3
+[30-Nov-2025 18:38:33 UTC] [AI WORKFLOW PLUGIN] Initialized | Version: 1.0.0 | PHP: 8.4.4 | WordPress: 6.8.3
+[30-Nov-2025 18:38:33 UTC] [AI WORKFLOW PLUGIN] Initialized | Version: 1.0.0 | PHP: 8.4.4 | WordPress: 6.8.3
+[30-Nov-2025 18:38:34 UTC] [AI WORKFLOW PLUGIN] Initialized | Version: 1.0.0 | PHP: 8.4.4 | WordPress: 6.8.3
+[30-Nov-2025 18:38:34 UTC] [AI WORKFLOW PLUGIN] Initialized | Version: 1.0.0 | PHP: 8.4.4 | WordPress: 6.8.3
+[30-Nov-2025 18:38:34 UTC] [AI WORKFLOW PLUGIN] Initialized | Version: 1.0.0 | PHP: 8.4.4 | WordPress: 6.8.3
+[30-Nov-2025 18:38:35 UTC] [AI WORKFLOW PLUGIN] Initialized | Version: 1.0.0 | PHP: 8.4.4 | WordPress: 6.8.3
+[30-Nov-2025 18:38:42 UTC] [AI WORKFLOW PLUGIN] Initialized | Version: 1.0.0 | PHP: 8.4.4 | WordPress: 6.8.3
+[30-Nov-2025 18:38:52 UTC] [AI WORKFLOW PLUGIN] Initialized | Version: 1.0.0 | PHP: 8.4.4 | WordPress: 6.8.3
+[30-Nov-2025 18:39:02 UTC] [AI WORKFLOW PLUGIN] Initialized | Version: 1.0.0 | PHP: 8.4.4 | WordPress: 6.8.3
+[30-Nov-2025 18:39:12 UTC] [AI WORKFLOW PLUGIN] Initialized | Version: 1.0.0 | PHP: 8.4.4 | WordPress: 6.8.3
+[30-Nov-2025 18:39:16 UTC] [AI WORKFLOW PLUGIN] Initialized | Version: 1.0.0 | PHP: 8.4.4 | WordPress: 6.8.3
+[30-Nov-2025 18:39:17 UTC] [AI WORKFLOW PLUGIN] Initialized | Version: 1.0.0 | PHP: 8.4.4 | WordPress: 6.8.3
+[30-Nov-2025 18:39:17 UTC] [AI WORKFLOW PLUGIN] Initialized | Version: 1.0.0 | PHP: 8.4.4 | WordPress: 6.8.3
+[30-Nov-2025 18:39:19 UTC] PHP Notice:  Function WP_Duotone::get_filter_svg was called <strong>incorrectly</strong>. "##292373" in theme.json settings.color.duotone is not a hex or rgb string. Please see <a href="https://developer.wordpress.org/advanced-administration/debug/debug-wordpress/">Debugging in WordPress</a> for more information. (This message was added in version 6.3.0.) in C:\Users\user\Local Sites\mgrnz\app\public\wp-includes\functions.php on line 6121
+[30-Nov-2025 18:39:22 UTC] [AI WORKFLOW PLUGIN] Initialized | Version: 1.0.0 | PHP: 8.4.4 | WordPress: 6.8.3
+[30-Nov-2025 18:39:26 UTC] [AI WORKFLOW PLUGIN] Initialized | Version: 1.0.0 | PHP: 8.4.4 | WordPress: 6.8.3
+[30-Nov-2025 18:39:42 UTC] [AI WORKFLOW PLUGIN] Initialized | Version: 1.0.0 | PHP: 8.4.4 | WordPress: 6.8.3
+[30-Nov-2025 18:39:42 UTC] [AI WORKFLOW PLUGIN] Initialized | Version: 1.0.0 | PHP: 8.4.4 | WordPress: 6.8.3
+[30-Nov-2025 18:39:45 UTC] [AI WORKFLOW PLUGIN] Initialized | Version: 1.0.0 | PHP: 8.4.4 | WordPress: 6.8.3
+[30-Nov-2025 18:39:47 UTC] [AI WORKFLOW PLUGIN] Initialized | Version: 1.0.0 | PHP: 8.4.4 | WordPress: 6.8.3
+[30-Nov-2025 18:39:48 UTC] [AI WORKFLOW PLUGIN] Initialized | Version: 1.0.0 | PHP: 8.4.4 | WordPress: 6.8.3
+[30-Nov-2025 18:39:49 UTC] [AI WORKFLOW PLUGIN] Initialized | Version: 1.0.0 | PHP: 8.4.4 | WordPress: 6.8.3
+[30-Nov-2025 18:39:53 UTC] [AI WORKFLOW PLUGIN] Initialized | Version: 1.0.0 | PHP: 8.4.4 | WordPress: 6.8.3
+[30-Nov-2025 18:39:56 UTC] [AI WORKFLOW PLUGIN] Initialized | Version: 1.0.0 | PHP: 8.4.4 | WordPress: 6.8.3
+[30-Nov-2025 18:39:56 UTC] [AI WORKFLOW CACHE MISS] Key: mgrnz_blueprint_9d679322a8be74dbffbec576bfb5db0d | Time: 2025-11-30 18:39:56
+[30-Nov-2025 18:39:56 UTC] [AI WORKFLOW] Including conversation history from session: sess_dbY4FzY7CewSmEVT6pb26qv0DBRG78vz
+[30-Nov-2025 18:40:22 UTC] [AI WORKFLOW] Skipping cache - chat-based submission or bypass requested
+[30-Nov-2025 18:40:44 UTC] [AI WORKFLOW PLUGIN] Initialized | Version: 1.0.0 | PHP: 8.4.4 | WordPress: 6.8.3
+[30-Nov-2025 18:40:44 UTC] [AI WORKFLOW PLUGIN] Initialized | Version: 1.0.0 | PHP: 8.4.4 | WordPress: 6.8.3
+[30-Nov-2025 18:40:45 UTC] [AI WORKFLOW PLUGIN] Initialized | Version: 1.0.0 | PHP: 8.4.4 | WordPress: 6.8.3
+[30-Nov-2025 18:40:46 UTC] [AI WORKFLOW PLUGIN] Initialized | Version: 1.0.0 | PHP: 8.4.4 | WordPress: 6.8.3
+[30-Nov-2025 18:40:53 UTC] [AI WORKFLOW PLUGIN] Initialized | Version: 1.0.0 | PHP: 8.4.4 | WordPress: 6.8.3
+[30-Nov-2025 18:40:53 UTC] [AJAX PDF] Request received. Data: Array
+(
+    [blueprint_html] => <p><!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Client Onboarding Automation Blueprint</title>
+</head>
+<body>
+    <h2>EXECUTIVE SUMMARY</h2>
+    <p>This document provides an indicative workflow and pricing estimate for automating your client onboarding process. It is designed to give you a clear understanding of the proposed solution and its benefits, while acknowledging that specifics may evolve through detailed discussions and implementation.</p>
+    <p>The D.R.I.V.E.™ Framework, borrowed from Maximised AI, structures our approach to ensure a repeatable, successful automation deployment. This framework comprises Discover, Ready, Implement, Validate, and Evolve stages, each critical to the automation's lifecycle.</p>
+    <p>By automating the client onboarding process, your business can expect to reduce manual efforts significantly, enhance client satisfaction with faster responses, and ensure consistent data handling across platforms.</p></p><p>    <h2>ABOUT YOUR 2-MINUTE AUTOMATION</h2>
+    <p>Currently, your client onboarding involves manually sending welcome emails, creating client folders in cloud storage, and adding new entries to your project management system. This typical manual process, taking about 30 minutes per client, is ripe for automation, particularly for businesses in your sector looking to scale efficiently.</p>
+    <p>Automation in this context involves integrating email, cloud storage, and project management systems to streamline workflows, reduce manual entry, and improve accuracy and speed. Technologies like Make.com, OpenAI, and possibly Supabase for data handling, will be utilized.</p>
+    <p>Challenges might include ensuring data consistency across platforms and managing change among staff used to manual processes. However, these are manageable with thorough planning and training.</p></p><p>    <h2>DISCOVER (Analysis)</h2>
+    <p>This phase focuses on identifying the need and opportunity, securing initial funding, and gaining approval for the strategic concept before proceeding.</p>
+    <p>The core need here is to minimize time-consuming manual tasks and the opportunity is to enhance client experience and operational efficiency. Analyzing current vs. future state reveals potential time savings and error reduction.</p>
+    <p>Your main pain point is the extensive manual effort required, which automation can address by streamlining interactions across the currently used tools.</p></p><p>    <h2>READY (Readiness)</h2>
+    <p>The goal is to prepare for execution by completing detailed design and brand assets, conducting a unit test, and ensuring all resources and dependencies are in place.</p>
+    <p>Detailed design will focus on creating automated workflows that trigger upon new client registration, send automated emails, and manage data across platforms. We will prepare data mappings and integrations between your email system, cloud storage, and project management tools.</p>
+    <p>Resource allocation will include a project manager, a Make.com expert, and an OpenAI integration specialist from our team.</p></p><p>    <h2>IMPLEMENT (Execution)</h2>
+    <p>This phase involves the core main build, executing integration testing, migrating data, and conducting model training to transform the concepts into a tangible solution.</p>
+    <p>The core build will use Make.com to connect your email system to trigger welcome emails and create entries in cloud storage and project management systems. OpenAI may be used to enhance email communications or manage complex data entries. Supabase will serve as a backend to ensure data consistency across platforms.</p>
+    <p>Integration will be managed via GitHub, and any necessary user interfaces will be adjusted or created in WordPress. A timeline of 4-6 weeks is anticipated for completion, with incremental milestones for each major component.</p></p><p>    <h2>VALIDATE (Quality Assurance)</h2>
+    <p>This is the monitoring and refinement stage, focused on achieving user acceptance (UAT), completing documentation, and managing support and change to optimize performance.</p>
+    <p>UAT will involve real-world scenario testing to ensure the automation meets your operational needs and is user-friendly. Documentation will be provided for system use and troubleshooting.</p>
+    <p>Success metrics will include reduction in client onboarding time, error rate in data handling, and user satisfaction scores.</p></p><p>    <h2>EVOLVE (Optimization)</h2>
+    <p>The Evolve component is the dynamic, central core of the D.R.I.V.E.™ Consulting Framework, representing Elevate & Evolve. It's more than just the final step; it functions as the Level Up™ Engine, providing the continuous strategic oversight and quality assurance that underpins the entire methodology.</p>
+    <p>Post-implementation, our Level Up Engine will monitor the automation's performance, suggesting improvements and ensuring the system scales with your business. Future enhancements may include integrating additional tools or refining AI capabilities to further reduce manual intervention.</p>
+    <p>Continuous improvement strategies will be discussed in quarterly review meetings, ensuring the automation evolves in line with your business needs and technological advancements.</p>
+</body>
+</html></p>
+    [user_name] => Mike
+    [user_email] => mike@mikerobinson.co.nz
+)
+
+[30-Nov-2025 18:40:53 UTC] [AJAX PDF] Generating PDF...
+[30-Nov-2025 18:40:53 UTC] [PDF Generator] Starting PDF generation via Api2Pdf for session: ajax-692c8fb5f2097
+[30-Nov-2025 18:40:57 UTC] [PDF Generator] Error: No FileUrl in Api2Pdf response
+[30-Nov-2025 18:40:57 UTC] [PDF Generator] Using HTML fallback
+[30-Nov-2025 18:40:57 UTC] [AJAX PDF] Success! Download URL: http://mgrnz.local/blueprint-pdf-viewer.php?f=blueprint-ajax-692c8fb5f2097-1764528057.html
+[30-Nov-2025 18:40:58 UTC] [AI WORKFLOW PLUGIN] Initialized | Version: 1.0.0 | PHP: 8.4.4 | WordPress: 6.8.3
