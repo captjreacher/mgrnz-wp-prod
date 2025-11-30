@@ -66,6 +66,7 @@ return [
             'title' => 'DISCOVER (Analysis)',
             'guidelines' => [
                 'Mandatory - include this statement first "This phase focuses on identifying the need and opportunity, securing initial funding, and gaining approval for the strategic concept before proceeding."',
+                'IMPORTANT: Include the DRIVE Framework diagram using this exact HTML: <img src="https://mgrnz.com/wp/wp-content/uploads/2025/11/DRIVE_Public_14-07-2025.png" alt="DRIVE Framework" style="max-width: 100%; height: auto; margin: 20px 0;" />',
                 'Identify the core need and opportunity.',
                 'Analyze the current state vs. future state.',
                 'Highlight pain points and inefficiencies.',
