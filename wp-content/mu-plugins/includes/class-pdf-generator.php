@@ -241,6 +241,18 @@ class MGRNZ_PDF_Generator_V2 {
         // Also handle cases where the URL might already have /wp/
         $content = str_replace('https://mgrnz.com/wp/wp/', 'https://mgrnz.com/wp/', $content);
         
+        // AUTO-INJECT: Add DRIVE framework image to DISCOVER section if not already present
+        if (stripos($content, 'DISCOVER') !== false && stripos($content, 'DRIVE_Public_14-07-2025.png') === false) {
+            // Find the DISCOVER section heading
+            $discover_pattern = '/(<h[23][^>]*>.*?DISCOVER.*?<\/h[23]>)/i';
+            if (preg_match($discover_pattern, $content, $matches)) {
+                $discover_heading = $matches[1];
+                $image_html = '<div style="text-align: center; margin: 30px 0;"><img src="https://mgrnz.com/wp/wp-content/uploads/2025/11/DRIVE_Public_14-07-2025.png" alt="DRIVE Framework" style="max-width: 100%; height: auto; display: block; margin: 0 auto;" /></div>';
+                // Insert image right after the DISCOVER heading
+                $content = str_replace($discover_heading, $discover_heading . $image_html, $content);
+            }
+        }
+        
         // Don't strip all tags - preserve images and structure
         // Only strip potentially dangerous tags
         $content = strip_tags($content, '<h1><h2><h3><h4><p><strong><em><ul><ol><li><br><img><div><span><table><tr><td>');
