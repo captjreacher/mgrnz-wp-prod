@@ -263,7 +263,7 @@ add_action('wp_footer', function() {
         <script>
         (function() {
             // AGGRESSIVE MODE: Force submission_ref value
-            const DEBUG = true;
+            const DEBUG = false;
             
             function log(...args) {
                 if (DEBUG) console.log('%c[Ref Enforcer]', 'background: #ff0000; color: white; padding: 2px 5px;', ...args);
@@ -286,14 +286,7 @@ add_action('wp_footer', function() {
                     log('Target ID from localStorage:', desiredID);
                 }
 
-                // 2. Visual Debugger (so user can see what's happening)
-                const debugBox = document.createElement('div');
-                debugBox.style.cssText = 'position: fixed; bottom: 10px; left: 10px; background: rgba(0,0,0,0.8); color: #0f0; padding: 10px; z-index: 99999; font-family: monospace; font-size: 12px; pointer-events: none;';
-                debugBox.innerHTML = `Target: <strong>${desiredID}</strong><br>Status: <span id="ref-status">Searching...</span>`;
-                document.body.appendChild(debugBox);
-                const statusEl = document.getElementById('ref-status');
-
-                // 3. The Enforcer Function
+                // 2. The Enforcer Function
                 function enforceValue(field) {
                     if (field.value !== desiredID) {
                         log('Overwriting value!', 'Old:', field.value, 'New:', desiredID);
@@ -308,15 +301,10 @@ add_action('wp_footer', function() {
                         
                         field.dispatchEvent(new Event('input', { bubbles: true }));
                         field.dispatchEvent(new Event('change', { bubbles: true }));
-                        
-                        statusEl.textContent = 'Enforced!';
-                        statusEl.style.color = '#0f0';
-                    } else {
-                        statusEl.textContent = 'Locked';
                     }
                 }
 
-                // 4. Find and Lock
+                // 3. Find and Lock
                 function findAndLock() {
                     // aggressive selector list
                     const selectors = [
@@ -359,9 +347,6 @@ add_action('wp_footer', function() {
                             log('Property interceptor active');
                         } catch(e) { log('Interceptor failed:', e); }
 
-                    } else {
-                        statusEl.textContent = 'Field Not Found';
-                        statusEl.style.color = 'red';
                     }
                 }
 
