@@ -32,7 +32,11 @@ jobs:
             **/vendor/**
             **/tests/**
             uploads/**
+            **/uploads/**
             cache/**
+            **/cache/**
+            litespeed/**
+            ai1wm-backups/**
             backup*/**
             backups/**
             upgrade/**
