@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Debug Quote Form</title>
+    <style>
+        body { font-family: monospace; padding: 20px; background: #1a1a1a; color: #0f0; }
+        .section { background: #2a2a2a; padding: 15px; margin: 10px 0; border: 1px solid #0f0; }
+        .error { color: #f00; }
+        .success { color: #0f0; }
+        .warning { color: #ff0; }
+        pre { background: #000; padding: 10px; overflow-x: auto; }
+    </style>
+</head>
+<body>
+    <h1>🔍 Quote Form Debug Tool</h1>
+    
+    <div class="section">
+        <h2>1. Check localStorage</h2>
+        <button onclick="checkLocalStorage()">Check Now</button>
+        <pre id="localStorage-result"></pre>
+    </div>
+    
+    <div class="section">
+        <h2>2. Find Form Fields</h2>
+        <button onclick="findFields()">Find Fields</button>
+        <pre id="fields-result"></pre>
+    </div>
+    
+    <div class="section">
+        <h2>3. Test Populate</h2>
+        <button onclick="testPopulate()">Test Populate</button>
+        <pre id="populate-result"></pre>
+    </div>
+    
+    <div class="section">
+        <h2>4. Check Scripts Loaded</h2>
+        <button onclick="checkScripts()">Check Scripts</button>
+        <pre id="scripts-result"></pre>
+    </div>
+
+    <script>
+        function checkLocalStorage() {
+            const result = document.getElementById('localStorage-result');
+            try {
+                const wizardData = localStorage.getItem('mgrnz_wizard_data');
+                if (!wizardData) {
+                    result.innerHTML = '<span class="error">❌ No wizard data found in localStorage</span>';
+                    return;
+                }
+                
+                const parsed = JSON.parse(wizardData);
+                result.innerHTML = '<span class="success">✅ Found wizard data:</span>\n' + 
+                                 JSON.stringify(parsed, null, 2);
+                
+                if (!parsed.submission_ref) {
+                    result.innerHTML += '\n\n<span class="error">❌ No submission_ref in data!</span>';
+                } else {
+                    result.innerHTML += '\n\n<span class="success">✅ submission_ref: ' + parsed.submission_ref + '</span>';
+                }
+            } catch (e) {
+                result.innerHTML = '<span class="error">❌ Error: ' + e.message + '</span>';
+            }
+        }
+        
+        function findFields() {
+            const result = document.getElementById('fields-result');
+            const forms = document.querySelectorAll('form');
+            
+            if (forms.length === 0) {
+                result.innerHTML = '<span class="error">❌ No forms found on page</span>';
+                return;
+            }
+            
+            let output = '<span class="success">✅ Found ' + forms.length + ' form(s)</span>\n\n';
+            
+            forms.forEach((form, i) => {
+                output += 'Form ' + (i + 1) + ':\n';
+                output += '  Action: ' + (form.action || 'none') + '\n';
+                output += '  Method: ' + (form.method || 'none') + '\n';
+                
+                const inputs = form.querySelectorAll('input');
+                output += '  Inputs (' + inputs.length + '):\n';
+                
+                inputs.forEach(input => {
+                    output += '    - name="' + (input.name || 'none') + '"';
+                    output += ' id="' + (input.id || 'none') + '"';
+                    output += ' type="' + input.type + '"';
+                    output += ' value="' + input.value + '"';
+                    
+                    if (input.name && input.name.includes('submission_ref')) {
+                        output += ' <span class="warning">⚠️ THIS IS THE SUBMISSION_REF FIELD!</span>';
+                    }
+                    output += '\n';
+                });
+                
+                output += '\n';
+            });
+            
+            result.innerHTML = output;
+        }
+        
+        function testPopulate() {
+            const result = document.getElementById('populate-result');
+            
+            // Get submission_ref from localStorage
+            let submissionRef = null;
+            try {
+                const wizardData = localStorage.getItem('mgrnz_wizard_data');
+                if (wizardData) {
+                    const parsed = JSON.parse(wizardData);
+                    submissionRef = parsed.submission_ref;
+                }
+            } catch (e) {}
+            
+            if (!submissionRef) {
+                result.innerHTML = '<span class="error">❌ No submission_ref in localStorage</span>';
+                return;
+            }
+            
+            // Try to find and populate the field
+            const selectors = [
+                'input[name="fields[submission_ref]"]',
+                'input[name="submission_ref"]',
+                'input[placeholder*="submission_ref"]',
+                'input[id*="submission_ref"]',
+                '#submission_ref',
+                '.submission_ref'
+            ];
+            
+            let found = false;
+            let output = 'Trying to populate with: ' + submissionRef + '\n\n';
+            
+            for (const selector of selectors) {
+                const field = document.querySelector(selector);
+                if (field) {
+                    output += '<span class="success">✅ Found field with selector: ' + selector + '</span>\n';
+                    output += '  Current value: "' + field.value + '"\n';
+                    
+                    field.value = submissionRef;
+                    field.setAttribute('readonly', 'readonly');
+                    field.style.backgroundColor = '#90EE90';
+                    
+                    output += '  New value: "' + field.value + '"\n';
+                    output += '<span class="success">✅ Field populated!</span>\n';
+                    found = true;
+                    break;
+                }
+            }
+            
+            if (!found) {
+                output += '<span class="error">❌ Could not find submission_ref field with any selector</span>\n';
+                output += 'Tried:\n';
+                selectors.forEach(s => output += '  - ' + s + '\n');
+            }
+            
+            result.innerHTML = output;
+        }
+        
+        function checkScripts() {
+            const result = document.getElementById('scripts-result');
+            const scripts = document.querySelectorAll('script');
+            
+            let output = 'Found ' + scripts.length + ' script tags\n\n';
+            
+            const relevantScripts = [
+                'populate-mailerlite-submission-ref.js',
+                'mark-quote-on-submit.js',
+                'add-back-button-to-quote-page.js',
+                'quote-page-blueprint-data-script'
+            ];
+            
+            relevantScripts.forEach(name => {
+                let found = false;
+                scripts.forEach(script => {
+                    if (script.src && script.src.includes(name)) {
+                        output += '<span class="success">✅ ' + name + '</span>\n';
+                        output += '  URL: ' + script.src + '\n\n';
+                        found = true;
+                    }
+                });
+                
+                if (!found) {
+                    output += '<span class="error">❌ ' + name + ' not found</span>\n\n';
+                }
+            });
+            
+            result.innerHTML = output;
+        }
+        
+        // Auto-run on load
+        window.addEventListener('load', function() {
+            setTimeout(function() {
+                checkLocalStorage();
+                findFields();
+                checkScripts();
+            }, 1000);
+        });
+    </script>
+</body>
+</html>
