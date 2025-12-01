@@ -43,7 +43,7 @@ return [
             'number' => '1',
             'title' => 'EXECUTIVE SUMMARY',
             'guidelines' => [
-                'Start each blueprint with an initial statement to the effect that this is an estimate process and as such, is designed to provide an indicative workflow and price rather than a final specification and fixed cost quote',
+                'Start each blueprint with this statement: "This blueprint is an intended to create workflows based on your stated problem and desired end state.  This document is created using AI and its purpose is to table an idea and if desired, provide an indicative cost estimate. In most cases, a thorough discovery process is necessary to tie down a workflow design. It provides a structured approach to implementation using the D.R.I.V.E.™ Automation Framework, ensuring adequate security and controls are built into the process."',
                 'Brief overview of the DRIVE Framework',
                 'Brief overview of the transformation.',
                 'Key benefits and expected outcomes.',
@@ -63,6 +63,67 @@ return [
         ],
         [
             'number' => '3',
+            'title' => 'YOUR WORKFLOW BLUEPRINT',
+            'guidelines' => [
+                'This section provides the detailed technical design of your automation workflow.',
+                '',
+                '**WORKFLOW DIAGRAM**: Create a simple, linear HTML diagram showing the high-level workflow steps. Use this structure:',
+                '<div style="display: flex; align-items: center; gap: 10px; padding: 20px; background: #f8fafc; border-radius: 8px; margin: 20px 0; flex-wrap: wrap;">',
+                '  <div style="background: #3b82f6; color: white; padding: 15px 20px; border-radius: 6px; font-weight: 600; text-align: center; min-width: 120px;">Step 1 Name</div>',
+                '  <div style="font-size: 24px; color: #64748b;">→</div>',
+                '  <div style="background: #3b82f6; color: white; padding: 15px 20px; border-radius: 6px; font-weight: 600; text-align: center; min-width: 120px;">Step 2 Name</div>',
+                '  <div style="font-size: 24px; color: #64748b;">→</div>',
+                '  <div style="background: #10b981; color: white; padding: 15px 20px; border-radius: 6px; font-weight: 600; text-align: center; min-width: 120px;">Final Step</div>',
+                '</div>',
+                'Use blue (#3b82f6) for process steps and green (#10b981) for the completion step. Keep it to 4-6 high-level steps maximum.',
+                '',
+                '**OUR TECH STACK**: List the specific technologies from our preferred stack that will be used. For each, explain:',
+                '  • What it is (e.g., "Make.com - Visual automation platform")',
+                '  • Why we\'re using it for this workflow (e.g., "Chosen for its ability to orchestrate complex multi-step workflows with 1000+ app integrations")',
+                '  • Its role in this specific automation (e.g., "Will handle the trigger from form submission and coordinate all subsequent actions")',
+                '',
+                '**ADDITIONAL STACK**: Identify any tools or platforms OUTSIDE our standard stack. For each, explain:',
+                '  • What it is and what it does',
+                '  • Why it\'s necessary for this specific workflow (e.g., "Your current CRM is Salesforce, so we\'ll integrate with it rather than suggesting a replacement")',
+                '  • Whether this is existing (user already has it) or new (needs to be procured)',
+                '',
+                '**THE WORKFLOW - STEP BY STEP**: Walk through the workflow in simple, user-friendly language. For each step in your diagram above:',
+                '  • Explain what happens at this step',
+                '  • Which system/tool is performing the action',
+                '  • What data is being processed or transferred',
+                '  • What triggers the next step',
+                'Keep explanations high-level but specific to this workflow. Avoid technical jargon.',
+                '',
+                '**SECURITY & AUTHENTICATION**: Include a dedicated note about security. Address:',
+                '  • How user data will be protected',
+                '  • Authentication methods between systems (e.g., OAuth 2.0, API keys)',
+                '  • Data encryption (in transit and at rest)',
+                '  • Access controls and permissions',
+                '  • Compliance considerations if relevant (GDPR, HIPAA, etc.)',
+                '  • Backup and disaster recovery approach',
+                'Frame this in terms of "Your data security" to make it personal and reassuring.',
+            ]
+        ],
+        [
+            'number' => '4',
+            'title' => 'THE IMPLEMENTATION PROCESS EXPLAINED',
+            'guidelines' => [
+                'Include this exact introductory text:',
+                '"What is a workflow? A workflow has two primary characteristics:',
+                '1. A workflow involves multiple process steps, data sources, integrations of disparate tasks',
+                '2. A workflow is sequential, there is a start and an end and the objective is to pass from initiation (start) to completion (end)',
+                '',
+                'Therefore, to implement a workflow, there are a lot of complexities to consider. It has to have an environment created to contain its code. It has multiple inputs and outputs, from often disparate systems or data sources. There are usually a number of methods to achieve each step of the workflow making its design something worth dwelling over.',
+                '',
+                'A workflow has to be treated with respect. While it\'s not the same as implementing new software, it should be treated in the same manner when it comes to the implementation process. It should pass through a gated framework (SDLC) of some format to ensure it will integrate safely into your business.',
+                '',
+                'We developed the DRIVE Automation framework for this purpose. A specific framework for workflows that\'s been trimmed to be more agile."',
+                '',
+                'After this introduction, provide a brief (2-3 sentence) overview of what the DRIVE framework is and why it ensures successful workflow implementation.',
+            ]
+        ],
+        [
+            'number' => '5',
             'title' => 'DISCOVER (Analysis)',
             'guidelines' => [
                 'Mandatory - include this statement first "This phase focuses on identifying the need and opportunity, securing initial funding, and gaining approval for the strategic concept before proceeding."',
@@ -73,7 +134,7 @@ return [
             ]
         ],
         [
-            'number' => '4',
+            'number' => '6',
             'title' => 'READY (Readiness)',
             'guidelines' => [
                 'Mandatory - include this statement first "The goal is to prepare for execution by completing detailed design and brand assets, conducting a unit test, and ensuring all resources and dependencies are in place."',
@@ -83,7 +144,7 @@ return [
             ]
         ],
         [
-            'number' => '5',
+            'number' => '7',
             'title' => 'IMPLEMENT (Execution)',
             'guidelines' => [
                 'Mandatory - include this statement first "This phase involves the core main build, executing integration testing, migrating data, and conducting model training to transform the concepts into a tangible solution."',
@@ -93,7 +154,7 @@ return [
             ]
         ],
         [
-            'number' => '6',
+            'number' => '8',
             'title' => 'VALIDATE (Quality Assurance)',
             'guidelines' => [
                 'Mandatory - include this statement first "This is the monitoring and refinement stage, focused on achieving user acceptance (UAT), completing documentation, and managing support and change to optimize performance."',
@@ -103,7 +164,7 @@ return [
             ]
         ],
         [
-            'number' => '7',
+            'number' => '9',
             'title' => 'EVOLVE (Optimization)',
             'guidelines' => [
                 'Mandatory to include this statementz: "The Evolve component is the dynamic, central core of the D.R.I.V.E.™ Consulting Framework, representing Elevate & Evolve. It\'s more than just the final step; it functions as the Level Up™ Engine , providing the continuous strategic oversight and quality assurance that underpins the entire methodology."',
