@@ -19,6 +19,8 @@ jobs:
           server: ${{ secrets.FTP_SERVER }}
           username: ${{ secrets.FTP_USERNAME }}
           password: ${{ secrets.FTP_PASSWORD }}
+          protocol: ftps
+          security: loose
           # Sync entire wp-content directory
           local-dir: ./wp-content/
           server-dir: /wp/wp-content/
