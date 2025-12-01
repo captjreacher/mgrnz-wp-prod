@@ -2071,6 +2071,16 @@ function mgrnz_handle_subscribe_blueprint($request) {
             // For now, we'll just rely on the log
         }
         
+        // Sync to MailerLite if enabled
+        if (function_exists('mgrnz_sync_to_mailerlite')) {
+            $ml_result = mgrnz_sync_to_mailerlite($email, $name, $session_id);
+            if (is_wp_error($ml_result)) {
+                error_log('[Subscribe Endpoint] MailerLite sync failed: ' . $ml_result->get_error_message());
+            } else {
+                error_log('[Subscribe Endpoint] MailerLite sync successful for: ' . $email);
+            }
+        }
+        
         // Track blueprint download analytics
         MGRNZ_Conversation_Analytics::track_event(
             MGRNZ_Conversation_Analytics::EVENT_BLUEPRINT_DOWNLOADED,
