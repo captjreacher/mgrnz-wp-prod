@@ -283,8 +283,8 @@ add_action('wp_footer', function() {
                 localStorage.setItem('mgrnz_wizard_data', JSON.stringify(wizardData));
               }
               
-              // Wait for MailerLite form to initialize
-              setTimeout(function() {
+              // Use MutationObserver to watch for the form
+              const observer = new MutationObserver(function(mutations, obs) {
                 const form = document.querySelector('.ml-form-embedContainer form');
                 
                 if (form) {
@@ -297,13 +297,30 @@ add_action('wp_footer', function() {
                       form.appendChild(hiddenField);
                       
                       console.log('[Quote Form] ✅ Added submission_ref:', wizardData.submission_ref);
-                  } else {
-                      console.log('[Quote Form] Field already exists');
+                      
+                      // Stop observing once found and handled
+                      obs.disconnect();
                   }
-                } else {
-                    console.error('[Quote Form] MailerLite form not found');
                 }
-              }, 1500); // Wait 1.5s to ensure form is rendered
+              });
+              
+              // Start observing the document body for added nodes
+              observer.observe(document.body, {
+                childList: true,
+                subtree: true
+              });
+              
+              // Fallback check in case it's already there
+              const existingForm = document.querySelector('.ml-form-embedContainer form');
+              if (existingForm && !existingForm.querySelector('input[name="fields[submission_ref]"]')) {
+                  const hiddenField = document.createElement('input');
+                  hiddenField.type = 'hidden';
+                  hiddenField.name = 'fields[submission_ref]';
+                  hiddenField.value = wizardData.submission_ref;
+                  existingForm.appendChild(hiddenField);
+                  console.log('[Quote Form] ✅ Added submission_ref (immediate):', wizardData.submission_ref);
+                  observer.disconnect();
+              }
               
             } catch (error) {
               console.error('[Quote Form] Error:', error);

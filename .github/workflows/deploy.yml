@@ -21,7 +21,7 @@ jobs:
           password: ${{ secrets.FTP_PASSWORD }}
           # Sync entire wp-content directory
           local-dir: ./wp-content/
-          server-dir: /public_html/wp/wp-content/
+          server-dir: /wp/wp-content/
           # Exclude uploads, cache, and other dynamic content
           exclude: |
             **/.git*
