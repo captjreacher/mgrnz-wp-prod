@@ -197,7 +197,71 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   }
 
-  setStep(1);
+  // Check for saved state and restore if available
+  const savedBlueprint = localStorage.getItem('mgrnz_blueprint_download');
+  const savedWizardData = localStorage.getItem('mgrnz_wizard_data');
+
+  if (savedBlueprint && savedWizardData) {
+    console.log("Restoring saved blueprint...");
+
+    // Restore data
+    const data = JSON.parse(savedWizardData);
+    if (data.goal) document.getElementById("goal").value = data.goal;
+    if (data.workflow) document.getElementById("workflow").value = data.workflow;
+
+    // Show blueprint
+    const blueprintSection = document.getElementById("blueprint-section");
+    const blueprintContent = document.getElementById("blueprint-content");
+    const completionScreen = document.getElementById("completion-screen");
+
+    if (blueprintContent) blueprintContent.innerHTML = savedBlueprint;
+
+    if (blueprintSection) {
+      blueprintSection.style.display = "block";
+      blueprintSection.classList.add("show");
+      blueprintSection.style.opacity = "1";
+    }
+
+    if (completionScreen) {
+      completionScreen.style.display = "block";
+      completionScreen.classList.add("show");
+      completionScreen.style.opacity = "1";
+    }
+
+    if (form) form.style.display = "none";
+    currentStep = 3;
+
+    // Add "Start Over" button if not present
+    if (!document.getElementById('btn-start-over')) {
+      const actionContainer = document.querySelector('.wizard-actions') || blueprintSection;
+      const startOverBtn = document.createElement('button');
+      startOverBtn.id = 'btn-start-over';
+      startOverBtn.className = 'wizard-btn secondary';
+      startOverBtn.textContent = 'Start New Workflow';
+      startOverBtn.style.cssText = 'margin-top: 10px; background: transparent; border: 1px solid rgba(255,255,255,0.3); color: #cbd5e0;';
+
+      startOverBtn.onclick = function () {
+        if (confirm('Are you sure? This will clear your current blueprint.')) {
+          localStorage.removeItem('mgrnz_blueprint_download');
+          localStorage.removeItem('mgrnz_wizard_data');
+          localStorage.removeItem('mgrnz_blueprint_url');
+          window.location.reload();
+        }
+      };
+
+      // Insert after download button or at end of section
+      const downloadBtn = document.getElementById("btn-download-blueprint");
+      if (downloadBtn && downloadBtn.parentNode) {
+        downloadBtn.parentNode.insertBefore(startOverBtn, downloadBtn.nextSibling);
+      } else {
+        blueprintSection.appendChild(startOverBtn);
+      }
+    }
+
+  } else {
+    setStep(1);
+  }
+
   // Handle form submission (Generate Blueprint)
   if (form) {
     form.addEventListener("submit", function (e) {
@@ -307,6 +371,33 @@ document.addEventListener("DOMContentLoaded", function () {
             void blueprintSection.offsetWidth;
             blueprintSection.classList.add("show");
             blueprintSection.style.opacity = "1";
+
+            // Add "Start Over" button if not present (for fresh generation)
+            if (!document.getElementById('btn-start-over')) {
+              const actionContainer = document.querySelector('.wizard-actions') || blueprintSection;
+              const startOverBtn = document.createElement('button');
+              startOverBtn.id = 'btn-start-over';
+              startOverBtn.className = 'wizard-btn secondary';
+              startOverBtn.textContent = 'Start New Workflow';
+              startOverBtn.style.cssText = 'margin-top: 10px; background: transparent; border: 1px solid rgba(255,255,255,0.3); color: #cbd5e0;';
+
+              startOverBtn.onclick = function () {
+                if (confirm('Are you sure? This will clear your current blueprint.')) {
+                  localStorage.removeItem('mgrnz_blueprint_download');
+                  localStorage.removeItem('mgrnz_wizard_data');
+                  localStorage.removeItem('mgrnz_blueprint_url');
+                  window.location.reload();
+                }
+              };
+
+              // Insert after download button or at end of section
+              const downloadBtn = document.getElementById("btn-download-blueprint");
+              if (downloadBtn && downloadBtn.parentNode) {
+                downloadBtn.parentNode.insertBefore(startOverBtn, downloadBtn.nextSibling);
+              } else {
+                blueprintSection.appendChild(startOverBtn);
+              }
+            }
           }
           if (completionScreen) {
             completionScreen.style.display = "block";
