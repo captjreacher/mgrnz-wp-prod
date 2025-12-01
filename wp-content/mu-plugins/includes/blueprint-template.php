@@ -173,10 +173,24 @@ return [
             'number' => '9',
             'title' => 'EVOLVE (Optimization)',
             'guidelines' => [
-                'Mandatory to include this statementz: "The Evolve component is the dynamic, central core of the D.R.I.V.E.™ Consulting Framework, representing Elevate & Evolve. It\'s more than just the final step; it functions as the Level Up™ Engine , providing the continuous strategic oversight and quality assurance that underpins the entire methodology."',
+                'Mandatory to include this statement: "The Evolve component is the dynamic, central core of the D.R.I.V.E.™ Consulting Framework, representing Elevate & Evolve. It\'s more than just the final step; it functions as the Level Up™ Engine, providing the continuous strategic oversight and quality assurance that underpins the entire methodology."',
                 'The \'Level Up Engine\': How to monitor and improve over time.',
                 'Future scaling opportunities.',
                 'Continuous improvement strategy.',
+            ]
+        ],
+        [
+            'number' => '10',
+            'title' => 'NEXT STEPS',
+            'guidelines' => [
+                'Include this closing statement: "Thank you for using our 2-Minute AI Workflow Generator! This blueprint is your starting point for transforming your business processes with intelligent automation."',
+                'Briefly outline the immediate next steps the user can take:',
+                '  • Review this blueprint and identify any questions or clarifications needed',
+                '  • Request a detailed quote to move forward with implementation',
+                '  • Schedule a discovery call to refine the design',
+                '  • Download this blueprint for your records',
+                'Include a warm, encouraging tone that invites them to reach out with questions.',
+                'End with: "We\'re here to help turn this blueprint into reality. Let\'s build something amazing together!"',
             ]
         ],
     ],
