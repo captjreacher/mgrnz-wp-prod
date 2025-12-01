@@ -179,14 +179,16 @@
 
   jQuery(document).ready(function ($) {
     var $nav = $(".is-style-saaslauncher-sticky-navigation");
-    var offset = $nav.offset().top;
+    if ($nav.length && $nav.offset()) {
+      var offset = $nav.offset().top;
 
-    $(window).on("scroll", function () {
-      if ($(window).scrollTop() > offset) {
-        $nav.addClass("sticky-enabled"); // Add sticky class
-      } else {
-        $nav.removeClass("sticky-enabled"); // Remove sticky class
-      }
-    });
+      $(window).on("scroll", function () {
+        if ($(window).scrollTop() > offset) {
+          $nav.addClass("sticky-enabled"); // Add sticky class
+        } else {
+          $nav.removeClass("sticky-enabled"); // Remove sticky class
+        }
+      });
+    }
   });
 })(jQuery);
