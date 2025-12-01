@@ -289,18 +289,22 @@ add_action('wp_footer', function() {
                 
                 if (form) {
                   // Check if field already exists
-                  if (!form.querySelector('input[name="fields[submission_ref]"]')) {
-                      const hiddenField = document.createElement('input');
+                  let hiddenField = form.querySelector('input[name="fields[submission_ref]"]');
+                  
+                  if (!hiddenField) {
+                      hiddenField = document.createElement('input');
                       hiddenField.type = 'hidden';
                       hiddenField.name = 'fields[submission_ref]';
-                      hiddenField.value = wizardData.submission_ref;
                       form.appendChild(hiddenField);
-                      
-                      console.log('[Quote Form] ✅ Added submission_ref:', wizardData.submission_ref);
-                      
-                      // Stop observing once found and handled
-                      obs.disconnect();
+                      console.log('[Quote Form] ✅ Created and set submission_ref:', wizardData.submission_ref);
+                  } else {
+                      console.log('[Quote Form] ⚠️ Field exists, overwriting value. Old:', hiddenField.value, 'New:', wizardData.submission_ref);
                   }
+                  
+                  hiddenField.value = wizardData.submission_ref;
+                      
+                  // Stop observing once found and handled
+                  obs.disconnect();
                 }
               });
               
@@ -312,13 +316,20 @@ add_action('wp_footer', function() {
               
               // Fallback check in case it's already there
               const existingForm = document.querySelector('.ml-form-embedContainer form');
-              if (existingForm && !existingForm.querySelector('input[name="fields[submission_ref]"]')) {
-                  const hiddenField = document.createElement('input');
-                  hiddenField.type = 'hidden';
-                  hiddenField.name = 'fields[submission_ref]';
+              if (existingForm) {
+                  let hiddenField = existingForm.querySelector('input[name="fields[submission_ref]"]');
+                  
+                  if (!hiddenField) {
+                      hiddenField = document.createElement('input');
+                      hiddenField.type = 'hidden';
+                      hiddenField.name = 'fields[submission_ref]';
+                      existingForm.appendChild(hiddenField);
+                      console.log('[Quote Form] ✅ Created and set submission_ref (immediate):', wizardData.submission_ref);
+                  } else {
+                      console.log('[Quote Form] ⚠️ Field exists (immediate), overwriting value. Old:', hiddenField.value, 'New:', wizardData.submission_ref);
+                  }
+                  
                   hiddenField.value = wizardData.submission_ref;
-                  existingForm.appendChild(hiddenField);
-                  console.log('[Quote Form] ✅ Added submission_ref (immediate):', wizardData.submission_ref);
                   observer.disconnect();
               }
               
