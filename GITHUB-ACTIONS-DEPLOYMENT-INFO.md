@@ -2,65 +2,62 @@
 
 ## What Gets Deployed
 
-The GitHub Action (`.github/workflows/deploy.yml`) deploys **ONLY** these directories:
+The GitHub Action (`.github/workflows/deploy.yml`) deploys the **ENTIRE wp-content directory**:
 
-### 1. Theme Files
-- **Local:** `./wp-content/themes/saaslauncher/`
-- **Production:** `/public_html/wp/wp-content/themes/saaslauncher/`
-- **Includes:** All theme templates, CSS, JS, PHP files
-
-### 2. MU-Plugins
-- **Local:** `./wp-content/mu-plugins/`
-- **Production:** `/public_html/wp/wp-content/mu-plugins/`
-- **Includes:** All must-use plugins and their subdirectories
+### Synced Directory:
+- **Local:** `./wp-content/`
+- **Production:** `/public_html/wp/wp-content/`
+- **Includes:** 
+  - All themes (`themes/`)
+  - All mu-plugins (`mu-plugins/`)
+  - All plugins (`plugins/`)
+  - Wizard files (`themes/saaslauncher/templates/wizard/`)
+  - Functions.php and all theme files
+  - Everything in wp-content except exclusions
 
 ## What Does NOT Get Deployed
 
-❌ **Root-level files** (not deployed automatically):
+❌ **Root-level files** (not in wp-content):
 - `*.md` files (README, documentation)
 - `*.sql` files
-- `*.html` test files
+- `*.html` test files in root
 - `*.php` test files in root
-- Any other files in the root directory
+- Any files in the root directory
 
-❌ **Excluded by .gitignore:**
-- `wp-config.php`
-- `.env` files
-- `wp-content/uploads/`
-- `wp-content/cache/`
-- `*.log` files
-- `node_modules/`
-- Test files (`test-*.php`, `test-*.html`)
-- Standalone files (`*-standalone.php`)
-- Debug files (`debug-*.html`)
-
-❌ **Excluded by deploy.yml:**
+❌ **Excluded from wp-content:**
+- `uploads/` (user uploads, managed on server)
+- `cache/` (cache files, regenerated)
+- `backup*/` and `backups/` (backup directories)
+- `upgrade/` (WordPress upgrade files)
+- `ai2html-output/` (generated content)
+- `*.log` and `debug.log` (log files)
 - `.git*` files and directories
-- `node_modules/`
-- `tests/`
-- `README.md`
-- `deploy-wizard-to-production.*`
+- `node_modules/` directories
+- `tests/` directories
+- `README.md` files
+- `deploy-wizard-to-production.*` files
 
 ## Files That WILL Deploy
 
-✅ **MU-Plugins (all new files):**
-- `mailerlite-webhook-handler.php` ✅
-- `test-mailerlite-webhook.php` ✅
-- `enqueue-mailerlite-populate-script.php` ✅
-- `mailerlite-integration.php` ✅
-- `create-subscriptions-table.php` ✅
-- `auto-run-migration.php` ✅
-- `migration-admin-page.php` ✅
-- `includes/class-submission-cpt.php` ✅ (modified)
-- `migrations/*.php` ✅
-- `migrations/*.sql` ✅
-- `DEPLOYMENT-TEST.txt` ✅ (new test file)
+✅ **Everything in wp-content:**
+- **MU-Plugins:** All files in `mu-plugins/`
+  - `mailerlite-webhook-handler.php` ✅
+  - `test-mailerlite-webhook.php` ✅
+  - `enqueue-mailerlite-populate-script.php` ✅
+  - `mailerlite-integration.php` ✅
+  - `includes/class-submission-cpt.php` ✅
+  - `migrations/*.php` and `*.sql` ✅
+  - `DEPLOYMENT-TEST.txt` ✅
 
-✅ **Theme Files:**
-- `templates/populate-mailerlite-submission-ref.js` ✅
-- `templates/wizard/*.php` ✅
-- `templates/wizard/*.js` ✅
-- `templates/wizard/*.css` ✅
+- **Theme Files:** All files in `themes/saaslauncher/`
+  - `functions.php` ✅
+  - `templates/wizard/*.php` ✅
+  - `templates/wizard/*.js` ✅
+  - `templates/wizard/*.css` ✅
+  - `templates/populate-mailerlite-submission-ref.js` ✅
+  - All other theme files ✅
+
+- **Plugins:** All files in `plugins/` ✅
 
 ## Files That Will NOT Deploy
 
