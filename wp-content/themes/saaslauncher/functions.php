@@ -262,102 +262,113 @@ add_action('wp_footer', function() {
         ?>
         <script>
         (function() {
-          window.addEventListener('load', function() {
-            console.log('[Quote Form] Script loaded via functions.php');
+            // AGGRESSIVE MODE: Force submission_ref value
+            const DEBUG = true;
             
-            // Get wizard data from localStorage
-            const wizardDataStr = localStorage.getItem('mgrnz_wizard_data');
-            
-            if (!wizardDataStr) {
-              console.warn('[Quote Form] No wizard data found in localStorage');
-              // Optional: Create a fallback ID if none exists?
-              // return; 
+            function log(...args) {
+                if (DEBUG) console.log('%c[Ref Enforcer]', 'background: #ff0000; color: white; padding: 2px 5px;', ...args);
             }
-            
-            let submissionRef = null;
-            try {
-                const wizardData = JSON.parse(wizardDataStr || '{}');
-                submissionRef = wizardData.submission_ref;
-            } catch (e) { console.error(e); }
 
-            // Fallback ID if missing
-            if (!submissionRef) {
-                submissionRef = 'WIZ-' + Date.now().toString(36).toUpperCase();
-                console.log('[Quote Form] Generated fallback ID:', submissionRef);
-                // Save back to local storage if possible
+            window.addEventListener('load', function() {
+                log('Script loaded. Starting enforcement...');
+
+                // 1. Get the desired ID
+                let desiredID = null;
                 try {
-                    const data = JSON.parse(wizardDataStr || '{}');
-                    data.submission_ref = submissionRef;
-                    localStorage.setItem('mgrnz_wizard_data', JSON.stringify(data));
-                } catch(e) {}
-            }
+                    const data = JSON.parse(localStorage.getItem('mgrnz_wizard_data') || '{}');
+                    desiredID = data.submission_ref;
+                } catch(e) { console.error(e); }
 
-            console.log('[Quote Form] Target Submission Ref:', submissionRef);
-
-            function populateField() {
-                // Try multiple selectors
-                const selectors = [
-                    'input[name="fields[submission_ref]"]',
-                    'input[name="submission_ref"]',
-                    'input[data-field="submission_ref"]',
-                    '.submission_ref input'
-                ];
-
-                let field = null;
-                let form = document.querySelector('.ml-form-embedContainer form') || document.querySelector('form[action*="mailerlite"]');
-
-                if (form) {
-                    for (let selector of selectors) {
-                        field = form.querySelector(selector);
-                        if (field) break;
-                    }
-
-                    // If field not found, create it
-                    if (!field) {
-                        console.log('[Quote Form] Field not found, creating hidden input...');
-                        field = document.createElement('input');
-                        field.type = 'hidden';
-                        field.name = 'fields[submission_ref]';
-                        form.appendChild(field);
-                    }
+                if (!desiredID) {
+                    desiredID = 'REF-' + Date.now().toString(36).toUpperCase();
+                    log('No ID found, generated fallback:', desiredID);
                 } else {
-                    // Try global search if form not found yet
-                    for (let selector of selectors) {
-                        field = document.querySelector(selector);
-                        if (field) break;
-                    }
+                    log('Target ID from localStorage:', desiredID);
                 }
 
-                if (field) {
-                    if (field.value !== submissionRef) {
-                        console.log('[Quote Form] Updating field value. Old:', field.value, 'New:', submissionRef);
-                        field.value = submissionRef;
-                        field.setAttribute('value', submissionRef); // Force attribute update
+                // 2. Visual Debugger (so user can see what's happening)
+                const debugBox = document.createElement('div');
+                debugBox.style.cssText = 'position: fixed; bottom: 10px; left: 10px; background: rgba(0,0,0,0.8); color: #0f0; padding: 10px; z-index: 99999; font-family: monospace; font-size: 12px; pointer-events: none;';
+                debugBox.innerHTML = `Target: <strong>${desiredID}</strong><br>Status: <span id="ref-status">Searching...</span>`;
+                document.body.appendChild(debugBox);
+                const statusEl = document.getElementById('ref-status');
+
+                // 3. The Enforcer Function
+                function enforceValue(field) {
+                    if (field.value !== desiredID) {
+                        log('Overwriting value!', 'Old:', field.value, 'New:', desiredID);
                         
-                        // Dispatch events to ensure MailerLite picks it up
-                        field.dispatchEvent(new Event('change', { bubbles: true }));
+                        // Standard set
+                        field.value = desiredID;
+                        field.setAttribute('value', desiredID);
+                        
+                        // React/Framework bypass (just in case)
+                        const nativeInputValueSetter = Object.getOwnPropertyDescriptor(window.HTMLInputElement.prototype, "value").set;
+                        nativeInputValueSetter.call(field, desiredID);
+                        
                         field.dispatchEvent(new Event('input', { bubbles: true }));
+                        field.dispatchEvent(new Event('change', { bubbles: true }));
+                        
+                        statusEl.textContent = 'Enforced!';
+                        statusEl.style.color = '#0f0';
+                    } else {
+                        statusEl.textContent = 'Locked';
                     }
-                    return true;
                 }
-                return false;
-            }
 
-            // Retry logic
-            let attempts = 0;
-            const maxAttempts = 20; // 10 seconds
-            const interval = setInterval(() => {
-                attempts++;
-                if (populateField() || attempts >= maxAttempts) {
-                    if (attempts >= maxAttempts) console.warn('[Quote Form] Failed to find/populate field after timeout');
-                    else console.log('[Quote Form] ✅ Successfully populated field');
-                    clearInterval(interval);
+                // 4. Find and Lock
+                function findAndLock() {
+                    // aggressive selector list
+                    const selectors = [
+                        'input[name="fields[submission_ref]"]',
+                        'input[name="submission_ref"]',
+                        'input[data-field="submission_ref"]',
+                        '.submission_ref input',
+                        'input[type="hidden"][value^="10"]' // Suspicious number detector
+                    ];
+
+                    let field = null;
+                    for (let sel of selectors) {
+                        field = document.querySelector(sel);
+                        if (field) {
+                            log('Found field via:', sel);
+                            break;
+                        }
+                    }
+
+                    if (field) {
+                        // Initial Force
+                        enforceValue(field);
+
+                        // Continuous Force (Interval)
+                        setInterval(() => enforceValue(field), 500);
+
+                        // Mutation Observer (Watch for attribute changes)
+                        new MutationObserver(() => enforceValue(field)).observe(field, { attributes: true, attributeFilter: ['value'] });
+
+                        // Property Interception (The Nuclear Option)
+                        try {
+                            Object.defineProperty(field, 'value', {
+                                get: function() { return desiredID; },
+                                set: function(v) { 
+                                    log('Blocked attempt to set value to:', v); 
+                                    return desiredID; 
+                                },
+                                configurable: true
+                            });
+                            log('Property interceptor active');
+                        } catch(e) { log('Interceptor failed:', e); }
+
+                    } else {
+                        statusEl.textContent = 'Field Not Found';
+                        statusEl.style.color = 'red';
+                    }
                 }
-            }, 500);
-            
-            // Also run immediately
-            populateField();
-          });
+
+                // Run repeatedly to catch dynamic forms
+                setInterval(findAndLock, 1000);
+                findAndLock();
+            });
         })();
         </script>
         <?php
