@@ -15358,3 +15358,29 @@ Stack trace:
 [01-Dec-2025 04:49:26 UTC] [AI WORKFLOW PLUGIN] Initialized | Version: 1.0.0 | PHP: 8.4.4 | WordPress: 6.8.3
 [01-Dec-2025 04:50:30 UTC] [AI WORKFLOW PLUGIN] Initialized | Version: 1.0.0 | PHP: 8.4.4 | WordPress: 6.8.3
 [01-Dec-2025 04:50:30 UTC] [AI WORKFLOW PLUGIN] Initialized | Version: 1.0.0 | PHP: 8.4.4 | WordPress: 6.8.3
+[01-Dec-2025 09:36:32 UTC] [AI WORKFLOW PLUGIN] Initialized | Version: 1.0.0 | PHP: 8.4.4 | WordPress: 6.8.3
+[01-Dec-2025 09:36:45 UTC] [AI WORKFLOW PLUGIN] Initialized | Version: 1.0.0 | PHP: 8.4.4 | WordPress: 6.8.3
+[01-Dec-2025 09:36:49 UTC] [AI WORKFLOW PLUGIN] Initialized | Version: 1.0.0 | PHP: 8.4.4 | WordPress: 6.8.3
+[01-Dec-2025 09:36:49 UTC] [AI WORKFLOW PLUGIN] Initialized | Version: 1.0.0 | PHP: 8.4.4 | WordPress: 6.8.3
+[01-Dec-2025 09:36:49 UTC] [AI WORKFLOW PLUGIN] Initialized | Version: 1.0.0 | PHP: 8.4.4 | WordPress: 6.8.3
+[01-Dec-2025 09:36:49 UTC] [AI Workflow] Cleaned up 0 expired conversation sessions (30-day retention policy)
+[01-Dec-2025 09:36:51 UTC] [AI WORKFLOW PLUGIN] Initialized | Version: 1.0.0 | PHP: 8.4.4 | WordPress: 6.8.3
+[01-Dec-2025 09:36:57 UTC] [AI WORKFLOW PLUGIN] Initialized | Version: 1.0.0 | PHP: 8.4.4 | WordPress: 6.8.3
+[01-Dec-2025 09:36:58 UTC] [AI WORKFLOW PLUGIN] Initialized | Version: 1.0.0 | PHP: 8.4.4 | WordPress: 6.8.3
+[01-Dec-2025 09:37:09 UTC] PHP Warning:  The URL https://s0.softaculous.com/a/gosmtp/updates.php?version=1.1.5&checking_for_updates=1&installed_version=1.1.5&license=SOFTWP-77440-52667-18409-52575&url=http%3A%2F%2Fmgrnz.local does not point to a valid plugin metadata file. WP HTTP Error: cURL error 28: Operation timed out after 10007 milliseconds with 0 bytes received in C:\Users\user\Local Sites\mgrnz\app\public\wp-content\plugins\gosmtp-pro\main\plugin-update-checker.php on line 974
+[01-Dec-2025 09:37:15 UTC] [AI WORKFLOW PLUGIN] Initialized | Version: 1.0.0 | PHP: 8.4.4 | WordPress: 6.8.3
+[01-Dec-2025 09:37:15 UTC] [AI WORKFLOW PLUGIN] Initialized | Version: 1.0.0 | PHP: 8.4.4 | WordPress: 6.8.3
+[01-Dec-2025 09:37:25 UTC] [AI WORKFLOW PLUGIN] Initialized | Version: 1.0.0 | PHP: 8.4.4 | WordPress: 6.8.3
+[01-Dec-2025 09:37:35 UTC] [AI WORKFLOW PLUGIN] Initialized | Version: 1.0.0 | PHP: 8.4.4 | WordPress: 6.8.3
+[01-Dec-2025 09:37:35 UTC] [AI WORKFLOW PLUGIN] Initialized | Version: 1.0.0 | PHP: 8.4.4 | WordPress: 6.8.3
+[01-Dec-2025 09:37:55 UTC] [AI WORKFLOW PLUGIN] Initialized | Version: 1.0.0 | PHP: 8.4.4 | WordPress: 6.8.3
+[01-Dec-2025 09:38:05 UTC] [AI WORKFLOW PLUGIN] Initialized | Version: 1.0.0 | PHP: 8.4.4 | WordPress: 6.8.3
+[01-Dec-2025 09:38:15 UTC] [AI WORKFLOW PLUGIN] Initialized | Version: 1.0.0 | PHP: 8.4.4 | WordPress: 6.8.3
+[01-Dec-2025 09:40:15 UTC] [AI WORKFLOW PLUGIN] Initialized | Version: 1.0.0 | PHP: 8.4.4 | WordPress: 6.8.3
+[01-Dec-2025 09:40:15 UTC] [AI WORKFLOW PLUGIN] Initialized | Version: 1.0.0 | PHP: 8.4.4 | WordPress: 6.8.3
+[01-Dec-2025 09:42:16 UTC] [AI WORKFLOW PLUGIN] Initialized | Version: 1.0.0 | PHP: 8.4.4 | WordPress: 6.8.3
+[01-Dec-2025 09:42:16 UTC] [AI WORKFLOW PLUGIN] Initialized | Version: 1.0.0 | PHP: 8.4.4 | WordPress: 6.8.3
+[01-Dec-2025 09:44:17 UTC] [AI WORKFLOW PLUGIN] Initialized | Version: 1.0.0 | PHP: 8.4.4 | WordPress: 6.8.3
+[01-Dec-2025 09:44:17 UTC] [AI WORKFLOW PLUGIN] Initialized | Version: 1.0.0 | PHP: 8.4.4 | WordPress: 6.8.3
+[01-Dec-2025 09:46:18 UTC] [AI WORKFLOW PLUGIN] Initialized | Version: 1.0.0 | PHP: 8.4.4 | WordPress: 6.8.3
+[01-Dec-2025 09:46:19 UTC] [AI WORKFLOW PLUGIN] Initialized | Version: 1.0.0 | PHP: 8.4.4 | WordPress: 6.8.3

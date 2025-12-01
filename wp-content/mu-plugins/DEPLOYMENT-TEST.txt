@@ -1,0 +1,25 @@
+DEPLOYMENT TEST FILE
+===================
+
+Last Updated: 2025-12-01 (Test #1)
+
+This file tests if GitHub Actions deployments are working.
+
+If you can see this file on production, the deployment is working!
+
+Deployment Info:
+- Commit: f1b9d00
+- Feature: AI Submission ID Cross-Population
+- Date: December 1, 2025
+
+Test Instructions:
+1. Check if this file exists on production server
+2. Verify the "Last Updated" timestamp matches
+3. Confirm new mu-plugin files are present:
+   - mailerlite-webhook-handler.php
+   - test-mailerlite-webhook.php
+   - enqueue-mailerlite-populate-script.php
+   - mailerlite-integration.php
+
+Expected Location on Production:
+/public_html/wp/wp-content/mu-plugins/DEPLOYMENT-TEST.txt
