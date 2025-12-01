@@ -203,8 +203,16 @@ document.addEventListener("DOMContentLoaded", function () {
   const savedBlueprint = localStorage.getItem('mgrnz_blueprint_download');
   const savedWizardData = localStorage.getItem('mgrnz_wizard_data');
 
+  console.log('[WIZARD] Restoration check:', {
+    url: window.location.href,
+    restoreParam: urlParams.get('restore'),
+    shouldRestore: shouldRestore,
+    hasSavedBlueprint: !!savedBlueprint,
+    hasSavedData: !!savedWizardData
+  });
+
   if (shouldRestore && savedBlueprint && savedWizardData) {
-    console.log("Restoring saved blueprint (restore parameter detected)...");
+    console.log("[WIZARD] Restoring saved blueprint (restore parameter detected)...");
 
     // Restore data
     const data = JSON.parse(savedWizardData);
@@ -262,6 +270,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
   } else {
     // Start fresh
+    console.log("[WIZARD] Starting fresh wizard (no restore parameter or no saved data)");
     setStep(1);
   }
 
@@ -527,3 +536,5 @@ document.addEventListener("DOMContentLoaded", function () {
 // Force deploy: 2025-11-28 16:53:42
 
 // Force deploy: 2025-11-29 01:22:11
+
+// Cache bust: 2025-12-02 09:32:00 - Fixed wizard auto-restore
