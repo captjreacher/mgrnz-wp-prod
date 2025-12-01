@@ -41,6 +41,10 @@ jobs:
             backups/**
             upgrade/**
             ai2html-output/**
+            **/.kiro/**
+            **/themes/twentytwentyfive/**
+            **/themes/twentytwentyfour/**
+            **/themes/twentytwentythree/**
             *.log
             debug.log
             README.md
