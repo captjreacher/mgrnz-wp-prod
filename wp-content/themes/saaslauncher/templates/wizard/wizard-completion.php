@@ -15,7 +15,7 @@
       <span class="btn-text">Download My Blueprint</span>
     </button>
     
-    <a href="/quote-my-workflow" class="completion-action-btn">
+    <a href="/quote-my-workflow" target="_blank" rel="noopener" class="completion-action-btn">
       <span class="btn-icon">💰</span>
       <span class="btn-text">Get a Quote for this Workflow</span>
     </a>

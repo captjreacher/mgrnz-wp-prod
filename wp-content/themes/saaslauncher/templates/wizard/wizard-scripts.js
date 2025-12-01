@@ -438,15 +438,8 @@ document.addEventListener("DOMContentLoaded", function () {
   if (downloadBtn) {
     downloadBtn.addEventListener("click", function () {
       console.log("Download blueprint clicked");
-      // Download URL should already be in localStorage from API response
-      const downloadUrl = localStorage.getItem('mgrnz_blueprint_url');
-      if (downloadUrl) {
-        console.log('[WIZARD] Download URL found in localStorage:', downloadUrl);
-      } else {
-        console.error('[WIZARD] No download URL in localStorage!');
-      }
-      // Navigate to subscribe page
-      window.location.href = '/wizard-subscribe-page';
+      // Open subscribe page in new tab
+      window.open('/wizard-subscribe-page', '_blank');
     });
   }
 
