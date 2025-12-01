@@ -34,6 +34,15 @@ function mgrnz_enqueue_mailerlite_populate_script() {
             filemtime(get_template_directory() . '/templates/add-back-button-to-quote-page.js'),
             true // Load in footer
         );
+        
+        // Enqueue quote marker script (marks submission as quote requested on form submit)
+        wp_enqueue_script(
+            'mgrnz-mark-quote-on-submit',
+            get_template_directory_uri() . '/templates/mark-quote-on-submit.js',
+            [],
+            filemtime(get_template_directory() . '/templates/mark-quote-on-submit.js'),
+            true // Load in footer
+        );
     }
 }
 add_action('wp_enqueue_scripts', 'mgrnz_enqueue_mailerlite_populate_script');
