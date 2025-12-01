@@ -31,6 +31,7 @@ class MGRNZ_Submission_CPT {
     const META_BLUEPRINT_CONTENT = '_mgrnz_blueprint_content';
     const META_SUBMISSION_DATE = '_mgrnz_submission_date';
     const META_EMAIL_SENT = '_mgrnz_email_sent';
+    const META_SUBMISSION_REF = '_mgrnz_submission_ref';
     
     /**
      * Initialize the class
@@ -152,6 +153,12 @@ class MGRNZ_Submission_CPT {
                 'single'       => true,
                 'show_in_rest' => false,
             ),
+            self::META_SUBMISSION_REF => array(
+                'type'         => 'string',
+                'description'  => 'Unique submission reference ID',
+                'single'       => true,
+                'show_in_rest' => false,
+            ),
         );
         
         foreach ($meta_fields as $key => $args) {
@@ -197,7 +204,9 @@ class MGRNZ_Submission_CPT {
         $email_queued_at = get_post_meta($post->ID, '_mgrnz_email_queued_at', true);
         $email_sent_at = get_post_meta($post->ID, '_mgrnz_email_sent_at', true);
         $email_failed_at = get_post_meta($post->ID, '_mgrnz_email_failed_at', true);
+        $email_failed_at = get_post_meta($post->ID, '_mgrnz_email_failed_at', true);
         $retry_count = get_post_meta($post->ID, '_mgrnz_email_retry_count', true);
+        $submission_ref = get_post_meta($post->ID, self::META_SUBMISSION_REF, true);
         
         ?>
         <style>
@@ -221,6 +230,15 @@ class MGRNZ_Submission_CPT {
                 <label><?php _e('Submission Date:', 'mgrnz'); ?></label>
                 <div class="value">
                     <p><?php echo esc_html(date('F j, Y g:i a', strtotime($submission_date))); ?></p>
+                </div>
+            </div>
+            <?php endif; ?>
+            
+            <?php if ($submission_ref): ?>
+            <div class="mgrnz-meta-field">
+                <label><?php _e('Reference ID:', 'mgrnz'); ?></label>
+                <div class="value">
+                    <p><strong><?php echo esc_html($submission_ref); ?></strong></p>
                 </div>
             </div>
             <?php endif; ?>
@@ -377,6 +395,7 @@ class MGRNZ_Submission_CPT {
         $new_columns = array(
             'cb' => $columns['cb'],
             'title' => $columns['title'],
+            'submission_ref' => __('Ref ID', 'mgrnz'),
             'submission_date' => __('Submission Date', 'mgrnz'),
             'email' => __('Email', 'mgrnz'),
             'goal' => __('Goal', 'mgrnz'),
@@ -475,6 +494,7 @@ class MGRNZ_Submission_CPT {
      * Make custom columns sortable
      */
     public function sortable_columns($columns) {
+        $columns['submission_ref'] = 'submission_ref';
         $columns['submission_date'] = 'submission_date';
         $columns['email'] = 'email';
         $columns['email_sent'] = 'email_sent';
@@ -498,12 +518,6 @@ class MGRNZ_Submission_CPT {
         
         switch ($orderby) {
             case 'submission_date':
-                $query->set('meta_key', self::META_SUBMISSION_DATE);
-                $query->set('orderby', 'meta_value');
-                break;
-                
-            case 'email':
-                $query->set('meta_key', self::META_EMAIL);
                 $query->set('orderby', 'meta_value');
                 break;
                 
@@ -539,7 +553,9 @@ class MGRNZ_Submission_CPT {
             self::META_WORKFLOW,
             self::META_TOOLS,
             self::META_PAIN_POINTS,
+            self::META_PAIN_POINTS,
             self::META_EMAIL,
+            self::META_SUBMISSION_REF,
         );
         
         $meta_query = array();

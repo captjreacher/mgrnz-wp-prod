@@ -249,3 +249,68 @@ function mgrnz_register_pattern_category() {
     );
 }
 add_action('init', 'mgrnz_register_pattern_category');
+
+/**
+ * Inject submission_ref script on quote page
+ * 
+ * This ensures the wizard submission reference is passed to the MailerLite form
+ * Bypasses potential HTML block syntax errors in the page editor
+ */
+add_action('wp_footer', function() {
+    // Only run on the quote page
+    if (is_page('quote-my-workflow')) {
+        ?>
+        <script>
+        (function() {
+          window.addEventListener('load', function() {
+            console.log('[Quote Form] Script loaded via functions.php');
+            
+            // Get wizard data from localStorage
+            const wizardDataStr = localStorage.getItem('mgrnz_wizard_data');
+            console.log('[Quote Form] Wizard data:', wizardDataStr);
+            
+            if (!wizardDataStr) {
+              console.warn('[Quote Form] No wizard data found in localStorage');
+              return;
+            }
+            
+            try {
+              const wizardData = JSON.parse(wizardDataStr);
+              
+              // Generate submission_ref if missing (fallback)
+              if (!wizardData.submission_ref) {
+                wizardData.submission_ref = 'WIZ-' + Date.now().toString(36).toUpperCase();
+                localStorage.setItem('mgrnz_wizard_data', JSON.stringify(wizardData));
+              }
+              
+              // Wait for MailerLite form to initialize
+              setTimeout(function() {
+                const form = document.querySelector('.ml-form-embedContainer form');
+                
+                if (form) {
+                  // Check if field already exists
+                  if (!form.querySelector('input[name="fields[submission_ref]"]')) {
+                      const hiddenField = document.createElement('input');
+                      hiddenField.type = 'hidden';
+                      hiddenField.name = 'fields[submission_ref]';
+                      hiddenField.value = wizardData.submission_ref;
+                      form.appendChild(hiddenField);
+                      
+                      console.log('[Quote Form] ✅ Added submission_ref:', wizardData.submission_ref);
+                  } else {
+                      console.log('[Quote Form] Field already exists');
+                  }
+                } else {
+                    console.error('[Quote Form] MailerLite form not found');
+                }
+              }, 1500); // Wait 1.5s to ensure form is rendered
+              
+            } catch (error) {
+              console.error('[Quote Form] Error:', error);
+            }
+          });
+        })();
+        </script>
+        <?php
+    }
+});

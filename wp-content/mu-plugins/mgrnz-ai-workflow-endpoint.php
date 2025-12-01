@@ -658,7 +658,14 @@ function mgrnz_handle_ai_workflow_submission($request) {
     }
     
     // Save submission to database
-    $submission_id = mgrnz_save_submission($validated_data, $blueprint);
+    $save_result = mgrnz_save_submission($validated_data, $blueprint);
+    
+    if (is_wp_error($save_result)) {
+        $submission_id = $save_result;
+    } else {
+        $submission_id = $save_result['post_id'];
+        $submission_ref = $save_result['submission_ref'];
+    }
     
     if (is_wp_error($submission_id)) {
         $logger->log_error(
@@ -734,6 +741,12 @@ function mgrnz_handle_ai_workflow_submission($request) {
     try {
         $email_service = new MGRNZ_Email_Service();
         $blueprint_html = $email_service->convert_markdown_to_html($blueprint['content']);
+        
+        // Inject Reference ID if available
+        if (isset($submission_ref)) {
+            $ref_html = '<div style="background:#f0f9ff; border:1px solid #bae6fd; padding:10px; border-radius:6px; margin-bottom:20px; text-align:center; font-family:monospace; color:#0369a1;"><strong>Reference ID:</strong> ' . esc_html($submission_ref) . '</div>';
+            $blueprint_html = $ref_html . $blueprint_html;
+        }
     } catch (Exception $e) {
         // Fallback to raw content if conversion fails
         $blueprint_html = '<pre>' . esc_html($blueprint['content']) . '</pre>';
@@ -744,6 +757,7 @@ function mgrnz_handle_ai_workflow_submission($request) {
         'success' => true,
         'status' => 'success',
         'submission_id' => $submission_id,
+        'submission_ref' => $submission_ref ?? null,
         'session_id' => $session_id,
         'assistant_name' => $assistant_name,
         'blueprint' => $blueprint_html,
@@ -836,7 +850,7 @@ function mgrnz_validate_submission_data($data) {
  *
  * @param array $data Validated submission data
  * @param array $blueprint Generated blueprint
- * @return int|WP_Error Post ID or error
+ * @return array|WP_Error Array with post_id and submission_ref, or error
  */
 function mgrnz_save_submission($data, $blueprint) {
     // Create post title from goal (truncated)
@@ -857,6 +871,9 @@ function mgrnz_save_submission($data, $blueprint) {
         return $post_id;
     }
     
+    // Generate unique reference ID
+    $submission_ref = 'REF-' . strtoupper(substr(md5(uniqid()), 0, 8));
+    
     // Save all metadata
     update_post_meta($post_id, '_mgrnz_goal', $data['goal']);
     update_post_meta($post_id, '_mgrnz_workflow_description', $data['workflow_description']);
@@ -869,6 +886,7 @@ function mgrnz_save_submission($data, $blueprint) {
     update_post_meta($post_id, '_mgrnz_ip_address', $data['ip_address']);
     update_post_meta($post_id, '_mgrnz_user_agent', $data['user_agent']);
     update_post_meta($post_id, '_mgrnz_email_sent', false);
+    update_post_meta($post_id, '_mgrnz_submission_ref', $submission_ref);
     
     // Store AI metadata if available
     if (isset($blueprint['ai_model'])) {
@@ -886,7 +904,10 @@ function mgrnz_save_submission($data, $blueprint) {
         update_post_meta($post_id, '_mgrnz_diagram_data', json_encode($blueprint['diagram']));
     }
     
-    return $post_id;
+    return [
+        'post_id' => $post_id,
+        'submission_ref' => $submission_ref
+    ];
 }
 
 /**
@@ -1977,7 +1998,17 @@ function mgrnz_handle_subscribe_blueprint($request) {
             'email' => $email
         ];
         
-        $pdf_path = $pdf_generator->generate_blueprint_pdf($blueprint_data, $user_data, $session_id);
+        // Get submission ID for blueprint_id
+        $submission_id = ($session) ? $session->get_metadata('submission_id') : 0;
+        $blueprint_id = $submission_id ? intval($submission_id) : 0;
+        
+        // Get submission ref if available
+        $submission_ref = '';
+        if ($submission_id) {
+            $submission_ref = get_post_meta($submission_id, '_mgrnz_submission_ref', true);
+        }
+        
+        $pdf_path = $pdf_generator->generate_blueprint_pdf($blueprint_data, $user_data, $session_id, $submission_ref);
         
         if (is_wp_error($pdf_path)) {
             throw new Exception($pdf_path->get_error_message());
@@ -2012,10 +2043,11 @@ function mgrnz_handle_subscribe_blueprint($request) {
                         'email' => $email,
                         'subscription_type' => 'blueprint_download',
                         'blueprint_id' => $blueprint_id,
+                        'ai_submission_id' => $session_id, // Add AI submission ID
                         'subscribed_at' => current_time('mysql'),
                         'download_count' => 0
                     ],
-                    ['%s', '%s', '%s', '%d', '%s', '%d']
+                    ['%s', '%s', '%s', '%d', '%s', '%s', '%d']
                 );
                 
                 if ($result !== false) {
@@ -2061,7 +2093,8 @@ function mgrnz_handle_subscribe_blueprint($request) {
         return new WP_REST_Response([
             'success' => true,
             'download_url' => $download_url,
-            'subscription_id' => $subscription_id
+            'subscription_id' => $subscription_id,
+            'ai_submission_id' => $session_id
         ], 200);
         
     } catch (Exception $e) {

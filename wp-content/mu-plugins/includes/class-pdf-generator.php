@@ -17,14 +17,15 @@ class MGRNZ_PDF_Generator_V2 {
      * @param array $blueprint_data Blueprint content and diagram
      * @param array $user_data User information (name, email)
      * @param string $session_id Session ID
+     * @param string $submission_ref Optional submission reference ID
      * @return string|WP_Error Path to generated PDF or error
      */
-    public function generate_blueprint_pdf($blueprint_data, $user_data, $session_id) {
+    public function generate_blueprint_pdf($blueprint_data, $user_data, $session_id, $submission_ref = '') {
         error_log('[PDF Generator] Starting PDF generation via Api2Pdf for session: ' . $session_id);
         
         try {
             // 1. Generate HTML content (clean version for API)
-            $html = $this->generate_blueprint_html($blueprint_data, $user_data, true);
+            $html = $this->generate_blueprint_html($blueprint_data, $user_data, true, $submission_ref);
             
             // 2. Call Api2Pdf
             $pdf_url = $this->call_api2pdf($html);
@@ -59,7 +60,7 @@ class MGRNZ_PDF_Generator_V2 {
         } catch (Exception $e) {
             error_log('[PDF Generator] Error: ' . $e->getMessage());
             // Fallback to HTML if API fails
-            return $this->generate_simple_pdf($blueprint_data, $user_data, $session_id);
+            return $this->generate_simple_pdf($blueprint_data, $user_data, $session_id, $submission_ref);
         }
     }
     
@@ -159,11 +160,11 @@ class MGRNZ_PDF_Generator_V2 {
     /**
      * Generate simple HTML-based fallback
      */
-    private function generate_simple_pdf($blueprint_data, $user_data, $session_id) {
+    private function generate_simple_pdf($blueprint_data, $user_data, $session_id, $submission_ref = '') {
         error_log('[PDF Generator] Using HTML fallback');
         
         try {
-            $html = $this->generate_blueprint_html($blueprint_data, $user_data, false); // false = include auto-print script
+            $html = $this->generate_blueprint_html($blueprint_data, $user_data, false, $submission_ref); // false = include auto-print script
             
             $filename = $this->generate_filename($session_id, 'html');
             $upload_dir = wp_upload_dir();
@@ -229,8 +230,9 @@ class MGRNZ_PDF_Generator_V2 {
     /**
      * Generate blueprint HTML
      * @param bool $for_api If true, removes auto-print script and buttons
+     * @param string $submission_ref Optional submission reference ID
      */
-    private function generate_blueprint_html($blueprint_data, $user_data, $for_api = false) {
+    private function generate_blueprint_html($blueprint_data, $user_data, $for_api = false, $submission_ref = '') {
         $content = $blueprint_data['content'] ?? 'No content available';
         
         // FIX: Replace local URLs with production URLs so Api2Pdf can access images
@@ -451,6 +453,7 @@ class MGRNZ_PDF_Generator_V2 {
     <div style="background: #f9fafb; padding: 20px; margin: 30px 40px; border-radius: 8px; border-left: 5px solid #ff4f00;">
         <p style="margin: 8px 0; color: #4b5563; font-size: 14px;"><strong style="color: #111827;">Prepared for:</strong> ' . esc_html($user_data['name'] ?? 'Valued Client') . '</p>
         <p style="margin: 8px 0; color: #4b5563; font-size: 14px;"><strong style="color: #111827;">Email:</strong> ' . esc_html($user_data['email'] ?? '') . '</p>
+        ' . ($submission_ref ? '<p style="margin: 8px 0; color: #4b5563; font-size: 14px;"><strong style="color: #111827;">Reference ID:</strong> ' . esc_html($submission_ref) . '</p>' : '') . '
         <p style="margin: 8px 0; color: #4b5563; font-size: 14px;"><strong style="color: #111827;">Date:</strong> ' . date('F j, Y g:i A') . '</p>
     </div>
     
