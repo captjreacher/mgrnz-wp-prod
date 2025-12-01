@@ -62,16 +62,14 @@
 <body><?php
 
 <div class="wizard-subscribe-container" style="max-width: 600px; margin: 4rem auto; padding: 2rem; background: #131c32; border-radius: 16px; border: 1px solid rgba(255,255,255,0.1); color: #fff; text-align: center;">
-    <h1 style="color: #fff; margin-bottom: 1rem;">Almost There!</h1>
-    <p style="color: #cbd5e0; margin-bottom: 2rem;">Enter your name and email to unlock your personalized AI Workflow Blueprint.</p>
+    <h1 style="color: #fff; margin-bottom: 1rem;">Your Blueprint is Ready!</h1>
+    <p style="color: #cbd5e0; margin-bottom: 2rem;">Enter your details below to download your personalized AI Automation Blueprint PDF.</p>
 
     <div id="wizard-subscribe-form" style="display: flex; flex-direction: column; gap: 1rem;">
-        <input type="text" id="sub-name" placeholder="Your Name" required style="padding: 1rem; border-radius: 8px; border: 1px solid #2d3748; background: #0f172a; color: #fff;">
-        <input type="email" id="sub-email" placeholder="Your Email Address" required style="padding: 1rem; border-radius: 8px; border: 1px solid #2d3748; background: #0f172a; color: #fff;">
-        
         <button type="button" id="sub-btn" style="padding: 1rem; background: #ff4f00; color: #fff; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; transition: background 0.2s;">
-            Unlock & Download Blueprint
+            📄 Download PDF (High Quality)
         </button>
+        <p style="font-size: 12px; color: #94a3b8; margin: 0;">We respect your privacy. Your data is secure.</p>
     </div>
 
     <div id="sub-message" style="margin-top: 1rem; display: none;"></div>
@@ -188,14 +186,6 @@ document.addEventListener('DOMContentLoaded', function() {
         e.stopImmediatePropagation();
         
         console.log('=== BUTTON CLICKED - OUR HANDLER ===');
-        
-        const name = document.getElementById('sub-name').value.trim();
-        const email = document.getElementById('sub-email').value.trim();
-        
-        if (!name || !email) {
-            alert('Please fill in all fields.');
-            return;
-        }
 
         btn.disabled = true;
         btn.textContent = 'Processing...';
@@ -203,8 +193,8 @@ document.addEventListener('DOMContentLoaded', function() {
 
         const requestData = {
             session_id: wizardData.submission_ref || 'unknown',
-            name: name,
-            email: email,
+            name: 'Wizard User', // Placeholder since subscribe form collects actual info
+            email: 'user@example.com', // Placeholder since subscribe form collects actual info
             blueprint_data: {
                 html: blueprintHTML,
                 content: blueprintHTML // Send both for compatibility
