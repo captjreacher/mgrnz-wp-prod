@@ -15283,3 +15283,76 @@ Stack trace:
 [01-Dec-2025 02:04:22 UTC] [AI WORKFLOW PLUGIN] Initialized | Version: 1.0.0 | PHP: 8.4.4 | WordPress: 6.8.3
 [01-Dec-2025 04:35:01 UTC] [AI WORKFLOW PLUGIN] Initialized | Version: 1.0.0 | PHP: 8.4.4 | WordPress: 6.8.3
 [01-Dec-2025 04:35:02 UTC] [AI WORKFLOW PLUGIN] Initialized | Version: 1.0.0 | PHP: 8.4.4 | WordPress: 6.8.3
+[01-Dec-2025 04:41:43 UTC] PHP Fatal error:  Uncaught Error: Call to undefined function wp_get_current_user() in C:\Users\user\Local Sites\mgrnz\app\public\wp-includes\capabilities.php:911
+Stack trace:
+#0 C:\Users\user\Local Sites\mgrnz\app\public\wp-content\mu-plugins\auto-run-migration.php(16): current_user_can('manage_options')
+#1 C:\Users\user\Local Sites\mgrnz\app\public\wp-settings.php(456): include_once('C:\\Users\\user\\L...')
+#2 C:\Users\user\Local Sites\mgrnz\app\public\wp-config.php(208): require_once('C:\\Users\\user\\L...')
+#3 C:\Users\user\Local Sites\mgrnz\app\public\wp-load.php(50): require_once('C:\\Users\\user\\L...')
+#4 C:\Users\user\Local Sites\mgrnz\app\public\check-migration-status.php(10): require_once('C:\\Users\\user\\L...')
+#5 {main}
+  thrown in C:\Users\user\Local Sites\mgrnz\app\public\wp-includes\capabilities.php on line 911
+[01-Dec-2025 04:41:43 UTC] PHP Fatal error:  Uncaught Error: Call to undefined function wp_get_current_user() in C:\Users\user\Local Sites\mgrnz\app\public\wp-includes\capabilities.php:911
+Stack trace:
+#0 C:\Users\user\Local Sites\mgrnz\app\public\wp-content\mu-plugins\auto-run-migration.php(16): current_user_can('manage_options')
+#1 C:\Users\user\Local Sites\mgrnz\app\public\wp-settings.php(456): include_once('C:\\Users\\user\\L...')
+#2 C:\Users\user\Local Sites\mgrnz\app\public\wp-config.php(208): require_once('C:\\Users\\user\\L...')
+#3 C:\Users\user\Local Sites\mgrnz\app\public\wp-load.php(50): require_once('C:\\Users\\user\\L...')
+#4 C:\Users\user\Local Sites\mgrnz\app\public\wp-blog-header.php(13): require_once('C:\\Users\\user\\L...')
+#5 C:\Users\user\Local Sites\mgrnz\app\public\index.php(17): require('C:\\Users\\user\\L...')
+#6 {main}
+  thrown in C:\Users\user\Local Sites\mgrnz\app\public\wp-includes\capabilities.php on line 911
+[01-Dec-2025 04:44:04 UTC] PHP Fatal error:  Uncaught Error: Call to undefined function wp_get_current_user() in C:\Users\user\Local Sites\mgrnz\app\public\wp-includes\capabilities.php:911
+Stack trace:
+#0 C:\Users\user\Local Sites\mgrnz\app\public\wp-content\mu-plugins\auto-run-migration.php(16): current_user_can('manage_options')
+#1 C:\Users\user\Local Sites\mgrnz\app\public\wp-settings.php(456): include_once('C:\\Users\\user\\L...')
+#2 C:\Users\user\Local Sites\mgrnz\app\public\wp-config.php(208): require_once('C:\\Users\\user\\L...')
+#3 C:\Users\user\Local Sites\mgrnz\app\public\wp-load.php(50): require_once('C:\\Users\\user\\L...')
+#4 C:\Users\user\Local Sites\mgrnz\app\public\wp-blog-header.php(13): require_once('C:\\Users\\user\\L...')
+#5 C:\Users\user\Local Sites\mgrnz\app\public\index.php(17): require('C:\\Users\\user\\L...')
+#6 {main}
+  thrown in C:\Users\user\Local Sites\mgrnz\app\public\wp-includes\capabilities.php on line 911
+[01-Dec-2025 04:45:41 UTC] PHP Fatal error:  Uncaught Error: Call to undefined function wp_get_current_user() in C:\Users\user\Local Sites\mgrnz\app\public\wp-includes\capabilities.php:911
+Stack trace:
+#0 C:\Users\user\Local Sites\mgrnz\app\public\wp-content\mu-plugins\auto-run-migration.php(16): current_user_can('manage_options')
+#1 C:\Users\user\Local Sites\mgrnz\app\public\wp-settings.php(456): include_once('C:\\Users\\user\\L...')
+#2 C:\Users\user\Local Sites\mgrnz\app\public\wp-config.php(208): require_once('C:\\Users\\user\\L...')
+#3 C:\Users\user\Local Sites\mgrnz\app\public\wp-load.php(50): require_once('C:\\Users\\user\\L...')
+#4 C:\Users\user\Local Sites\mgrnz\app\public\wp-admin\admin.php(35): require_once('C:\\Users\\user\\L...')
+#5 C:\Users\user\Local Sites\mgrnz\app\public\wp-admin\index.php(10): require_once('C:\\Users\\user\\L...')
+#6 {main}
+  thrown in C:\Users\user\Local Sites\mgrnz\app\public\wp-includes\capabilities.php on line 911
+[01-Dec-2025 04:45:41 UTC] PHP Fatal error:  Uncaught Error: Call to undefined function wp_get_current_user() in C:\Users\user\Local Sites\mgrnz\app\public\wp-includes\capabilities.php:911
+Stack trace:
+#0 C:\Users\user\Local Sites\mgrnz\app\public\wp-content\mu-plugins\auto-run-migration.php(16): current_user_can('manage_options')
+#1 C:\Users\user\Local Sites\mgrnz\app\public\wp-settings.php(456): include_once('C:\\Users\\user\\L...')
+#2 C:\Users\user\Local Sites\mgrnz\app\public\wp-config.php(208): require_once('C:\\Users\\user\\L...')
+#3 C:\Users\user\Local Sites\mgrnz\app\public\wp-load.php(50): require_once('C:\\Users\\user\\L...')
+#4 C:\Users\user\Local Sites\mgrnz\app\public\wp-blog-header.php(13): require_once('C:\\Users\\user\\L...')
+#5 C:\Users\user\Local Sites\mgrnz\app\public\index.php(17): require('C:\\Users\\user\\L...')
+#6 {main}
+  thrown in C:\Users\user\Local Sites\mgrnz\app\public\wp-includes\capabilities.php on line 911
+[01-Dec-2025 04:47:19 UTC] [AI WORKFLOW PLUGIN] Initialized | Version: 1.0.0 | PHP: 8.4.4 | WordPress: 6.8.3
+[01-Dec-2025 04:47:19 UTC] [MGRNZ] Created blueprint_subscriptions table with ai_submission_id field
+[01-Dec-2025 04:47:20 UTC] [AI WORKFLOW PLUGIN] Initialized | Version: 1.0.0 | PHP: 8.4.4 | WordPress: 6.8.3
+[01-Dec-2025 04:47:20 UTC] [AI WORKFLOW PLUGIN] Initialized | Version: 1.0.0 | PHP: 8.4.4 | WordPress: 6.8.3
+[01-Dec-2025 04:47:21 UTC] [AI WORKFLOW PLUGIN] Initialized | Version: 1.0.0 | PHP: 8.4.4 | WordPress: 6.8.3
+[01-Dec-2025 04:47:25 UTC] [AI WORKFLOW PLUGIN] Initialized | Version: 1.0.0 | PHP: 8.4.4 | WordPress: 6.8.3
+[01-Dec-2025 04:47:26 UTC] [AI WORKFLOW PLUGIN] Initialized | Version: 1.0.0 | PHP: 8.4.4 | WordPress: 6.8.3
+[01-Dec-2025 04:47:29 UTC] [AI WORKFLOW PLUGIN] Initialized | Version: 1.0.0 | PHP: 8.4.4 | WordPress: 6.8.3
+[01-Dec-2025 04:47:29 UTC] [AI WORKFLOW PLUGIN] Initialized | Version: 1.0.0 | PHP: 8.4.4 | WordPress: 6.8.3
+[01-Dec-2025 04:48:27 UTC] [AI WORKFLOW PLUGIN] Initialized | Version: 1.0.0 | PHP: 8.4.4 | WordPress: 6.8.3
+[01-Dec-2025 04:48:28 UTC] [AI WORKFLOW PLUGIN] Initialized | Version: 1.0.0 | PHP: 8.4.4 | WordPress: 6.8.3
+[01-Dec-2025 04:48:29 UTC] [AI WORKFLOW PLUGIN] Initialized | Version: 1.0.0 | PHP: 8.4.4 | WordPress: 6.8.3
+[01-Dec-2025 04:48:34 UTC] [AI WORKFLOW PLUGIN] Initialized | Version: 1.0.0 | PHP: 8.4.4 | WordPress: 6.8.3
+[01-Dec-2025 04:48:35 UTC] [AI WORKFLOW PLUGIN] Initialized | Version: 1.0.0 | PHP: 8.4.4 | WordPress: 6.8.3
+[01-Dec-2025 04:48:35 UTC] [AI WORKFLOW PLUGIN] Initialized | Version: 1.0.0 | PHP: 8.4.4 | WordPress: 6.8.3
+[01-Dec-2025 04:48:36 UTC] [AI WORKFLOW PLUGIN] Initialized | Version: 1.0.0 | PHP: 8.4.4 | WordPress: 6.8.3
+[01-Dec-2025 04:48:43 UTC] [AI WORKFLOW PLUGIN] Initialized | Version: 1.0.0 | PHP: 8.4.4 | WordPress: 6.8.3
+[01-Dec-2025 04:48:45 UTC] [AI WORKFLOW PLUGIN] Initialized | Version: 1.0.0 | PHP: 8.4.4 | WordPress: 6.8.3
+[01-Dec-2025 04:48:46 UTC] [AI WORKFLOW CACHE MISS] Key: mgrnz_blueprint_9d679322a8be74dbffbec576bfb5db0d | Time: 2025-12-01 04:48:46
+[01-Dec-2025 04:48:46 UTC] [AI WORKFLOW] Including conversation history from session: sess_lR7xJ6XvOxE8kkzPdWBCcRZu5TiYm4F5
+[01-Dec-2025 04:49:09 UTC] [AI WORKFLOW] Skipping cache - chat-based submission or bypass requested
+[01-Dec-2025 04:49:25 UTC] [AI WORKFLOW PLUGIN] Initialized | Version: 1.0.0 | PHP: 8.4.4 | WordPress: 6.8.3
+[01-Dec-2025 04:49:25 UTC] [AI WORKFLOW PLUGIN] Initialized | Version: 1.0.0 | PHP: 8.4.4 | WordPress: 6.8.3
+[01-Dec-2025 04:49:26 UTC] [AI WORKFLOW PLUGIN] Initialized | Version: 1.0.0 | PHP: 8.4.4 | WordPress: 6.8.3

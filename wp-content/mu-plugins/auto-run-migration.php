@@ -12,11 +12,6 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-// Only run for admins
-if (!current_user_can('manage_options')) {
-    return;
-}
-
 // Check if migration has already been run
 $migration_completed = get_option('mgrnz_ai_submission_id_migration_completed', false);
 
@@ -28,6 +23,11 @@ if ($migration_completed) {
  * Run the migration to add ai_submission_id column
  */
 function mgrnz_auto_run_subscription_migration() {
+    // Only run for admins
+    if (!current_user_can('manage_options')) {
+        return;
+    }
+    
     global $wpdb;
     
     $table_name = $wpdb->prefix . 'mgrnz_blueprint_subscriptions';
