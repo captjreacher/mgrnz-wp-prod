@@ -1,4 +1,4 @@
-name: Deploy to Production
+name: Deploy to Production (Test Fix)
 
 on:
   push:
@@ -23,7 +23,7 @@ jobs:
           security: loose
           # Sync entire wp-content directory
           local-dir: ./wp-content/
-          server-dir: /wp/wp-content/
+          server-dir: /wp-content/
           # Exclude uploads, cache, and other dynamic content
           exclude: |
             **/.git*
