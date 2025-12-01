@@ -3644,27 +3644,38 @@ function mgrnz_handle_generate_blueprint($request) {
             'generated_at' => current_time('mysql')
         ]);
         
+        // Generate unique reference ID
+        $submission_ref = 'REF-' . strtoupper(substr(md5(uniqid()), 0, 8));
+        
         // Create submission post
         $submission_id = wp_insert_post([
-            'post_type' => 'mgrnz_submission',
-            'post_title' => 'Blueprint - ' . $session_id,
+            'post_type' => 'ai_workflow_sub',
+            'post_title' => 'Blueprint - ' . substr($goal, 0, 100),
             'post_status' => 'publish',
+            'post_content' => $workflow,
             'meta_input' => [
                 '_mgrnz_session_id' => $session_id,
+                '_mgrnz_submission_ref' => $submission_ref,
                 '_mgrnz_blueprint_content' => $blueprint_html,
                 '_mgrnz_goal' => $goal,
-                '_mgrnz_workflow' => $workflow
+                '_mgrnz_workflow_description' => $workflow,
+                '_mgrnz_submission_date' => current_time('mysql')
             ]
         ]);
         
         if ($submission_id) {
             $session->set_metadata('submission_id', $submission_id);
+            $session->set_metadata('submission_ref', $submission_ref);
         }
+        
+        // Inject Reference ID into blueprint HTML
+        $ref_html = '<div style="background:#f0f9ff; border:1px solid #bae6fd; padding:10px; border-radius:6px; margin-bottom:20px; text-align:center; font-family:monospace; color:#0369a1;"><strong>Reference ID:</strong> ' . esc_html($submission_ref) . '</div>';
+        $blueprint_html_with_ref = $ref_html . $blueprint_html;
         
         return new WP_REST_Response([
             'success' => true,
-            'blueprint' => $blueprint_html,
-            'submission_ref' => $session_id,
+            'blueprint' => $blueprint_html_with_ref,
+            'submission_ref' => $submission_ref,
             'submission_id' => $submission_id
         ], 200);
         
