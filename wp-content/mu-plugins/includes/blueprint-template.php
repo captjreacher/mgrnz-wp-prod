@@ -43,6 +43,8 @@ return [
             'number' => '1',
             'title' => 'EXECUTIVE SUMMARY',
             'guidelines' => [
+                'CRITICAL: Use this exact format for the section header: <h2 style="color: #ff4f00; text-transform: uppercase; font-weight: 700; margin-top: 30px;">EXECUTIVE SUMMARY</h2>',
+                'ALL section headers throughout this blueprint must use the same inline style with orange color (#ff4f00).',
                 'Start each blueprint with this statement: "This blueprint is an intended to create workflows based on your stated problem and desired end state.  This document is created using AI and its purpose is to table an idea and if desired, provide an indicative cost estimate. In most cases, a thorough discovery process is necessary to tie down a workflow design. It provides a structured approach to implementation using the D.R.I.V.E.™ Automation Framework, ensuring adequate security and controls are built into the process."',
                 'Brief overview of the DRIVE Framework',
                 'Brief overview of the transformation.',
@@ -184,7 +186,7 @@ return [
      * How the blueprint should be formatted
      */
     'output_format' => [
-        'format' => 'clean HTML with semantic tags (h2, h3, p, ul, li, img, strong). Use <img> tags for images, not Markdown syntax.',
+        'format' => 'clean HTML with semantic tags (h2, h3, p, ul, li, img, strong). Use <img> tags for images, not Markdown syntax. ALL section headers (h2) must have inline style with orange color: style="color: #ff4f00; text-transform: uppercase; font-weight: 700; margin-top: 30px;"',
         'tone' => 'professional, consultative,explanatory',
         'style' => 'detailed yet accessible, concepts are simple and practical',
         'include_examples' => true,
