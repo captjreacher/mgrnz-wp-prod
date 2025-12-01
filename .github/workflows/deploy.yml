@@ -22,26 +22,20 @@ jobs:
           set ftp:ssl-protect-data true;
           open -u ${{ secrets.FTP_USERNAME }},${{ secrets.FTP_PASSWORD }} ${{ secrets.FTP_SERVER }};
           mirror --reverse --delete --verbose --only-newer \
-            --exclude .git \
-            --exclude node_modules \
-            --exclude vendor \
-            --exclude tests \
-            --exclude uploads \
-            --exclude cache \
-            --exclude litespeed \
-            --exclude ai1wm-backups \
-            --exclude backup \
-            --exclude backups \
-            --exclude upgrade \
-            --exclude ai2html-output \
-            --exclude .kiro \
-            --exclude twentytwentyfive \
-            --exclude twentytwentyfour \
-            --exclude twentytwentythree \
-            --exclude plugins \
-            --exclude '*.log' \
-            --exclude debug.log \
-            --exclude README.md \
+            --exclude-glob .git/ \
+            --exclude-glob node_modules/ \
+            --exclude-glob vendor/ \
+            --exclude-glob uploads/ \
+            --exclude-glob cache/ \
+            --exclude-glob litespeed/ \
+            --exclude-glob ai1wm-backups/ \
+            --exclude-glob backup*/ \
+            --exclude-glob backups/ \
+            --exclude-glob plugins/ \
+            --exclude-glob .kiro/ \
+            --exclude-glob themes/twentytwenty*/ \
+            --exclude-glob *.log \
             ./wp-content /wp-content
           "
+
 
