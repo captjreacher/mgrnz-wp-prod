@@ -25,6 +25,7 @@ jobs:
           local-dir: ./wp-content/
           server-dir: /wp-content/
           # Exclude uploads, cache, and other dynamic content
+          dry-run: true
           exclude: |
             **/.git*
             **/.git*/**
