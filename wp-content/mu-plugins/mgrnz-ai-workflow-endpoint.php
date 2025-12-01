@@ -3647,6 +3647,8 @@ function mgrnz_handle_generate_blueprint($request) {
         // Generate unique reference ID
         $submission_ref = 'REF-' . strtoupper(substr(md5(uniqid()), 0, 8));
         
+        error_log('[GENERATE BLUEPRINT] ✅ USING NEW CODE - Generated REF ID: ' . $submission_ref);
+        
         // Create submission post
         $submission_id = wp_insert_post([
             'post_type' => 'ai_workflow_sub',

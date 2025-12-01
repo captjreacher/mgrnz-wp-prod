@@ -21,7 +21,7 @@ jobs:
           set ftp:ssl-force true;
           set ftp:ssl-protect-data true;
           open -u ${{ secrets.FTP_USERNAME }},${{ secrets.FTP_PASSWORD }} ${{ secrets.FTP_SERVER }};
-          mirror --reverse --delete --verbose --ignore-time \
+          mirror --reverse --delete --verbose \
             --exclude-glob .git/ \
             --exclude-glob node_modules/ \
             --exclude-glob vendor/ \
