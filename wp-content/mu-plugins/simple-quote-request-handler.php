@@ -43,30 +43,45 @@ function mgrnz_mark_quote_requested($request) {
         ], 400);
     }
     
-    // Find the AI submission by submission_ref
-    $args = [
-        'post_type' => 'ai_workflow_sub',
-        'meta_query' => [
-            [
-                'key' => '_mgrnz_submission_ref',
-                'value' => $submission_ref,
-                'compare' => '='
-            ]
-        ],
-        'posts_per_page' => 1
-    ];
+    // If submission_ref is numeric, it's a post ID - use it directly
+    if (is_numeric($submission_ref)) {
+        $post_id = intval($submission_ref);
+        error_log('[Quote Request] Using numeric ID directly: ' . $post_id);
+    } else {
+        // Try to find by meta field
+        $args = [
+            'post_type' => 'ai_workflow_sub',
+            'meta_query' => [
+                [
+                    'key' => '_mgrnz_submission_ref',
+                    'value' => $submission_ref,
+                    'compare' => '='
+                ]
+            ],
+            'posts_per_page' => 1
+        ];
+        
+        $query = new WP_Query($args);
+        
+        if (!$query->have_posts()) {
+            error_log('[Quote Request] No submission found for ref: ' . $submission_ref);
+            return new WP_REST_Response([
+                'success' => false,
+                'message' => 'Submission not found'
+            ], 404);
+        }
+        
+        $post_id = $query->posts[0]->ID;
+    }
     
-    $query = new WP_Query($args);
-    
-    if (!$query->have_posts()) {
-        error_log('[Quote Request] No submission found for ref: ' . $submission_ref);
+    // Verify post exists
+    if (!get_post($post_id)) {
+        error_log('[Quote Request] Post ID does not exist: ' . $post_id);
         return new WP_REST_Response([
             'success' => false,
             'message' => 'Submission not found'
         ], 404);
     }
-    
-    $post_id = $query->posts[0]->ID;
     
     // Mark as quote requested
     update_post_meta($post_id, '_mgrnz_quote_requested', true);

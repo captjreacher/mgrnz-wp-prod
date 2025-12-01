@@ -472,6 +472,18 @@ class MGRNZ_Submission_CPT {
                 }
                 break;
                 
+            case 'submission_ref':
+                $submission_ref = get_post_meta($post_id, self::META_SUBMISSION_REF, true);
+                if ($submission_ref) {
+                    echo '<code style="background:#f0f9ff; padding:4px 8px; border-radius:4px; font-family:monospace; color:#0369a1;">' . esc_html($submission_ref) . '</code>';
+                } else {
+                    // Generate one if it doesn't exist
+                    $submission_ref = 'REF-' . strtoupper(substr(md5($post_id . time()), 0, 8));
+                    update_post_meta($post_id, self::META_SUBMISSION_REF, $submission_ref);
+                    echo '<code style="background:#fff3cd; padding:4px 8px; border-radius:4px; font-family:monospace; color:#856404;">' . esc_html($submission_ref) . ' (generated)</code>';
+                }
+                break;
+                
             case 'quote_requested':
                 $quote_requested = get_post_meta($post_id, '_mgrnz_quote_requested', true);
                 if ($quote_requested) {
