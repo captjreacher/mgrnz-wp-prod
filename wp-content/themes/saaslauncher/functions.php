@@ -267,75 +267,96 @@ add_action('wp_footer', function() {
             
             // Get wizard data from localStorage
             const wizardDataStr = localStorage.getItem('mgrnz_wizard_data');
-            console.log('[Quote Form] Wizard data:', wizardDataStr);
             
             if (!wizardDataStr) {
               console.warn('[Quote Form] No wizard data found in localStorage');
-              return;
+              // Optional: Create a fallback ID if none exists?
+              // return; 
             }
             
+            let submissionRef = null;
             try {
-              const wizardData = JSON.parse(wizardDataStr);
-              
-              // Generate submission_ref if missing (fallback)
-              if (!wizardData.submission_ref) {
-                wizardData.submission_ref = 'WIZ-' + Date.now().toString(36).toUpperCase();
-                localStorage.setItem('mgrnz_wizard_data', JSON.stringify(wizardData));
-              }
-              
-              // Use MutationObserver to watch for the form
-              const observer = new MutationObserver(function(mutations, obs) {
-                const form = document.querySelector('.ml-form-embedContainer form');
-                
-                if (form) {
-                  // Check if field already exists
-                  let hiddenField = form.querySelector('input[name="fields[submission_ref]"]');
-                  
-                  if (!hiddenField) {
-                      hiddenField = document.createElement('input');
-                      hiddenField.type = 'hidden';
-                      hiddenField.name = 'fields[submission_ref]';
-                      form.appendChild(hiddenField);
-                      console.log('[Quote Form] ✅ Created and set submission_ref:', wizardData.submission_ref);
-                  } else {
-                      console.log('[Quote Form] ⚠️ Field exists, overwriting value. Old:', hiddenField.value, 'New:', wizardData.submission_ref);
-                  }
-                  
-                  hiddenField.value = wizardData.submission_ref;
-                      
-                  // Stop observing once found and handled
-                  obs.disconnect();
-                }
-              });
-              
-              // Start observing the document body for added nodes
-              observer.observe(document.body, {
-                childList: true,
-                subtree: true
-              });
-              
-              // Fallback check in case it's already there
-              const existingForm = document.querySelector('.ml-form-embedContainer form');
-              if (existingForm) {
-                  let hiddenField = existingForm.querySelector('input[name="fields[submission_ref]"]');
-                  
-                  if (!hiddenField) {
-                      hiddenField = document.createElement('input');
-                      hiddenField.type = 'hidden';
-                      hiddenField.name = 'fields[submission_ref]';
-                      existingForm.appendChild(hiddenField);
-                      console.log('[Quote Form] ✅ Created and set submission_ref (immediate):', wizardData.submission_ref);
-                  } else {
-                      console.log('[Quote Form] ⚠️ Field exists (immediate), overwriting value. Old:', hiddenField.value, 'New:', wizardData.submission_ref);
-                  }
-                  
-                  hiddenField.value = wizardData.submission_ref;
-                  observer.disconnect();
-              }
-              
-            } catch (error) {
-              console.error('[Quote Form] Error:', error);
+                const wizardData = JSON.parse(wizardDataStr || '{}');
+                submissionRef = wizardData.submission_ref;
+            } catch (e) { console.error(e); }
+
+            // Fallback ID if missing
+            if (!submissionRef) {
+                submissionRef = 'WIZ-' + Date.now().toString(36).toUpperCase();
+                console.log('[Quote Form] Generated fallback ID:', submissionRef);
+                // Save back to local storage if possible
+                try {
+                    const data = JSON.parse(wizardDataStr || '{}');
+                    data.submission_ref = submissionRef;
+                    localStorage.setItem('mgrnz_wizard_data', JSON.stringify(data));
+                } catch(e) {}
             }
+
+            console.log('[Quote Form] Target Submission Ref:', submissionRef);
+
+            function populateField() {
+                // Try multiple selectors
+                const selectors = [
+                    'input[name="fields[submission_ref]"]',
+                    'input[name="submission_ref"]',
+                    'input[data-field="submission_ref"]',
+                    '.submission_ref input'
+                ];
+
+                let field = null;
+                let form = document.querySelector('.ml-form-embedContainer form') || document.querySelector('form[action*="mailerlite"]');
+
+                if (form) {
+                    for (let selector of selectors) {
+                        field = form.querySelector(selector);
+                        if (field) break;
+                    }
+
+                    // If field not found, create it
+                    if (!field) {
+                        console.log('[Quote Form] Field not found, creating hidden input...');
+                        field = document.createElement('input');
+                        field.type = 'hidden';
+                        field.name = 'fields[submission_ref]';
+                        form.appendChild(field);
+                    }
+                } else {
+                    // Try global search if form not found yet
+                    for (let selector of selectors) {
+                        field = document.querySelector(selector);
+                        if (field) break;
+                    }
+                }
+
+                if (field) {
+                    if (field.value !== submissionRef) {
+                        console.log('[Quote Form] Updating field value. Old:', field.value, 'New:', submissionRef);
+                        field.value = submissionRef;
+                        field.setAttribute('value', submissionRef); // Force attribute update
+                        
+                        // Dispatch events to ensure MailerLite picks it up
+                        field.dispatchEvent(new Event('change', { bubbles: true }));
+                        field.dispatchEvent(new Event('input', { bubbles: true }));
+                    }
+                    return true;
+                }
+                return false;
+            }
+
+            // Retry logic
+            let attempts = 0;
+            const maxAttempts = 20; // 10 seconds
+            const interval = setInterval(() => {
+                attempts++;
+                if (populateField() || attempts >= maxAttempts) {
+                    if (attempts >= maxAttempts) console.warn('[Quote Form] Failed to find/populate field after timeout');
+                    else console.log('[Quote Form] ✅ Successfully populated field');
+                    clearInterval(interval);
+                }
+            }, 500);
+            
+            // Also run immediately
+            populateField();
           });
         })();
         </script>
