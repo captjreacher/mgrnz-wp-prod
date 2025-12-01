@@ -417,6 +417,16 @@ class MGRNZ_PDF_Generator_V2 {
             ';
         }
         
+        // Fetch and encode the logo as base64
+        $logo_url = 'https://mgrnz.com/wp/wp-content/uploads/2025/11/mgrnz-logo-small.png';
+        $logo_data = @file_get_contents($logo_url);
+        if ($logo_data !== false) {
+            $base64_logo = base64_encode($logo_data);
+            $logo_html = '<div style="margin-bottom: 20px;"><img src="data:image/png;base64,' . $base64_logo . '" alt="MGRNZ Logo" style="height: 60px; width: auto;" /></div>';
+        } else {
+            $logo_html = '<div style="margin-bottom: 20px;"><span style="color: #ff4f00; font-size: 48px; font-weight: 900; font-family: Inter, Helvetica, Arial, sans-serif; letter-spacing: 2px;">MGRNZ</span></div>';
+        }
+        
         return '<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -429,7 +439,8 @@ class MGRNZ_PDF_Generator_V2 {
     
     <table width="100%" cellpadding="0" cellspacing="0" style="margin:0; padding:0; -webkit-print-color-adjust: exact; color-adjust: exact;">
         <tr>
-            <td style="background-color: #1e293b; padding: 40px 20px 30px; text-align: center; border-bottom: 5px solid #ff4f00; -webkit-print-color-adjust: exact; color-adjust: exact;">
+            <td style="background-color: #1e293b; padding: 30px 20px; text-align: center; border-bottom: 5px solid #ff4f00; -webkit-print-color-adjust: exact; color-adjust: exact;">
+                ' . $logo_html . '
                 <h1 style="color: #ffffff; font-size: 36px; margin: 0 0 10px 0; font-weight: 800; font-family: Inter, Helvetica, Arial, sans-serif;">AI Workflow Blueprint</h1>
                 <p style="color: #e2e8f0; font-size: 18px; font-weight: 500; margin: 0; font-family: Inter, Helvetica, Arial, sans-serif;">Your Personalized Automation Strategy</p>
                 <p style="color: #64748b; font-size: 10px; margin-top: 10px;">Generated: ' . date('Y-m-d H:i:s') . '</p>
@@ -447,7 +458,8 @@ class MGRNZ_PDF_Generator_V2 {
         ' . $content . '
     </div>
     
-    <table width="100%" cellpadding="0" cellspacing="0" style="margin:50px 0 0 0; padding:0;">
+    <div style="margin-top: 100px;"></div>
+    <table width="100%" cellpadding="0" cellspacing="0" style="margin:0; padding:0; page-break-after: avoid;">
         <tr>
             <td style="background-color: #1e293b; padding: 30px 20px; text-align: center; border-top: 5px solid #ff4f00;">
                 <p style="color: #ffffff; font-size: 15px; font-weight: 700; margin: 5px 0; font-family: Inter, Helvetica, Arial, sans-serif;">MGRNZ - AI Workflow Automation</p>
