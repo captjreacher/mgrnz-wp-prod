@@ -13,7 +13,7 @@ jobs:
       - name: 🚚 Get latest code
         uses: actions/checkout@v4
 
-      - name: 📂 Sync wp-content via LFTP
+      - name: 📂 Sync MU-Plugins
         run: |
           sudo apt-get update && sudo apt-get install -y lftp
           lftp -c "
@@ -21,21 +21,20 @@ jobs:
           set ftp:ssl-force true;
           set ftp:ssl-protect-data true;
           open -u ${{ secrets.FTP_USERNAME }},${{ secrets.FTP_PASSWORD }} ${{ secrets.FTP_SERVER }};
-          mirror --reverse --delete --verbose \
-            --exclude-glob .git/ \
-            --exclude-glob node_modules/ \
-            --exclude-glob vendor/ \
-            --exclude-glob uploads/ \
-            --exclude-glob cache/ \
-            --exclude-glob litespeed/ \
-            --exclude-glob ai1wm-backups/ \
-            --exclude-glob backup*/ \
-            --exclude-glob backups/ \
-            --exclude-glob plugins/ \
-            --exclude-glob .kiro/ \
-            --exclude-glob themes/twentytwenty*/ \
-            --exclude-glob *.log \
-            ./wp-content /wp-content
+          mirror --reverse --verbose --no-perms \
+            ./wp-content/mu-plugins /wp-content/mu-plugins
+          "
+      
+      - name: 📂 Sync Theme
+        run: |
+          lftp -c "
+          set ssl:verify-certificate no;
+          set ftp:ssl-force true;
+          set ftp:ssl-protect-data true;
+          open -u ${{ secrets.FTP_USERNAME }},${{ secrets.FTP_PASSWORD }} ${{ secrets.FTP_SERVER }};
+          mirror --reverse --verbose --no-perms \
+            --exclude-glob assets/ \
+            ./wp-content/themes/saaslauncher /wp-content/themes/saaslauncher
           "
 
 
