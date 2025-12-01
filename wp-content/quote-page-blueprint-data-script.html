@@ -105,7 +105,13 @@
       }
 
       if (mlForm) {
-        const submissionRef = wizardData.submission_ref || 'WIZ-UNKNOWN';
+        let submissionRef = wizardData.submission_ref || 'WIZ-UNKNOWN';
+        
+        // Convert numeric ID to REF format
+        if (typeof submissionRef === 'number' || /^\d+$/.test(submissionRef)) {
+          submissionRef = 'REF-' + String(submissionRef).padStart(8, '0');
+          console.log('✅ Converted numeric ID to REF format:', submissionRef);
+        }
 
         // Check if we already added it
         if (mlForm.querySelector('.ml-field-submission_ref')) {
