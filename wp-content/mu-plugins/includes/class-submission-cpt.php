@@ -350,6 +350,38 @@ class MGRNZ_Submission_CPT {
                     <p><?php echo nl2br(esc_html($pain_points)); ?></p>
                 </div>
             </div>
+            
+            <?php
+            // Show quote request details if available
+            $quote_requested = get_post_meta($post->ID, '_mgrnz_quote_requested', true);
+            if ($quote_requested):
+                $quote_requested_at = get_post_meta($post->ID, '_mgrnz_quote_requested_at', true);
+                $quote_contact_name = get_post_meta($post->ID, '_mgrnz_quote_contact_name', true);
+                $quote_contact_email = get_post_meta($post->ID, '_mgrnz_quote_contact_email', true);
+                $quote_company = get_post_meta($post->ID, '_mgrnz_quote_company', true);
+                $quote_message = get_post_meta($post->ID, '_mgrnz_quote_message', true);
+            ?>
+            <div class="mgrnz-meta-field" style="border-top: 2px solid #00a32a; padding-top: 20px; margin-top: 20px;">
+                <label style="color: #00a32a;"><?php _e('📋 Quote Request Details:', 'mgrnz'); ?></label>
+                <div class="value" style="background: #f0f9ff; border-left-color: #00a32a;">
+                    <?php if ($quote_requested_at): ?>
+                        <p><strong>Requested At:</strong> <?php echo esc_html(date('F j, Y g:i a', strtotime($quote_requested_at))); ?></p>
+                    <?php endif; ?>
+                    <?php if ($quote_contact_name): ?>
+                        <p><strong>Contact Name:</strong> <?php echo esc_html($quote_contact_name); ?></p>
+                    <?php endif; ?>
+                    <?php if ($quote_contact_email): ?>
+                        <p><strong>Contact Email:</strong> <a href="mailto:<?php echo esc_attr($quote_contact_email); ?>"><?php echo esc_html($quote_contact_email); ?></a></p>
+                    <?php endif; ?>
+                    <?php if ($quote_company): ?>
+                        <p><strong>Company:</strong> <?php echo esc_html($quote_company); ?></p>
+                    <?php endif; ?>
+                    <?php if ($quote_message): ?>
+                        <p><strong>Message:</strong><br><?php echo nl2br(esc_html($quote_message)); ?></p>
+                    <?php endif; ?>
+                </div>
+            </div>
+            <?php endif; ?>
         </div>
         <?php
     }
@@ -399,6 +431,7 @@ class MGRNZ_Submission_CPT {
             'submission_date' => __('Submission Date', 'mgrnz'),
             'email' => __('Email', 'mgrnz'),
             'goal' => __('Goal', 'mgrnz'),
+            'quote_requested' => __('Quote Requested', 'mgrnz'),
             'email_sent' => __('Email Status', 'mgrnz'),
         );
         
@@ -436,6 +469,21 @@ class MGRNZ_Submission_CPT {
                     echo '<span title="' . esc_attr($goal) . '">' . esc_html($truncated) . '</span>';
                 } else {
                     echo '—';
+                }
+                break;
+                
+            case 'quote_requested':
+                $quote_requested = get_post_meta($post_id, '_mgrnz_quote_requested', true);
+                if ($quote_requested) {
+                    $quote_requested_at = get_post_meta($post_id, '_mgrnz_quote_requested_at', true);
+                    $quote_email = get_post_meta($post_id, '_mgrnz_quote_contact_email', true);
+                    $title = $quote_requested_at ? 'Requested at: ' . date('M j, Y g:i a', strtotime($quote_requested_at)) : 'Quote requested';
+                    if ($quote_email) {
+                        $title .= ' by ' . $quote_email;
+                    }
+                    echo '<span style="color: #00a32a; font-weight: 600;" title="' . esc_attr($title) . '">✓ Yes</span>';
+                } else {
+                    echo '<span style="color: #8c8f94;">—</span>';
                 }
                 break;
                 

@@ -127,10 +127,36 @@ class MGRNZ_MailerLite_Integration {
             <ol>
                 <li>Go to <a href="https://dashboard.mailerlite.com/subscribers/fields" target="_blank">MailerLite → Subscribers → Fields</a></li>
                 <li>Click "Create Field"</li>
-                <li>Field name: <code>ai_submission_id</code></li>
+                <li>Field name: <code>submission_ref</code></li>
                 <li>Field type: Text</li>
                 <li>Save the field</li>
             </ol>
+            
+            <hr>
+            
+            <h2>Webhook Setup (Sync Form Submissions to WordPress)</h2>
+            <p>To save MailerLite form submissions to your WordPress database:</p>
+            <ol>
+                <li>Copy this webhook URL:
+                    <br>
+                    <input type="text" 
+                           value="<?php echo esc_attr(rest_url('mgrnz/v1/mailerlite-webhook')); ?>" 
+                           readonly 
+                           style="width: 100%; max-width: 600px; padding: 8px; margin: 10px 0; font-family: monospace; background: #f0f0f0;"
+                           onclick="this.select()">
+                    <button type="button" 
+                            class="button button-secondary" 
+                            onclick="navigator.clipboard.writeText('<?php echo esc_js(rest_url('mgrnz/v1/mailerlite-webhook')); ?>'); alert('Webhook URL copied!');">
+                        Copy URL
+                    </button>
+                </li>
+                <li>Go to <a href="https://dashboard.mailerlite.com/integrations/webhooks" target="_blank">MailerLite → Integrations → Webhooks</a></li>
+                <li>Click "Add Webhook"</li>
+                <li>Paste the URL above</li>
+                <li>Select event: <strong>Subscriber created</strong></li>
+                <li>Save the webhook</li>
+            </ol>
+            <p><strong>Note:</strong> This webhook will automatically save form submissions (including the submission_ref) to your WordPress database.</p>
             
             <h2>Test Integration</h2>
             <p>
