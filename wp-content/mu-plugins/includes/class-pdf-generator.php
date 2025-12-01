@@ -242,12 +242,25 @@ class MGRNZ_PDF_Generator_V2 {
         $content = str_replace('https://mgrnz.com/wp/wp/', 'https://mgrnz.com/wp/', $content);
         
         // AUTO-INJECT: Add DRIVE framework image to DISCOVER section if not already present
-        if (stripos($content, 'DISCOVER') !== false && stripos($content, 'DRIVE_Public_14-07-2025.png') === false) {
+        if (stripos($content, 'DISCOVER') !== false && stripos($content, 'DRIVE_Public_14-07-2025.png') === false && stripos($content, 'data:image') === false) {
             // Find the DISCOVER section heading
             $discover_pattern = '/(<h[23][^>]*>.*?DISCOVER.*?<\/h[23]>)/i';
             if (preg_match($discover_pattern, $content, $matches)) {
                 $discover_heading = $matches[1];
-                $image_html = '<div style="text-align: center; margin: 30px 0;"><img src="https://mgrnz.com/wp/wp-content/uploads/2025/11/DRIVE_Public_14-07-2025.png" alt="DRIVE Framework" style="max-width: 100%; height: auto; display: block; margin: 0 auto;" /></div>';
+                
+                // Fetch and encode the image as base64
+                $image_url = 'https://mgrnz.com/wp/wp-content/uploads/2025/11/DRIVE_Public_14-07-2025.png';
+                $image_data = @file_get_contents($image_url);
+                
+                if ($image_data !== false) {
+                    $base64_image = base64_encode($image_data);
+                    $image_html = '<div style="text-align: center; margin: 30px 0;"><img src="data:image/png;base64,' . $base64_image . '" alt="DRIVE Framework" style="max-width: 100%; height: auto; display: block; margin: 0 auto;" /></div>';
+                } else {
+                    // Fallback if image can't be fetched
+                    error_log('[PDF Generator] Failed to fetch DRIVE framework image from: ' . $image_url);
+                    $image_html = '<div style="text-align: center; margin: 30px 0;"><img src="' . $image_url . '" alt="DRIVE Framework" style="max-width: 100%; height: auto; display: block; margin: 0 auto;" /></div>';
+                }
+                
                 // Insert image right after the DISCOVER heading
                 $content = str_replace($discover_heading, $discover_heading . $image_html, $content);
             }
