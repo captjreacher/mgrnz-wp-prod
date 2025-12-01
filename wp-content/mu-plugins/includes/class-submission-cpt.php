@@ -45,6 +45,29 @@ class MGRNZ_Submission_CPT {
         add_filter('manage_edit-' . self::POST_TYPE . '_sortable_columns', array($this, 'sortable_columns'));
         add_action('pre_get_posts', array($this, 'custom_orderby'));
         add_filter('posts_search', array($this, 'custom_search'), 10, 2);
+        add_action('save_post_' . self::POST_TYPE, array($this, 'generate_submission_ref'), 10, 3);
+    }
+    
+    /**
+     * Generate submission_ref when post is created
+     */
+    public function generate_submission_ref($post_id, $post, $update) {
+        // Only generate for new posts
+        if ($update) {
+            return;
+        }
+        
+        // Check if already has a submission_ref
+        $existing_ref = get_post_meta($post_id, self::META_SUBMISSION_REF, true);
+        if (!empty($existing_ref)) {
+            return;
+        }
+        
+        // Generate REF ID
+        $submission_ref = 'REF-' . strtoupper(substr(md5($post_id . time()), 0, 8));
+        update_post_meta($post_id, self::META_SUBMISSION_REF, $submission_ref);
+        
+        error_log('[SUBMISSION CPT] Generated REF ID for post ' . $post_id . ': ' . $submission_ref);
     }
     
     /**
