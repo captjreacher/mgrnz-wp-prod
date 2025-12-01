@@ -17,13 +17,12 @@
       if (wizardDataStr) {
         try {
           wizardData = JSON.parse(wizardDataStr);
-          // Ensure submission ref exists
-          if (!wizardData.submission_ref) {
-            const timestamp = Date.now();
-            wizardData.submission_ref = 'WIZ-' + timestamp.toString(36).toUpperCase();
-            localStorage.setItem('mgrnz_wizard_data', JSON.stringify(wizardData));
-          }
           console.log('✅ Using submission ref:', wizardData.submission_ref);
+          
+          // If no submission_ref, user didn't complete wizard - don't generate a fake one
+          if (!wizardData.submission_ref) {
+            console.warn('⚠️ No submission_ref found - user may not have completed wizard');
+          }
         } catch (e) {
           console.error('❌ Error parsing wizard data', e);
         }
