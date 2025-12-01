@@ -53,6 +53,9 @@ function mgrnz_handle_mailerlite_webhook($request) {
     $message = $subscriber['fields']['message'] ?? '';
     $submission_ref = $subscriber['fields']['submission_ref'] ?? '';
     
+    // Sanitize submission_ref to remove any HTML entities, special chars, or rogue characters
+    $submission_ref = preg_replace('/[^A-Z0-9\-_]/i', '', $submission_ref);
+    
     if (empty($email)) {
         error_log('[MailerLite Webhook] No email found in webhook data');
         return new WP_REST_Response(['status' => 'error', 'message' => 'No email'], 400);
