@@ -197,12 +197,14 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   }
 
-  // Check for saved state and restore if available
+  // Check for saved state and restore if explicitly requested (via URL parameter)
+  const urlParams = new URLSearchParams(window.location.search);
+  const shouldRestore = urlParams.get('restore') === 'true';
   const savedBlueprint = localStorage.getItem('mgrnz_blueprint_download');
   const savedWizardData = localStorage.getItem('mgrnz_wizard_data');
 
-  if (savedBlueprint && savedWizardData) {
-    console.log("Restoring saved blueprint...");
+  if (shouldRestore && savedBlueprint && savedWizardData) {
+    console.log("Restoring saved blueprint (restore parameter detected)...");
 
     // Restore data
     const data = JSON.parse(savedWizardData);
@@ -245,7 +247,7 @@ document.addEventListener("DOMContentLoaded", function () {
           localStorage.removeItem('mgrnz_blueprint_download');
           localStorage.removeItem('mgrnz_wizard_data');
           localStorage.removeItem('mgrnz_blueprint_url');
-          window.location.reload();
+          window.location.href = '/start-using-ai/'; // Redirect to fresh wizard
         }
       };
 
@@ -259,6 +261,7 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
   } else {
+    // Start fresh
     setStep(1);
   }
 
