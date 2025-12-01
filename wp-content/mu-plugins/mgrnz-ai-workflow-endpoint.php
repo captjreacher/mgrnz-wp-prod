@@ -3569,6 +3569,9 @@ function mgrnz_handle_token_download($request) {
  * Generates blueprint from existing chat session
  */
 function mgrnz_handle_generate_blueprint($request) {
+    error_log('========== GENERATE BLUEPRINT FUNCTION CALLED ==========');
+    error_log('Request data: ' . print_r($request->get_json_params(), true));
+    
     $logger = MGRNZ_Error_Logger::get_instance();
     
     try {
