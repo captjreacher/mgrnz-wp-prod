@@ -1,11 +1,14 @@
 /**
  * Add Back Button to Quote Page
  * 
- * Adds a back button that returns to the blueprint view
+ * DISABLED: Quote page now opens in new tab, no back button needed
  */
 
 (function () {
     'use strict';
+
+    // DISABLED: Back button no longer needed since quote opens in new tab
+    return;
 
     console.log('[Back Button] Script loaded');
 
